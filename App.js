@@ -1,6 +1,6 @@
 import React from 'react'
 import {createAppContainer, createDrawerNavigator } from 'react-navigation';
-import { Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons} from '@expo/vector-icons';
 import Home from './Home';  // Tab Nav
 
  const rootDrawer = createDrawerNavigator({
@@ -8,7 +8,7 @@ import Home from './Home';  // Tab Nav
     screen: Home,
     navigationOptions: {
       drawerLabel: 'Home',
-      drawerIcon: (<Ionicons name="md-checkmark-circle" size={32} color="green" />),
+      drawerIcon: (<MaterialCommunityIcons name="home" size={27} color="green" />),
     }
   },
 });
