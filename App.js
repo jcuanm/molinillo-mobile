@@ -1,9 +1,16 @@
 import React from 'react'
-import {createAppContainer, createDrawerNavigator } from 'react-navigation';
+import {
+  createAppContainer,
+  createDrawerNavigator, 
+  createStackNavigator,
+  createSwitchNavigator
+} from 'react-navigation';
 import { MaterialCommunityIcons} from '@expo/vector-icons';
 import Home from './Home';  // Tab Nav
+import Login from './Login/pages/Login';  
+import Signup from './Login/pages/Signup';  
 
- const rootDrawer = createDrawerNavigator({
+const drawerStack = createDrawerNavigator({
   Home: {
     screen: Home,
     navigationOptions: {
@@ -13,6 +20,16 @@ import Home from './Home';  // Tab Nav
   },
 });
 
-const App = createAppContainer(rootDrawer);
+const loginStack = createStackNavigator({
+  login: { screen: Login },
+  signup: {screen: Signup}
+})
 
-export default App;
+const primaryNav = createSwitchNavigator({
+  loginStack: { screen: loginStack },
+  drawerStack: { screen: drawerStack }
+}, {
+  initialRouteName: 'loginStack',
+})
+
+export default createAppContainer(primaryNav);
