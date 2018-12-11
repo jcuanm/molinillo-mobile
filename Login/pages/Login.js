@@ -3,26 +3,19 @@ import {
   StyleSheet,
   Text,
   View,
-  StatusBar ,
   TouchableOpacity
 } from 'react-native';
 
 import Logo from '../components/Logo';
-import Form from '../components/Form';
-
-//import {Actions} from 'react-native-router-flux';
+import LoginForm from '../components/LoginForm';
 
 export default class Login extends Component {
-
-	signup() {
-		console.log(this.props);
-	}
 
 	render() {
 		return(
 			<View style={styles.container}>
 				<Logo/>
-				<Form type="Login"/>
+				<LoginForm/>
 				<View style={styles.signupTextCont}>
 					<Text style={styles.signupText}>Don't have an account yet?</Text>
 					<TouchableOpacity onPress={() => this.props.navigation.navigate("signup")}><Text style={styles.signupButton}> Signup</Text></TouchableOpacity>

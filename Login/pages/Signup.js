@@ -3,12 +3,11 @@ import {
   StyleSheet,
   Text,
   View,
-  StatusBar ,
   TouchableOpacity
 } from 'react-native';
 
 import Logo from '../components/Logo';
-import Form from '../components/Form';
+import SignupForm from '../components/SignupForm';
 
 export default class Signup extends Component {
 
@@ -16,10 +15,10 @@ export default class Signup extends Component {
 		return(
 			<View style={styles.container}>
 				<Logo/>
-				<Form type="Signup"/>
+				<SignupForm/>
 				<View style={styles.signupTextCont}>
 					<Text style={styles.signupText}>Blah blah</Text>
-					<TouchableOpacity onPress={this.goBack}><Text style={styles.signupButton}> Sign in</Text></TouchableOpacity>
+					<TouchableOpacity onPress={this.goBack}><Text style={styles.signupButton}> Sign in </Text></TouchableOpacity>
 				</View>
 			</View>	
 			)
