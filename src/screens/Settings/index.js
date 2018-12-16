@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
   View,
   Button,
-  StyleSheet
+  StyleSheet,
 } from 'react-native';
 import * as firebase from 'firebase';
 
@@ -14,7 +14,6 @@ export default class Settings extends Component {
             <View styles={styles.container}>
                 <Button
                     title="Logout"
-                    //onPress={() => alert(":hi")}
                     onPress={() => firebase.auth().signOut()}
                     styles={styles.button}
                 />

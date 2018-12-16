@@ -6,10 +6,10 @@ import {
   TouchableOpacity
 } from 'react-native';
 
-import Logo from '../components/Logo';
-import SignupForm from '../components/SignupForm';
+import Logo from './components/Logo';
+import SignupForm from './components/SignupForm';
 
-export default class Signup extends Component {
+export default class SignupScreen extends Component {
 
 	render() {
 		return(

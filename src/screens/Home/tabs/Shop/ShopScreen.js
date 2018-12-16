@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, Button, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import ActionButton from 'react-native-action-button';
-import styles from '../../styles';
+import styles from '../../../../styles';
 
 class Shop extends Component {
     static navigationOptions = ({ navigation }) => ({
