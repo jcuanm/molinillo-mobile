@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import {
   StyleSheet,
-  Text,
   View,
   TextInput,
-  TouchableOpacity,
+  Button
 } from 'react-native';
 import * as firebase from 'firebase';
 
@@ -56,14 +55,8 @@ export default class SignupForm extends Component {
           placeholderTextColor = "#ffffff"
           ref={(input) => this.password = input}
         />  
-        <TouchableOpacity style={styles.button}>
-          <Text 
-            style={styles.buttonText} 
-            onPress={this.onSignupPress}
-          >
-            Sign-up
-          </Text>
-        </TouchableOpacity>     
+        
+        <Button style={styles.button} title="Signup" onPress={this.onSignupPress} />
   		</View>
 		)
 	}

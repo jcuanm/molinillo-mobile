@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import {
   StyleSheet,
-  Text,
   View,
   TextInput,
-  TouchableOpacity,
+  Button
 } from 'react-native';
 import * as firebase from 'firebase';
 
@@ -18,6 +17,7 @@ export default class LoginForm extends Component {
   }
 
   onLoginPress = () => {
+    console.log("I got pressed");
     firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
       .then(() => { }), (error) => { alert(error.message); }
   }
@@ -43,14 +43,8 @@ export default class LoginForm extends Component {
           placeholderTextColor = "#ffffff"
           ref={(input) => this.password = input}
         />  
-        <TouchableOpacity style={styles.button}>
-          <Text 
-            style={styles.buttonText} 
-            onPress={this.onLoginPress}
-          >
-            Login
-          </Text>
-        </TouchableOpacity>     
+
+        <Button title="Login" onPress={this.onLoginPress} />
   		</View>
 		)
 	}
