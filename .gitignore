@@ -5,3 +5,6 @@ npm-debug.*
 *.p12
 *.key
 *.mobileprovision
+
+appsync-info.json
+project-info.json

@@ -24,7 +24,7 @@ export default class ProfileScreen extends Component {
                 <Ionicons name="md-checkmark-circle" size={32} color="green" />
                 <ActionButton
                     buttonColor="rgba(231,76,60,1)"
-                    onPress={() => { this.props.navigation.navigate("Scanner") }}
+                    onPress={() => { this.props.navigation.navigate("ScannerScreen") }}
                 />
             </View>
         );

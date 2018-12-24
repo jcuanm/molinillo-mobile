@@ -1,8 +1,8 @@
 import { createStackNavigator } from 'react-navigation'
 import Shop from '../tabs/Shop/ShopScreen';
-import Scanner from '../../Scanner/scanner';
+import ScannerScreen from '../../Scanner/ScannerScreen';
 
 export default createStackNavigator({
     Shop,
-    Scanner
+    ScannerScreen
 });

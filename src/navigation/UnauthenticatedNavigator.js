@@ -9,7 +9,7 @@ import { MaterialCommunityIcons, } from '@expo/vector-icons';
 import HomeTabs from '../screens/Home/HomeTabs';  
 import LoginScreen from '../screens/Login/LoginScreen';  
 import SignupScreen from '../screens/Signup/SignupScreen';
-import Settings from '../screens/Settings/';
+import SettingsScreen from '../screens/Settings/SettingsScreen';
 
 const drawerStack = createDrawerNavigator({
   Home: {
@@ -20,7 +20,7 @@ const drawerStack = createDrawerNavigator({
     }
   },
   Settings: {
-    screen: Settings,
+    screen: SettingsScreen,
     navigationOptions: {
       drawerLabel: 'Settings',
       drawerIcon: ( <MaterialCommunityIcons name="settings" size={27} color="green" /> ),
