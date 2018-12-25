@@ -9,6 +9,7 @@ import { MaterialCommunityIcons, } from '@expo/vector-icons';
 import HomeTabs from '../screens/Home/HomeTabs';  
 import LoginScreen from '../screens/Login/LoginScreen';  
 import SignupScreen from '../screens/Signup/SignupScreen';
+import ForgotPasswordScreen from '../screens/ForgotPassword/ForgotPasswordScreen';
 import SettingsScreen from '../screens/Settings/SettingsScreen';
 
 const drawerStack = createDrawerNavigator({
@@ -30,7 +31,8 @@ const drawerStack = createDrawerNavigator({
 
 const authStack = createStackNavigator({
   login: { screen: LoginScreen },
-  signup: {screen: SignupScreen}
+  signup: {screen: SignupScreen},
+  forgotPassword: {screen: ForgotPasswordScreen}
 })
 
 const unauthenticatedNav = createSwitchNavigator({
