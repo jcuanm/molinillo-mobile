@@ -4,14 +4,14 @@ import { Ionicons } from '@expo/vector-icons';
 import ActionButton from 'react-native-action-button';
 import styles from '../../../../styles';
 
-export default class Search extends Component {
+export default class SearchScreen extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: "Search",
         headerLeft: (
             <TouchableOpacity
                 style={styles.headerButton}
                 onPress={() => navigation.openDrawer()}>
-                <Ionicons name="md-checkmark-circle" size={32} color="green" />
+                <Ionicons name="md-menu" size={32} />
             </TouchableOpacity>
         ),
     })

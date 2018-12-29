@@ -1,6 +1,8 @@
 import { createStackNavigator } from 'react-navigation';
-import Search from '../tabs/Search/SearchScreen';
+import SearchScreen from '../tabs/Search/SearchScreen';
+import ScannerScreen from '../../Scanner/ScannerScreen';
 
 export default createStackNavigator({
-    Search
+    SearchScreen,
+    ScannerScreen
 })

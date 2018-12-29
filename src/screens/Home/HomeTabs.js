@@ -14,7 +14,7 @@ const HomeTabs = createMaterialBottomTabNavigator(
         activeColor: 'rgba(255,255,255,1)',
         inactiveColor: 'rgba(255,255,255,.7)',
         barStyle: {
-            backgroundColor: 'crimson'
+            backgroundColor: '#8A2BE2'
         }
     }
 );

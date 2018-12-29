@@ -15,19 +15,23 @@ export default class LoginScreen extends Component {
 		return(
 			<View style={styles.container}>
 				<Logo/>
+
 				<LoginForm/>
+
 				<View style={styles.signupTextCont}>
 					<Text style={styles.signupText}>Don't have an account yet?</Text>
 					<TouchableOpacity onPress={() => this.props.navigation.navigate("signup")}>
             <Text style={styles.signupButton}> Signup </Text>
           </TouchableOpacity>
 				</View>
+
         <View style={styles.forgotPasswordTextCont}>
 					<Text style={styles.forgotPasswordText}>Forgot Password?</Text>
 					<TouchableOpacity onPress={() => this.props.navigation.navigate("forgotPassword")}>
             <Text style={styles.forgotPasswordButton}> Reset Password </Text>
           </TouchableOpacity>
 				</View>
+        
 			</View>	
 			)
 	}
