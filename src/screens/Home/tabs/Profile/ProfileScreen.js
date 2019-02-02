@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import ActionButton from 'react-native-action-button';
 import styles from '../../../../styles';
 import ProfileOptions from './components/ProfileOptions'
+import * as firebase from 'firebase';
 
 export default class ProfileScreen extends Component {
 
@@ -24,12 +25,11 @@ export default class ProfileScreen extends Component {
     })
     
     render() {
-        console.log("Props", this.props)
         return (
             <View style={styles.container}>
                 <View style={{width: Dimensions.get('window').width, height: 50, backgroundColor: 'steelblue'}}>
                     <Text>
-                        Welcome [Insert User name here]
+                        Welcome {firebase.auth().currentUser.email}
                     </Text>
                 </View>
 

@@ -6,6 +6,7 @@ import {
   Button
 } from 'react-native';
 import * as firebase from 'firebase';
+import 'firebase/firestore';
 
 export default class SignupForm extends Component {
   constructor(props){
@@ -23,7 +24,19 @@ export default class SignupForm extends Component {
       return;
     }
     firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
-      .then(() => { }), (error) => { alert(error.message); }
+      .then(() => { 
+        var db = firebase.firestore();
+        var user = firebase.auth().currentUser;
+        db.collection("users").doc(user.uid).set({
+          email: user.email
+        })
+        .then(function(docRef) {
+          console.log("User's email added");
+        })
+        .catch(function(error) {
+          console.error("Error adding user $(user.uid)");
+        });
+      }), (error) => { alert(error.message); }
   }
 
 	render(){

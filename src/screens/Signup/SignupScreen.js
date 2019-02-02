@@ -5,7 +5,6 @@ import {
   View,
   TouchableOpacity
 } from 'react-native';
-
 import Logo from './components/Logo';
 import SignupForm from './components/SignupForm';
 

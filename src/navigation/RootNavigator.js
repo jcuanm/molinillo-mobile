@@ -4,6 +4,7 @@ import AuthenticatedNavigator from './AuthenticatedNavigator';
 import UnauthenticatedNavigator from './UnauthenticatedNavigator';
 import { Asset, AppLoading } from 'expo';
 import * as firebase from 'firebase';
+import 'firebase/firestore';
 
 export default class RootNavigator extends Component{
   constructor(props){
@@ -17,6 +18,11 @@ export default class RootNavigator extends Component{
     // Initialize firebase database
     if (!firebase.apps.length) { firebase.initializeApp(FirebaseConfig.FirebaseConfig); }
     firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
+
+    // Initializing firestore
+    const firestore = firebase.firestore();
+    const settings = {timestampsInSnapshots: true};
+    firestore.settings(settings);
   }
 
   onAuthStateChanged = (user) => {

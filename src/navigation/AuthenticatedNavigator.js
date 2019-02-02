@@ -10,6 +10,8 @@ import HomeTabs from '../screens/Home/HomeTabs';
 import LoginScreen from '../screens/Login/LoginScreen';  
 import SignupScreen from '../screens/Signup/SignupScreen';
 import SettingsScreen from '../screens/Settings/SettingsScreen';
+import ScannerScreen from '../screens/Scanner/ScannerScreen';
+import AddChocolateScreen from '../screens/AddChocolate/AddChocolateScreen';
 
 const drawerStack = createDrawerNavigator({
   Home: {
@@ -33,9 +35,15 @@ const authStack = createStackNavigator({
   signup: {screen: SignupScreen}
 })
 
+const scanningStack = createStackNavigator({
+  ScannerScreen: { screen: ScannerScreen },
+  AddChocolateScreen: {screen: AddChocolateScreen}
+})
+
 const authenticatedNav = createSwitchNavigator({
   authStack: { screen: authStack },
-  drawerStack: { screen: drawerStack }
+  drawerStack: { screen: drawerStack },
+  scanningStack: {screen: scanningStack}
 }, {
   initialRouteName: 'drawerStack',
 })

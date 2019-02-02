@@ -17,7 +17,6 @@ export default class LoginForm extends Component {
   }
 
   onLoginPress = () => {
-    console.log("I got pressed");
     firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
       .then(() => { }), (error) => { alert(error.message); }
   }
