@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { 
   StyleSheet, 
   Text, 
@@ -6,15 +6,14 @@ import {
   Alert
 } from 'react-native';
 import { BarCodeScanner, Permissions } from 'expo';
-import * as firebase from 'firebase';
+import { Warnings, Collections } from '../../helpers/Constants';
+import DbHandler from '../../helpers/DbHandler';
 
 export default class ScannerScreen extends Component {
   constructor(props) {
     super(props);
-    this.db = firebase.firestore();
-    this.currUser = firebase.auth().currentUser;
+    this.dbHandler = new DbHandler();
     this.handleBarCodeScanned = this.handleBarCodeScanned.bind(this);
-    this.addToMyChocolates = this.addToMyChocolates.bind(this);
   }
 
   state = {
@@ -28,6 +27,40 @@ export default class ScannerScreen extends Component {
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({ hasCameraPermission: status === 'granted' });
+  }
+
+  handleBarCodeScanned({ type, data }) {
+    let confectionsRef = this.dbHandler.getRef(Collections['confections'], type, data);
+    confectionsRef.get()
+      .then(results => {
+        if (!results.data()){
+          Alert.alert(
+            Warnings['failedToFindChocolate'],
+            Warnings['helpFindChocolate'],
+            [
+              {text: 'No thanks', style: 'cancel'},
+              {text: 'Add Chocolate', onPress: () => 
+                this.props.navigation.navigate(
+                  "AddChocolateScreen",
+                  { 
+                    barcodeType: type, 
+                    barcodeData: data , 
+                  }
+                )
+              },
+            ],
+            { cancelable: false }
+          );
+        } 
+        else {
+          let myChocolatesRef = this.dbHandler.getRef(Collections['myChocolates'], type, data);
+          myChocolatesRef.set(results.data());
+        }
+      })
+      .catch( error => {
+        console.log("error: " + error);
+        alert("Error getting chocolate: " + error);
+      });
   }
 
   render() {
@@ -61,57 +94,5 @@ export default class ScannerScreen extends Component {
         />
       </View>
     );
-  }
-
-  handleBarCodeScanned({ type, data }) {
-    var confectionsQuery = this.db.collection("confections")
-      .doc(type.toString())
-      .collection("barcodeData")
-      .doc(data.toString());
-    this.process(confectionsQuery, type, data);
-  }
-
-  addToMyChocolates(barcodeType, barcodeData, results){
-    let myChocolatesRef = this.db.collection("myChocolates")
-      .doc(this.currUser.uid)
-      .collection(barcodeType.toString())
-      .doc(barcodeData.toString())
-      
-    return this.db.runTransaction(transaction => {
-      return transaction.get(myChocolatesRef)
-          .then(res => {
-              if (!res.exists){
-                  console.log("Document does not exist!");
-              }
-              console.log("Results", results);
-              transaction.set(myChocolatesRef, results);
-          }) 
-    })
-  }
-
-  process(query, type, data){
-    query.get()
-      .then(results => {
-        if (results.data() == null){
-          Alert.alert(
-            'Sorry, we couldn\'t find this chocolate',
-            'Help us out by adding this new chocolate to our database!',
-            [
-              {text: 'No thanks', style: 'cancel'},
-              {text: 'Add Chocolate', onPress: () => 
-                this.props.navigation.navigate("AddChocolateScreen",{ barcodeType: type, barcodeData: data , addToMyChocolates: this.addToMyChocolates})
-              },
-            ],
-            { cancelable: false }
-          )
-        } 
-        else {
-          this.addToMyChocolates(type, data, results.data());
-        }
-      })
-      .catch(function(error) {
-        console.log("error: " + error);
-        alert("Error getting chocolate: " + error);
-      });
   }
 }

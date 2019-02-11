@@ -40,7 +40,7 @@ export default class ForgotPasswordForm extends Component {
         
         <Button style={styles.button} title="Reset Password" onPress={this.onResetPasswordPress} />
   		</View>
-		)
+		);
 	}
 }
 

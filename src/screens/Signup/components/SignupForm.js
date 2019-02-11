@@ -5,38 +5,17 @@ import {
   TextInput,
   Button
 } from 'react-native';
-import * as firebase from 'firebase';
-import 'firebase/firestore';
+import DbHandler from '../../../helpers/DbHandler';
 
 export default class SignupForm extends Component {
   constructor(props){
     super(props);
+    this.dbHandler = new DbHandler();
     this.state = {
       email: "",
       password: "",
       passwordConfirm: "",
     }
-  }
-
-  onSignupPress = () => {
-    if(this.state.password !== this.state.passwordConfirm){
-      alert("Passwords do not match");
-      return;
-    }
-    firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
-      .then(() => { 
-        var db = firebase.firestore();
-        var user = firebase.auth().currentUser;
-        db.collection("users").doc(user.uid).set({
-          email: user.email
-        })
-        .then(function(docRef) {
-          console.log("User's email added");
-        })
-        .catch(function(error) {
-          console.error("Error adding user $(user.uid)");
-        });
-      }), (error) => { alert(error.message); }
   }
 
 	render(){
@@ -69,9 +48,13 @@ export default class SignupForm extends Component {
           ref={(input) => this.password = input}
         />  
         
-        <Button style={styles.button} title="Signup" onPress={this.onSignupPress} />
+        <Button 
+          style={styles.button} 
+          title="Signup" 
+          onPress={() => this.dbHandler.signupUser(this.state.email, this.state.password, this.state.passwordConfirm)} 
+        />
   		</View>
-		)
+		);
 	}
 }
 

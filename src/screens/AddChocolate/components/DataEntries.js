@@ -3,8 +3,9 @@ import {
     View,
     Button
 } from 'react-native';
-import * as firebase from 'firebase';
 import Entry from './Entry';
+import { Collections } from '../../../helpers/Constants';
+import DbHandler from '../../../helpers/DbHandler'
 import styles from '../../../styles';
 
 export default class DataEntries extends Component {
@@ -12,8 +13,7 @@ export default class DataEntries extends Component {
         super(props);
         this.inputValues = {};
         this.updateInput = this.updateInput.bind(this); 
-        this.db = firebase.firestore();
-        this.currUser = firebase.auth().currentUser;
+        this.dbHandler = new DbHandler();
     }
 
     updateInput(input){
@@ -24,22 +24,10 @@ export default class DataEntries extends Component {
     }
     
     submitInput(inputValues){
-        let confectionsRef = this.db.collection("confections")
-            .doc(this.props.barcodeType.toString())
-            .collection("barcodeData")
-            .doc(this.props.barcodeData.toString());
-
-        return this.db.runTransaction(transaction => {
-            return transaction.get(confectionsRef)
-                .then(res => {
-                    if (!res.exists){
-                        console.log("Document does not exist!");
-                    }
-                    
-                    transaction.set(confectionsRef, inputValues);
-                    this.props.addToMyChocolates(this.props.barcodeType, this.props.barcodeData, inputValues);
-                }) 
-        })
+        let confectionsRef = this.dbHandler.getRef(Collections['confections'], this.props.barcodeType, this.props.barcodeData);
+        let myChocolatesRef = this.dbHandler.getRef(Collections['myChocolates'], this.props.barcodeType, this.props.barcodeData)
+        confectionsRef.set(inputValues);
+        myChocolatesRef.set(inputValues);
     }
 
     render(){
@@ -49,32 +37,22 @@ export default class DataEntries extends Component {
                     <Entry 
                         title={"Confection Name"} 
                         updateInput={this.updateInput}
-                        // popup={"MyChocolatesScreen"} 
-                        // navigationFunc={this.props.navigationFunc} 
                     />
                     <Entry 
                         title={"Brand"} 
-                        updateInput={this.updateInput}
-                        // navigateScreen={"RatingsScreen"} 
-                        // navigationFunc={this.props.navigationFunc} 
+                        updateInput={this.updateInput} 
                     />
                     <Entry 
                         title={"Type"} 
-                        updateInput={this.updateInput}
-                        // navigateScreen={"WishlistScreen"} 
-                        // navigationFunc={this.props.navigationFunc} 
+                        updateInput={this.updateInput} 
                     />
                     <Entry 
                         title={"Cacao Variety"} 
-                        updateInput={this.updateInput}
-                        // navigateScreen={"WishlistScreen"} 
-                        // navigationFunc={this.props.navigationFunc} 
+                        updateInput={this.updateInput} 
                     />
                     <Entry 
                         title={"Country of Origin"} 
-                        updateInput={this.updateInput}
-                        // navigateScreen={"WishlistScreen"} 
-                        // navigationFunc={this.props.navigationFunc} 
+                        updateInput={this.updateInput} 
                     />
                 </View>
                 <Button

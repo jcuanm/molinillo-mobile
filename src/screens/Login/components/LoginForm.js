@@ -5,20 +5,16 @@ import {
   TextInput,
   Button
 } from 'react-native';
-import * as firebase from 'firebase';
+import DbHandler from '../../../helpers/DbHandler';
 
 export default class LoginForm extends Component {
   constructor(props){
     super(props);
+    this.dbHandler = new DbHandler();
     this.state = {
       email: "",
       password: "",
     }
-  }
-
-  onLoginPress = () => {
-    firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
-      .then(() => { }), (error) => { alert(error.message); }
   }
 
 	render(){
@@ -43,9 +39,12 @@ export default class LoginForm extends Component {
           ref={(input) => this.password = input}
         />  
 
-        <Button title="Login" onPress={this.onLoginPress} />
+        <Button 
+          title="Login" 
+          onPress={() => this.dbHandler.loginUser(this.state.email, this.state.password)} 
+        />
   		</View>
-		)
+		);
 	}
 }
 

@@ -15,7 +15,6 @@ export default class AddChocolateScreen extends Component {
             <DataEntries 
                 barcodeType = {barcodeType}
                 barcodeData = {barcodeData}
-                addToMyChocolates = {navigation.getParam('addToMyChocolates', null)}
             /> 
         );
     }
