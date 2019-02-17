@@ -6,7 +6,7 @@ npm-debug.*
 *.key
 *.mobileprovision
 
-assets/config/*
+assets/config/FirebaseConfig.js
 
 appsync-info.json
 project-info.json
