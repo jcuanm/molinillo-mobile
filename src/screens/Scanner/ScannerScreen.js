@@ -55,6 +55,10 @@ export default class ScannerScreen extends Component {
         else {
           let myChocolatesRef = this.dbHandler.getRef(Collections['myChocolates'], type, data);
           myChocolatesRef.set(results.data());
+          myChocolatesRef.get()
+            .then(results => {
+              this.props.navigation.navigate("DetailScreen", { results: results })
+            })
         }
       })
       .catch( error => {

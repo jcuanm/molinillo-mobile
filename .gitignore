@@ -6,5 +6,7 @@ npm-debug.*
 *.key
 *.mobileprovision
 
+assets/config/*
+
 appsync-info.json
 project-info.json

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import FirebaseConfig from '../../assets/config/FirebaseConfig';
-import AuthenticatedNavigator from './AuthenticatedNavigator';
-import UnauthenticatedNavigator from './UnauthenticatedNavigator';
+import AuthNavigator from './AuthNavigator';
 import { Asset, AppLoading } from 'expo';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
@@ -9,7 +8,6 @@ import 'firebase/firestore';
 export default class RootNavigator extends Component{
   constructor(props){
     super(props);
-
     this.state = {
       isAuthenticated: false,
       isLoading: true,
@@ -26,9 +24,10 @@ export default class RootNavigator extends Component{
   }
 
   onAuthStateChanged = (user) => {
-    if(user){
+    if (user){
       this.setState({isAuthenticated: true, isLoading: false});
-    } else{
+    } 
+    else{
       this.setState({isAuthenticated: false, isLoading: false});
     }
   }
@@ -47,21 +46,20 @@ export default class RootNavigator extends Component{
   }
 
   render() {
-    // Render the LoadScreen if it is unknown if the user has been authenticated
-    if(this.state.isLoading){
+    if (this.state.isLoading){
       return(
         <AppLoading
           startAsync={this._cacheResourcesAsync}
           onFinish={() => null}
           onError={console.warn}
         />
-      )
+      );
     }
 
-    // Render Auth Stack when done loading
-    if (!this.state.isAuthenticated){ return( <UnauthenticatedNavigator/> ); }
-
-    // Keep the user signed in if previously signed in
-    return (<AuthenticatedNavigator/>);
+    return (
+      <AuthNavigator
+        isAuthenticated={this.state.isAuthenticated}
+      />
+    );
   }
 }

@@ -17,9 +17,9 @@ export default class ForgotPasswordScreen extends Component {
 				<ForgotPasswordForm/>
 				<View style={styles.forgotPasswordTextCont}>
 					<Text style={styles.forgotPasswordText}>Forgot Password</Text>
-					<TouchableOpacity onPress={this.goBack}>
-                        <Text style={styles.forgotPasswordButton}> Reset Password </Text>
-                    </TouchableOpacity>
+					<TouchableOpacity>
+            <Text style={styles.forgotPasswordButton}> Reset Password </Text>
+          </TouchableOpacity>
 				</View>
 			</View>	
 		);

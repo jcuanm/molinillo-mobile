@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react';
 import {
   createAppContainer,
   createDrawerNavigator, 
@@ -28,26 +28,44 @@ const drawerStack = createDrawerNavigator({
       drawerLabel: 'Settings',
       drawerIcon: ( <MaterialCommunityIcons name="settings" size={27} color="green" /> ),
     }
-  }
+  },
 });
 
+const unauthStack = createStackNavigator({
+  LoginScreen: { screen: LoginScreen },
+  SignupScreen: { screen: SignupScreen },
+  ForgotPasswordScreen: { screen: ForgotPasswordScreen }
+})
+
 const authStack = createStackNavigator({
-  login: { screen: LoginScreen },
-  signup: {screen: SignupScreen},
-  forgotPassword: {screen: ForgotPasswordScreen}
+  LoginScreen: { screen: LoginScreen },
+  SignupScreen: { screen: SignupScreen },
 })
 
 const scanningStack = createStackNavigator({
-  scanner: { screen: ScannerScreen },
-  addChocolate: {screen: AddChocolateScreen}
+  ScannerScreen: { screen: ScannerScreen },
+  AddChocolateScreen: { screen: AddChocolateScreen }
+})
+
+const authenticatedNav = createSwitchNavigator({
+  authStack: { screen: authStack },
+  drawerStack: { screen: drawerStack },
+  scanningStack: { screen: scanningStack }
+}, {
+  initialRouteName: 'drawerStack',
 })
 
 const unauthenticatedNav = createSwitchNavigator({
-  authStack: { screen: authStack },
+  authStack: { screen: unauthStack },
   drawerStack: { screen: drawerStack },
   scanningStack: {screen: scanningStack}
 }, {
   initialRouteName: 'authStack',
 })
 
-export default UnauthenticatedNavigator = createAppContainer(unauthenticatedNav);
+export default class AuthNavigator extends Component {
+  render() {
+    const AuthNavigator = this.props.isAuthenticated ? createAppContainer(authenticatedNav) : createAppContainer(unauthenticatedNav);
+    return ( <AuthNavigator /> );
+  }
+}

@@ -11,7 +11,7 @@ export default class ForgotPassword extends Component {
 		return(
       <View style={styles.forgotPasswordTextCont}>
         <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate("forgotPassword")}>
+        <TouchableOpacity onPress={() => this.props.navigate("ForgotPasswordScreen")}>
           <Text style={styles.forgotPasswordButton}> Reset Password </Text>
         </TouchableOpacity>
       </View>	
