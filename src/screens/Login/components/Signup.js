@@ -8,7 +8,6 @@ import {
 
 export default class Signup extends Component {
 	render() {
-    console.log(this.props);
 		return(
       <View style={styles.textContent}>
         <Text style={styles.text}>Don't have an account yet?</Text>

@@ -34,37 +34,49 @@ export default class ScannerScreen extends Component {
     confectionsRef.get()
       .then(results => {
         if (!results.data()){
-          Alert.alert(
-            Warnings['failedToFindChocolate'],
-            Warnings['helpFindChocolate'],
-            [
-              {text: 'No thanks', style: 'cancel'},
-              {text: 'Add Chocolate', onPress: () => 
-                this.props.navigation.navigate(
-                  "AddChocolateScreen",
-                  { 
-                    barcodeType: type, 
-                    barcodeData: data , 
-                  }
-                )
-              },
-            ],
-            { cancelable: false }
-          );
+          this.handleChocolateNotFound(type, data);
         } 
         else {
-          let myChocolatesRef = this.dbHandler.getRef(Collections['myChocolates'], type, data);
-          myChocolatesRef.set(results.data());
-          myChocolatesRef.get()
-            .then(results => {
-              this.props.navigation.navigate("DetailScreen", { results: results })
-            })
+          this.handleChocolateFound(results.data(), type, data);
         }
       })
-      .catch( error => {
+      .catch(error => {
         console.log("error: " + error);
         alert("Error getting chocolate: " + error);
       });
+  }
+
+  handleChocolateFound(results, barcodeType, barcodeData){
+    let myChocolatesRef = this.dbHandler.getRef(Collections['myChocolates'], barcodeType, barcodeData);
+    myChocolatesRef.set(results);
+    myChocolatesRef.get()
+      .then( _ => {
+        this.props.navigation.navigate("DetailScreen", { results: results })
+      })
+      .catch(error => {
+        console.log("error: " + error);
+        alert("Error getting chocolate: " + error);
+      })
+  }
+
+  handleChocolateNotFound(barcodeType, barcodeData){
+    Alert.alert(
+      Warnings['failedToFindChocolate'],
+      Warnings['helpFindChocolate'],
+      [
+        {text: 'No thanks', style: 'cancel'},
+        {text: 'Add Chocolate', onPress: () => 
+          this.props.navigation.navigate(
+            "AddChocolateScreen",
+            { 
+              barcodeType: barcodeType, 
+              barcodeData: barcodeData, 
+            }
+          )
+        },
+      ],
+      { cancelable: false }
+    );
   }
 
   render() {
