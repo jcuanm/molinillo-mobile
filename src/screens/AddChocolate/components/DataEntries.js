@@ -28,6 +28,7 @@ export default class DataEntries extends Component {
         let myChocolatesRef = this.dbHandler.getRef(Collections['myChocolates'], this.props.barcodeType, this.props.barcodeData)
         confectionsRef.set(inputValues);
         myChocolatesRef.set(inputValues);
+        this.props.navigate("DetailScreen", {results : inputValues});
     }
 
     render(){

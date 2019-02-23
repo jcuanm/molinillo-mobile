@@ -34,10 +34,10 @@ export default class ScannerScreen extends Component {
     confectionsRef.get()
       .then(results => {
         if (!results.data()){
-          this.handleChocolateNotFound(type, data);
+          this.handleBarcodeNotFound(type, data);
         } 
         else {
-          this.handleChocolateFound(results.data(), type, data);
+          this.handleBarcodeFound(results.data(), type, data);
         }
       })
       .catch(error => {
@@ -46,7 +46,7 @@ export default class ScannerScreen extends Component {
       });
   }
 
-  handleChocolateFound(results, barcodeType, barcodeData){
+  handleBarcodeFound(results, barcodeType, barcodeData){
     let myChocolatesRef = this.dbHandler.getRef(Collections['myChocolates'], barcodeType, barcodeData);
     myChocolatesRef.set(results);
     myChocolatesRef.get()
@@ -59,7 +59,7 @@ export default class ScannerScreen extends Component {
       })
   }
 
-  handleChocolateNotFound(barcodeType, barcodeData){
+  handleBarcodeNotFound(barcodeType, barcodeData){
     Alert.alert(
       Warnings['failedToFindChocolate'],
       Warnings['helpFindChocolate'],

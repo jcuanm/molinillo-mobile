@@ -26,9 +26,7 @@ export default class Entry extends Component {
         this.setState({value: inputText});
     }
 
-    showDialog(isShow){
-        this.setState({isDialogVisible: isShow});
-    }
+    showDialog(isShow){ this.setState({isDialogVisible: isShow}); }
 
     render(){
         return(
@@ -41,7 +39,10 @@ export default class Entry extends Component {
                     title={"DialogInput 1"}
                     message={"Message for DialogInput #1"}
                     hintInput ={"HINT INPUT"}
-                    submitInput={ (inputText) => {this.sendInput(inputText)} }
+                    submitInput={ inputText => {
+                        this.sendInput(inputText); 
+                        this.showDialog(false); 
+                    }}
                     closeDialog={ () => {this.showDialog(false)}}>
                 </DialogInput>
             </TouchableOpacity>   
