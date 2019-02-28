@@ -1,4 +1,4 @@
-import { Collections } from './Constants';
+import { RegularExpressions } from '../helpers/Constants';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 
@@ -40,24 +40,20 @@ export default class DbHandler{
     getRef(root, barcodeType = null, barcodeData = null){
         var ref;
         switch(root){
-            case Collections['users']:
+            case 'users':
                 ref = this.dbRef
-                    .collection(Collections['users'])
+                    .collection(root)
                     .doc(this.currUser.uid);
                 break;
-            case Collections['confections']:
+            case root.match(RegularExpressions['Prefix']) + barcodeType:
                 ref = this.dbRef
-                    .collection(Collections['confections'])
-                    .doc(barcodeType.toString())
-                    .collection(Collections["barcodeData"])
+                    .collection(root)
                     .doc(barcodeData.toString());
                 break;
-            case Collections['myChocolates']:
+            case 'MyChocolates':
                 ref = this.dbRef
-                    .collection(Collections['myChocolates'])
-                    .doc(this.currUser.uid)
-                    .collection(barcodeType.toString())
-                    .doc(barcodeData.toString());
+                    .collection(root)
+                    .doc(this.currUser.uid);
                 break;
             default:
                 ref = null; 

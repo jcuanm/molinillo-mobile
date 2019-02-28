@@ -5,8 +5,8 @@ import {
   View,
   Alert
 } from 'react-native';
+import { BarcodeTypeMappings, StringConcatenations, Warnings } from '../../helpers/Constants';
 import { BarCodeScanner, Permissions } from 'expo';
-import { Warnings, Collections } from '../../helpers/Constants';
 import DbHandler from '../../helpers/DbHandler';
 
 export default class ScannerScreen extends Component {
@@ -30,8 +30,12 @@ export default class ScannerScreen extends Component {
   }
 
   handleBarCodeScanned({ type, data }) {
-    let confectionsRef = this.dbHandler.getRef(Collections['confections'], type, data);
-    confectionsRef.get()
+    type = BarcodeTypeMappings[type];
+    let barcodeTypeRef = this.dbHandler.getRef(
+      StringConcatenations["Prefix"] + type, 
+      type, 
+      data);
+    barcodeTypeRef.get()
       .then(results => {
         if (!results.data()){
           this.handleBarcodeNotFound(type, data);
@@ -47,7 +51,7 @@ export default class ScannerScreen extends Component {
   }
 
   handleBarcodeFound(results, barcodeType, barcodeData){
-    let myChocolatesRef = this.dbHandler.getRef(Collections['myChocolates'], barcodeType, barcodeData);
+    let myChocolatesRef = this.dbHandler.getRef("MyChocolates", barcodeType, barcodeData);
     myChocolatesRef.set(results);
     myChocolatesRef.get()
       .then( _ => {
@@ -61,8 +65,8 @@ export default class ScannerScreen extends Component {
 
   handleBarcodeNotFound(barcodeType, barcodeData){
     Alert.alert(
-      Warnings['failedToFindChocolate'],
-      Warnings['helpFindChocolate'],
+      Warnings['FailedToFindChocolate'],
+      Warnings['HelpFindChocolate'],
       [
         {text: 'No thanks', style: 'cancel'},
         {text: 'Add Chocolate', onPress: () => 

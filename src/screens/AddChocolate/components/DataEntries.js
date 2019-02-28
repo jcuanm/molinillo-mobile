@@ -3,17 +3,17 @@ import {
     View,
     Button
 } from 'react-native';
+import { StringConcatenations } from '../../../helpers/Constants';
 import Entry from './Entry';
-import { Collections } from '../../../helpers/Constants';
 import DbHandler from '../../../helpers/DbHandler'
 import styles from '../../../styles';
 
 export default class DataEntries extends Component {
     constructor(props){
         super(props);
-        this.inputValues = {};
         this.updateInput = this.updateInput.bind(this); 
         this.dbHandler = new DbHandler();
+        this.inputValues = {};
     }
 
     updateInput(input){
@@ -24,11 +24,16 @@ export default class DataEntries extends Component {
     }
     
     submitInput(inputValues){
-        let confectionsRef = this.dbHandler.getRef(Collections['confections'], this.props.barcodeType, this.props.barcodeData);
-        let myChocolatesRef = this.dbHandler.getRef(Collections['myChocolates'], this.props.barcodeType, this.props.barcodeData)
-        confectionsRef.set(inputValues);
-        myChocolatesRef.set(inputValues);
-        this.props.navigate("DetailScreen", {results : inputValues});
+        let barcodeTypeRef = this.dbHandler.getRef(
+            StringConcatenations["Prefix"] + this.props.barcodeType, 
+            this.props.barcodeType, 
+            this.props.barcodeData);
+        let myChocolatesRef = this.dbHandler.getRef('MyChocolates');
+        barcodeTypeRef.set(inputValues);
+        myChocolatesRef.set(
+            { [this.props.barcodeData] : this.props.barcodeType }, 
+            { merge : true});
+        this.props.navigate("DetailScreen", { results : inputValues });
     }
 
     render(){
