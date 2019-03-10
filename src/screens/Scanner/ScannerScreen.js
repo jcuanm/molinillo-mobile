@@ -32,12 +32,12 @@ export default class ScannerScreen extends Component {
   handleBarCodeScanned({ type, data }) {
     type = BarcodeTypeMappings[type];
     let barcodeTypeRef = this.dbHandler.getRef(
-      StringConcatenations["Prefix"] + type, 
+      StringConcatenations.Prefix, 
       type, 
       data);
     barcodeTypeRef.get()
       .then(results => {
-        if (!results.data()){
+        if (!results.exists){
           this.handleBarcodeNotFound(type, data);
         } 
         else {

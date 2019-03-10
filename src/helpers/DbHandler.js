@@ -1,4 +1,4 @@
-import { RegularExpressions } from '../helpers/Constants';
+import {  RegularExpressions, StringConcatenations } from '../helpers/Constants';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 
@@ -45,9 +45,9 @@ export default class DbHandler{
                     .collection(root)
                     .doc(this.currUser.uid);
                 break;
-            case root.match(RegularExpressions['Prefix']) + barcodeType:
+            case StringConcatenations['Prefix']:
                 ref = this.dbRef
-                    .collection(root)
+                    .collection(root + barcodeType)
                     .doc(barcodeData.toString());
                 break;
             case 'MyChocolates':

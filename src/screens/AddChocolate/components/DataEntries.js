@@ -18,14 +18,11 @@ export default class DataEntries extends Component {
 
     updateInput(input){
         this.inputValues[input['field']] = input['value'];
-        console.log("BarcodeType", this.props.barcodeType);
-        console.log("BarcodeData", this.props.barcodeData);
-        console.log(this.inputValues);
     }
     
     submitInput(inputValues){
         let barcodeTypeRef = this.dbHandler.getRef(
-            StringConcatenations["Prefix"] + this.props.barcodeType, 
+            StringConcatenations.Prefix, 
             this.props.barcodeType, 
             this.props.barcodeData);
         let myChocolatesRef = this.dbHandler.getRef('MyChocolates');

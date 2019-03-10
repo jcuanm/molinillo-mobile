@@ -7,10 +7,6 @@ export const StringConcatenations = {
     Prefix: "BarcodeType_"
 }
 
-export const RegularExpressions = {
-    Prefix: /^BarcodeType_/,
-}
-
 export const BarcodeTypeMappings = {
     512 : "Upc_a",
     1024 : "Upc_e",
