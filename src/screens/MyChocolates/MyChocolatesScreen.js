@@ -20,30 +20,34 @@ export default class MyChocolatesScreen extends Component {
 
     componentDidMount() {
         let myChocolatesRef = this.dbHandler.getRef("MyChocolates");
-        myChocolatesRef.get()
-            .then(myChocolatesResults => {
-                if (myChocolatesResults.exists) {
-                    let newMyChocolates = []; 
-                    for (let barcodeData in myChocolatesResults.data()){
-                        let barcodeType = myChocolatesResults.data()[barcodeData];
-                        let barcodeTypeRef = this.dbHandler.getRef(
-                            StringConcatenations.Prefix, 
-                            barcodeType, 
-                            barcodeData);
-                        barcodeTypeRef.get()
-                            .then(barcodeTypeResults => {
-                                newMyChocolates.push({key : JSON.stringify(barcodeTypeResults.data())})
-                            })
-                            .catch(err => {
-                                console.log("Error " + err);
-                            })
-                    }
-                    this.setState( { myChocolates: newMyChocolates } );
+        let myChocolatesResults = myChocolatesRef.get()
+            .then(results => {
+                if (results.exists) {
+                    return results;
                 }
             })
             .catch(err => {
                 console.log('Error getting myChocolates document', err);
             });
+        
+        myChocolatesResults.then(results => {
+            let newMyChocolates = []; 
+            for (let barcodeData in results.data()){
+                let barcodeType = results.data()[barcodeData];
+                let barcodeTypeRef = this.dbHandler.getRef(
+                    StringConcatenations.Prefix, 
+                    barcodeType, 
+                    barcodeData);
+                barcodeTypeRef.get()
+                    .then(barcodeTypeResults => {
+                        newMyChocolates.push({key : JSON.stringify(barcodeTypeResults.data())})
+                        this.setState( { myChocolates: newMyChocolates } );
+                    })
+                    .catch(err => {
+                        console.log("Error " + err);
+                    })
+            }
+        })
     }
 
     static navigationOptions = ({ navigation }) => ({
@@ -51,20 +55,26 @@ export default class MyChocolatesScreen extends Component {
     })
     
     render() {
-        return (
-            <View style={styles.container}>
-                <SearchBar
-                    onChangeText={() => console.log("Typeing...")}
-                    onClear={() => console.log("Cleared...")}
-                    placeholder='Type Here...' 
-                    clearIcon={{name: 'clear'}}
-                />
-
-                <FlatList
-                    data={this.state.myChocolates}
-                    renderItem={({item}) => <Text>{item.key}</Text>}
-                />
-            </View>
-        );
+        if (this.state.myChocolates.length){
+            return (
+                <View style={styles.container}>
+                    <SearchBar
+                        onChangeText={() => console.log("Typeing...")}
+                        onClear={() => console.log("Cleared...")}
+                        placeholder='Type Here...' 
+                        clearIcon={{name: 'clear'}}
+                    />
+    
+                    <FlatList
+                        data={this.state.myChocolates}
+                        renderItem={({item}) => <Text>{item.key}</Text>}
+                    />
+                </View>
+            ); 
+        }
+        else {
+            return <Text>Loading...</Text>
+        }
+        
     }
 }
