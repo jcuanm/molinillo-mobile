@@ -13,6 +13,12 @@ export default class ScannerScreen extends Component {
   constructor(props) {
     super(props);
     this.dbHandler = new DbHandler();
+    this.handleMyChocolatesSuccessCallback = this.handleMyChocolatesSuccessCallback.bind(this); 
+    this.handleMyChocolatesErrorCallback = this.handleMyChocolatesErrorCallback.bind(this); 
+    this.handleBarcodeSuccessCallback = this.handleBarcodeSuccessCallback.bind(this); 
+    this.handleBarcodeErrorCallback = this.handleBarcodeErrorCallback.bind(this); 
+    this.handleBarcodeFound = this.handleBarcodeFound.bind(this); 
+    this.handleBarcodeNotFound = this.handleBarcodeNotFound.bind(this); 
     this.handleBarCodeScanned = this.handleBarCodeScanned.bind(this);
   }
 
@@ -35,38 +41,55 @@ export default class ScannerScreen extends Component {
       StringConcatenations.Prefix, 
       type, 
       data);
-    barcodeTypeRef.get()
-      .then(results => {
-        if (!results.exists){
-          this.handleBarcodeNotFound(type, data);
-        } 
-        else {
-          this.handleBarcodeFound(results.data(), type, data);
-        }
-      })
-      .catch(error => {
-        console.log("error: " + error);
-        alert("Error getting chocolate: " + error);
-      });
+    
+    let barcodeTypeResults = this.dbHandler.getData(
+      barcodeTypeRef,
+      this.handleBarcodeSuccessCallback,
+      [type, data],
+      this.handleBarcodeErrorCallback,
+      []);
+  }
+
+  handleBarcodeSuccessCallback(results, optionalParams){
+    let type = optionalParams[0];
+    let data = optionalParams[1];
+    if (!results.exists){
+      this.handleBarcodeNotFound(type, data);
+    } 
+    else {
+      this.handleBarcodeFound(results.data(), type, data);
+    }
+  }
+
+  handleBarcodeErrorCallback(error, optionalParams){
+    console.log("error: " + error);
+    alert("Error getting chocolate: " + error);
   }
 
   handleBarcodeFound(results, barcodeType, barcodeData){
     let myChocolatesRef = this.dbHandler.getRef("MyChocolates", barcodeType, barcodeData);
     myChocolatesRef.set(results);
-    myChocolatesRef.get()
-      .then( _ => {
-        this.props.navigation.navigate("DetailScreen", { results: results })
-      })
-      .catch(error => {
-        console.log("error: " + error);
-        alert("Error getting chocolate: " + error);
-      })
+    let myChocolatesResults = this.dbHandler.getData(
+      myChocolatesRef,
+      this.handleMyChocolatesSuccessCallback,
+      [],
+      this.handleMyChocolatesErrorCallback,
+      []);
+  }
+
+  handleMyChocolatesSuccessCallback(results, optionalParams){
+    this.props.navigation.navigate("DetailScreen", { results: results.data() })
+  }
+
+  handleMyChocolatesErrorCallback(error, optionalParams){
+    console.log("error: " + error);
+    alert("Error getting chocolate: " + error);  
   }
 
   handleBarcodeNotFound(barcodeType, barcodeData){
     Alert.alert(
-      Warnings['FailedToFindChocolate'],
-      Warnings['HelpFindChocolate'],
+      Warnings.FailedToFindChocolate,
+      Warnings.HelpFindChocolate,
       [
         {text: 'No thanks', style: 'cancel'},
         {text: 'Add Chocolate', onPress: () => 

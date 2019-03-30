@@ -1,4 +1,4 @@
-import {  RegularExpressions, StringConcatenations } from '../helpers/Constants';
+import {  StringConcatenations } from '../helpers/Constants';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 
@@ -10,8 +10,8 @@ export default class DbHandler{
 
     loginUser(email, password){
         firebase
-        .auth()
-        .signInWithEmailAndPassword(email, password)
+            .auth()
+            .signInWithEmailAndPassword(email, password)
             .then(() => {})
             .catch( error => { 
                 console.log(error);
@@ -25,15 +25,26 @@ export default class DbHandler{
             return;
         }
 
-        // Limited by email and password with this implementation
+        // Limited to email and password with this implementation
         // Add other user data using createUser() method
         firebase
             .auth()
             .createUserWithEmailAndPassword(email, password)
             .then()
-            .catch( error => { 
-                console.log(error);
-                alert(error.message); 
+            .catch( err => { 
+                console.log(err);
+                alert(err.message); 
+            });
+    }
+
+    getData(ref, successCallback, successCallbackParams, errorFunc, errorFuncParams){
+        return ref
+            .get()
+            .then(results => {
+                return successCallback(results, successCallbackParams);
+            })
+            .catch(err => {
+                return errorFunc(err, errorFuncParams);
             });
     }
 
