@@ -14,6 +14,7 @@ import SettingsScreen from '../screens/Settings/SettingsScreen';
 import ScannerScreen from '../screens/Scanner/ScannerScreen';
 import AddChocolateScreen from '../screens/AddChocolate/AddChocolateScreen';
 import DetailScreen from '../screens/Detail/DetailScreen';
+import MyChocolatesScreen from '../screens/MyChocolates/MyChocolatesScreen';
 
 const drawerStack = createDrawerNavigator({
     Home: {
@@ -44,9 +45,10 @@ const authStack = createStackNavigator({
 })
 
 const scanningStack = createStackNavigator({
+    MyChocolatesScreen: { screen: MyChocolatesScreen },
+    DetailScreen: { screen: DetailScreen },
     ScannerScreen: { screen: ScannerScreen },
     AddChocolateScreen: { screen: AddChocolateScreen },
-    DetailScreen: { screen: DetailScreen },
 })
 
 const authenticatedNav = createSwitchNavigator({
@@ -69,7 +71,8 @@ const unauthenticatedNav = createSwitchNavigator({
 
 export default class AuthNavigator extends Component {
     render() {
-        const AuthNavigator = this.props.isAuthenticated ? createAppContainer(authenticatedNav) : createAppContainer(unauthenticatedNav);
+        const AuthNavigator = this.props.isAuthenticated ? 
+            createAppContainer(authenticatedNav) : createAppContainer(unauthenticatedNav);
         return ( <AuthNavigator /> );
     }
 }

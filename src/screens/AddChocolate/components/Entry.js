@@ -18,7 +18,7 @@ export default class Entry extends Component {
 
     sendInput(inputText){
         let currentInput = {
-            'field' : this.props.title,
+            'field' : this.props.key,
             'value' : inputText
         }
 
@@ -32,7 +32,7 @@ export default class Entry extends Component {
         return(
             <TouchableOpacity onPress={()=>{this.showDialog(true)}}>
                 <View style={{width: Dimensions.get('window').width, height: 50, backgroundColor: 'powderblue'}}>
-                    <Text>{this.props.title}</Text> 
+                    <Text>{this.props.displayName}</Text> 
                     <Text style={{textAlign: 'right'}}>{this.state.value}</Text>
                 </View>
                 <DialogInput isDialogVisible={this.state.isDialogVisible}

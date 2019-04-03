@@ -38,23 +38,28 @@ export default class DataEntries extends Component {
             <View style={styles.container}>
                 <View style={{flex: 1, flexDirection: 'column'}}>
                     <Entry 
-                        title={"Confection_Name"} 
+                        key={"confectionName"} 
+                        displayName={"Confection Name"}
                         updateInput={this.updateInput}
                     />
                     <Entry 
-                        title={"Brand"} 
+                        key={"brand"}
+                        displayName={"Brand"} 
                         updateInput={this.updateInput} 
                     />
                     <Entry 
-                        title={"Type"} 
+                        key={"type"}
+                        displayName={"Type"} 
                         updateInput={this.updateInput} 
                     />
                     <Entry 
-                        title={"Cacao_Variety"} 
+                        key={"cacaoVariety"} 
+                        displayName={"Cacao Variety"}
                         updateInput={this.updateInput} 
                     />
                     <Entry 
-                        title={"Country_Of_Origin"} 
+                        key={"countryOfOrigin"}
+                        displayName={"Country of Origin"} 
                         updateInput={this.updateInput} 
                     />
                 </View>

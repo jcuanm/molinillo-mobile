@@ -5,7 +5,11 @@ import {
   View,
   Alert
 } from 'react-native';
-import { BarcodeTypeMappings, StringConcatenations, Warnings } from '../../helpers/Constants';
+import { 
+  BarcodeTypeMappings, 
+  StringConcatenations, 
+  Warnings 
+} from '../../helpers/Constants';
 import { BarCodeScanner, Permissions } from 'expo';
 import DbHandler from '../../helpers/DbHandler';
 
@@ -19,7 +23,7 @@ export default class ScannerScreen extends Component {
     this.handleBarcodeErrorCallback = this.handleBarcodeErrorCallback.bind(this); 
     this.handleBarcodeFound = this.handleBarcodeFound.bind(this); 
     this.handleBarcodeNotFound = this.handleBarcodeNotFound.bind(this); 
-    this.handleBarCodeScanned = this.handleBarCodeScanned.bind(this);
+    this.handleBarcodeScanned = this.handleBarcodeScanned.bind(this);
   }
 
   state = {
@@ -35,7 +39,7 @@ export default class ScannerScreen extends Component {
     this.setState({ hasCameraPermission: status === 'granted' });
   }
 
-  handleBarCodeScanned({ type, data }) {
+  handleBarcodeScanned({ type, data }) {
     type = BarcodeTypeMappings[type];
     let barcodeTypeRef = this.dbHandler.getRef(
       StringConcatenations.Prefix, 
@@ -128,7 +132,7 @@ export default class ScannerScreen extends Component {
     return (
       <View style={{ flex: 1 }}>
         <BarCodeScanner
-          onBarCodeScanned={this.handleBarCodeScanned}
+          onBarCodeScanned={this.handleBarcodeScanned}
           barCodeTypes={[
             BarCodeScanner.Constants.BarCodeType.upc_a,
             BarCodeScanner.Constants.BarCodeType.upc_e,

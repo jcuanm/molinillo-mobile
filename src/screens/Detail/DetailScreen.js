@@ -14,21 +14,22 @@ export default class DetailScreen extends Component {
 	render() {
 		const { navigation } = this.props;
 		const results = navigation.getParam('results', 'none');
+		console.log("Results: ", results);
 		return (
 			<View style={styles.container}>
 			<View style={{width: Dimensions.get('window').width, height: 50, backgroundColor: 'steelblue'}}>
 				<Text>
-					{results['Confection_Name']}
+					{results['confectionName']}
 				</Text>
 			</View>
 			<View style={{width: Dimensions.get('window').width, height: 50, backgroundColor: 'steelblue'}}>
 				<Text>
-					{results['Brand']}
+					{results['brand']}
 				</Text>
 			</View>
 			<View style={{width: Dimensions.get('window').width, height: 50, backgroundColor: 'steelblue'}}>
 				<Text>
-					{results['Type']}
+					{results['type']}
 				</Text>
 			</View>
 			</View>

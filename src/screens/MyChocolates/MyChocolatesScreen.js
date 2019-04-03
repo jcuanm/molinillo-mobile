@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { 
-    View, 
+    FlatList,
     Text, 
-    FlatList
+    TouchableOpacity,
+    View
  } from 'react-native';
 import DbHandler from '../../helpers/DbHandler';
 import { StringConcatenations } from '../../helpers/Constants';
@@ -69,13 +70,19 @@ export default class MyChocolatesScreen extends Component {
         title: "My Chocolates",
     })
 
-    renderItem({ item }){
+    renderItem(item, index){
         return(
-            <ListItem
-                roundAvatar
-                title={<Text>{item.key}</Text>}
-                subtitle={<Text>Hello</Text>}
-            />
+            <TouchableOpacity 
+                onPress={ () => this.props.navigation.navigate(
+                    "DetailScreen",
+                    { results : this.state.myChocolates[index].key})}
+            >
+                <ListItem
+                    roundAvatar
+                    title={<Text>{item.key}</Text>}
+                    subtitle={<Text>{index.toString()}</Text>}
+                />
+            </TouchableOpacity>
         )
     }
 
@@ -92,7 +99,8 @@ export default class MyChocolatesScreen extends Component {
     
                     <FlatList
                         data={this.state.myChocolates}
-                        renderItem={this.renderItem}
+                        renderItem={({item, index}) => this.renderItem(item, index)}
+                        keyExtractor={(_, index) => index.toString()}
                     />
                 </View>
             ); 
