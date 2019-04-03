@@ -18,17 +18,17 @@ export default class DetailScreen extends Component {
 			<View style={styles.container}>
 			<View style={{width: Dimensions.get('window').width, height: 50, backgroundColor: 'steelblue'}}>
 				<Text>
-				{results['Confection Name']}
+					{results['Confection_Name']}
 				</Text>
 			</View>
 			<View style={{width: Dimensions.get('window').width, height: 50, backgroundColor: 'steelblue'}}>
 				<Text>
-				{results['Brand']}
+					{results['Brand']}
 				</Text>
 			</View>
 			<View style={{width: Dimensions.get('window').width, height: 50, backgroundColor: 'steelblue'}}>
 				<Text>
-				{results['Type']}
+					{results['Type']}
 				</Text>
 			</View>
 			</View>

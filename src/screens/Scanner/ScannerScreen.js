@@ -13,8 +13,8 @@ export default class ScannerScreen extends Component {
   constructor(props) {
     super(props);
     this.dbHandler = new DbHandler();
-    this.handleMyChocolatesSuccessCallback = this.handleMyChocolatesSuccessCallback.bind(this); 
-    this.handleMyChocolatesErrorCallback = this.handleMyChocolatesErrorCallback.bind(this); 
+    this.handleBarcodeTypeSuccessCallback = this.handleBarcodeTypeSuccessCallback.bind(this); 
+    this.handleBarcodeTypeErrorCallback = this.handleBarcodeTypeErrorCallback.bind(this); 
     this.handleBarcodeSuccessCallback = this.handleBarcodeSuccessCallback.bind(this); 
     this.handleBarcodeErrorCallback = this.handleBarcodeErrorCallback.bind(this); 
     this.handleBarcodeFound = this.handleBarcodeFound.bind(this); 
@@ -67,21 +67,31 @@ export default class ScannerScreen extends Component {
   }
 
   handleBarcodeFound(results, barcodeType, barcodeData){
-    let myChocolatesRef = this.dbHandler.getRef("MyChocolates", barcodeType, barcodeData);
-    myChocolatesRef.set(results);
-    let myChocolatesResults = this.dbHandler.getData(
-      myChocolatesRef,
-      this.handleMyChocolatesSuccessCallback,
+    let myChocolatesRef = this.dbHandler.getRef(
+      "MyChocolates", 
+      barcodeType, 
+      barcodeData);
+
+    myChocolatesRef.set({[barcodeData] : barcodeType}, { merge : true });
+
+    let barcodeTypeRef = this.dbHandler.getRef(
+      StringConcatenations.Prefix, 
+      barcodeType, 
+      barcodeData)
+
+    let barcodeTypeResults = this.dbHandler.getData(
+      barcodeTypeRef,
+      this.handleBarcodeTypeSuccessCallback,
       [],
-      this.handleMyChocolatesErrorCallback,
+      this.handleBarcodeTypeErrorCallback,
       []);
   }
 
-  handleMyChocolatesSuccessCallback(results, optionalParams){
+  handleBarcodeTypeSuccessCallback(results, optionalParams){
     this.props.navigation.navigate("DetailScreen", { results: results.data() })
   }
 
-  handleMyChocolatesErrorCallback(error, optionalParams){
+  handleBarcodeTypeErrorCallback(error, optionalParams){
     console.log("error: " + error);
     alert("Error getting chocolate: " + error);  
   }

@@ -29,7 +29,7 @@ export default class DataEntries extends Component {
         barcodeTypeRef.set(inputValues);
         myChocolatesRef.set(
             { [this.props.barcodeData] : this.props.barcodeType }, 
-            { merge : true});
+            { merge : true });
         this.props.navigate("DetailScreen", { results : inputValues });
     }
 
@@ -38,7 +38,7 @@ export default class DataEntries extends Component {
             <View style={styles.container}>
                 <View style={{flex: 1, flexDirection: 'column'}}>
                     <Entry 
-                        title={"Confection Name"} 
+                        title={"Confection_Name"} 
                         updateInput={this.updateInput}
                     />
                     <Entry 
@@ -50,11 +50,11 @@ export default class DataEntries extends Component {
                         updateInput={this.updateInput} 
                     />
                     <Entry 
-                        title={"Cacao Variety"} 
+                        title={"Cacao_Variety"} 
                         updateInput={this.updateInput} 
                     />
                     <Entry 
-                        title={"Country of Origin"} 
+                        title={"Country_Of_Origin"} 
                         updateInput={this.updateInput} 
                     />
                 </View>

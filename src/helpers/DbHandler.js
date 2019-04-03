@@ -56,7 +56,7 @@ export default class DbHandler{
                     .collection(root)
                     .doc(this.currUser.uid);
                 break;
-            case StringConcatenations['Prefix']:
+            case StringConcatenations.Prefix:
                 ref = this.dbRef
                     .collection(root + barcodeType)
                     .doc(barcodeData.toString());

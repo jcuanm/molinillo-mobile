@@ -5,9 +5,8 @@ import {
     FlatList
  } from 'react-native';
 import DbHandler from '../../helpers/DbHandler';
-import styles from '../../styles';
 import { StringConcatenations } from '../../helpers/Constants';
-import { SearchBar } from 'react-native-elements';
+import { ListItem, SearchBar } from 'react-native-elements';
 
 export default class MyChocolatesScreen extends Component {
     constructor(props) {
@@ -69,11 +68,21 @@ export default class MyChocolatesScreen extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: "My Chocolates",
     })
-    
+
+    renderItem({ item }){
+        return(
+            <ListItem
+                roundAvatar
+                title={<Text>{item.key}</Text>}
+                subtitle={<Text>Hello</Text>}
+            />
+        )
+    }
+
     render() {
-        if (this.state.myChocolates.length){
+        if(this.state.myChocolates.length){
             return (
-                <View style={styles.container}>
+                <View>
                     <SearchBar
                         onChangeText={() => console.log("Typeing...")}
                         onClear={() => console.log("Cleared...")}
@@ -83,7 +92,7 @@ export default class MyChocolatesScreen extends Component {
     
                     <FlatList
                         data={this.state.myChocolates}
-                        renderItem={({item}) => <Text>{item.key}</Text>}
+                        renderItem={this.renderItem}
                     />
                 </View>
             ); 
