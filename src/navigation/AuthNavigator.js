@@ -11,10 +11,6 @@ import LoginScreen from '../screens/Login/LoginScreen';
 import SignupScreen from '../screens/Signup/SignupScreen';
 import ForgotPasswordScreen from '../screens/ForgotPassword/ForgotPasswordScreen';
 import SettingsScreen from '../screens/Settings/SettingsScreen';
-import ScannerScreen from '../screens/Scanner/ScannerScreen';
-import AddChocolateScreen from '../screens/AddChocolate/AddChocolateScreen';
-import DetailScreen from '../screens/Detail/DetailScreen';
-import MyChocolatesScreen from '../screens/MyChocolates/MyChocolatesScreen';
 
 const drawerStack = createDrawerNavigator({
     Home: {
@@ -33,46 +29,24 @@ const drawerStack = createDrawerNavigator({
     },
 });
 
-const unauthStack = createStackNavigator({
+const authStack = createStackNavigator({
     LoginScreen: { screen: LoginScreen },
     SignupScreen: { screen: SignupScreen },
     ForgotPasswordScreen: { screen: ForgotPasswordScreen },
 })
 
-const authStack = createStackNavigator({
-    LoginScreen: { screen: LoginScreen },
-    SignupScreen: { screen: SignupScreen },
-})
-
-const scanningStack = createStackNavigator({
-    MyChocolatesScreen: { screen: MyChocolatesScreen },
-    DetailScreen: { screen: DetailScreen },
-    ScannerScreen: { screen: ScannerScreen },
-    AddChocolateScreen: { screen: AddChocolateScreen },
-})
-
-const authenticatedNav = createSwitchNavigator({
+const unauthenticatedNav = createSwitchNavigator({
     AuthStack: { screen: authStack },
     DrawerStack: { screen: drawerStack },
-    ScanningStack: { screen: scanningStack },
-}, 
-{ 
-    initialRouteName: 'DrawerStack',
-})
-
-const unauthenticatedNav = createSwitchNavigator({
-    UnauthStack: { screen: unauthStack },
-    DrawerStack: { screen: drawerStack },
-    ScanningStack: { screen: scanningStack},
 }, 
 {
-    initialRouteName: 'UnauthStack',
+    initialRouteName: 'AuthStack',
 })
 
 export default class AuthNavigator extends Component {
     render() {
         const AuthNavigator = this.props.isAuthenticated ? 
-            createAppContainer(authenticatedNav) : createAppContainer(unauthenticatedNav);
+            createAppContainer(drawerStack) : createAppContainer(unauthenticatedNav);
         return ( <AuthNavigator /> );
     }
 }

@@ -4,11 +4,15 @@ import ScannerScreen from '../../Scanner/ScannerScreen';
 import MyChocolatesScreen from '../../MyChocolates/MyChocolatesScreen';
 import RatingsScreen from '../../Ratings/RatingsScreen';
 import WishlistScreen from '../../Wishlist/WishlistScreen';
+import DetailScreen from '../../Detail/DetailScreen';
+import AddChocolateScreen from '../../AddChocolate/AddChocolateScreen';
 
 export default createStackNavigator({
     ProfileScreen,
     ScannerScreen,
-    RatingsScreen,
     MyChocolatesScreen,
-    WishlistScreen,
+    DetailScreen,
+    AddChocolateScreen,
+    RatingsScreen,
+    WishlistScreen
 });

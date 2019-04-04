@@ -18,7 +18,7 @@ export default class Entry extends Component {
 
     sendInput(inputText){
         let currentInput = {
-            'field' : this.props.key,
+            'field' : this.props.id,
             'value' : inputText
         }
 

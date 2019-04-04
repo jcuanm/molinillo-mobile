@@ -46,11 +46,14 @@ export default class MyChocolatesScreen extends Component {
                     []);
             }
         })
+        .catch(error => {
+            console.log("Empty");
+        })
     }
 
     barcodeTypeResultsSuccessCallback(results, optionalParams){
         let newMyChocolates = optionalParams[0];
-        newMyChocolates.push({key : JSON.stringify(results.data())})
+        newMyChocolates.push({key : results.data()})
         this.setState( { myChocolates: newMyChocolates } );
     }
 
@@ -79,7 +82,7 @@ export default class MyChocolatesScreen extends Component {
             >
                 <ListItem
                     roundAvatar
-                    title={<Text>{item.key}</Text>}
+                    title={<Text>{item.key.confectionName}</Text>}
                     subtitle={<Text>{index.toString()}</Text>}
                 />
             </TouchableOpacity>
