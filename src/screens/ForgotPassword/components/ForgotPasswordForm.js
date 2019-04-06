@@ -35,7 +35,6 @@ export default class ForgotPasswordForm extends Component {
           placeholderTextColor = "#ffffff"
           selectionColor="#fff"
           keyboardType="email-address"
-          onSubmitEditing={()=> this.password.focus()}
         />
         
         <Button style={styles.button} title="Reset Password" onPress={this.onResetPasswordPress} />

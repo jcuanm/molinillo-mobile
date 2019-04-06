@@ -26,7 +26,7 @@ export default class SettingsScreen extends Component {
       <View styles={styles.container}>
         <Button
           title="Logout"
-          onPress={() => {console.log("Props", this.props); firebase.auth().signOut()}} 
+          onPress={() => { firebase.auth().signOut()} } 
           styles={styles.button}
         />
       </View>

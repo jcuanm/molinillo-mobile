@@ -1,8 +1,8 @@
 import { createStackNavigator } from 'react-navigation';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
-import SearchStack from './stacks/SearchStack';
-import ShopStack from './stacks/ShopStack';
-import ProfileStack from './stacks/ProfileStack';
+import SearchStack from '../../navigation/home_screen_stacks/SearchStack';
+import ShopStack from '../../navigation/home_screen_stacks/ShopStack';
+import ProfileStack from '../../navigation/home_screen_stacks/ProfileStack';
 
 const HomeTabs = createMaterialBottomTabNavigator(
     {

@@ -21,16 +21,14 @@ export default class DataEntries extends Component {
     }
     
     submitInput(inputValues){
-        let barcodeTypeRef = this.dbHandler.getRef(
-            StringConcatenations.Prefix, 
-            this.props.barcodeType, 
-            this.props.barcodeData);
+        const { barcode, navigate } = this.props;
+        let barcodeTypeRef = this.dbHandler.getRef(StringConcatenations.Prefix, barcode);
         let myChocolatesRef = this.dbHandler.getRef('MyChocolates');
         barcodeTypeRef.set(inputValues);
         myChocolatesRef.set(
-            { [this.props.barcodeData] : this.props.barcodeType }, 
+            { [barcode.data] : barcode.type }, 
             { merge : true });
-        this.props.navigate("DetailScreen", { results : inputValues });
+        navigate("DetailScreen", { results : inputValues });
     }
 
     render(){

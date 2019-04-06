@@ -9,13 +9,11 @@ export default class AddChocolateScreen extends Component {
     
     render() {
         const { navigation } = this.props;
-        const barcodeType = navigation.getParam('barcodeType', 'none');
-        const barcodeData = navigation.getParam('barcodeData', 'none');
+        const barcode = navigation.getParam('barcode', 'none');
         return ( 
             <DataEntries 
-                barcodeType = {barcodeType}
-                barcodeData = {barcodeData}
-                navigate = {navigation.navigate}
+                barcode = { barcode }
+                navigate = { navigation.navigate }
             /> 
         );
     }

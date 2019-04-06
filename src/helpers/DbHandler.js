@@ -37,18 +37,36 @@ export default class DbHandler{
             });
     }
 
-    getData(ref, successCallback, successCallbackParams, errorFunc, errorFuncParams){
-        return ref
+    getData(dbRef, callbacksAndParams){
+        return dbRef
             .get()
             .then(results => {
-                return successCallback(results, successCallbackParams);
+                if(results.exists){
+                    return this.executeResultsFoundCallback(
+                        results, 
+                        callbacksAndParams.handleResultsFoundCallback, 
+                        callbacksAndParams.params);
+                }
+                else{
+                    return this.executeResultsNotFoundCallback(
+                        callbacksAndParams.handleResultsNotFoundCallback, 
+                        callbacksAndParams.params);
+                }
             })
             .catch(err => {
-                return errorFunc(err, errorFuncParams);
+                console.log("Error!: ", err);
             });
     }
 
-    getRef(root, barcodeType = null, barcodeData = null){
+    executeResultsFoundCallback(results, handleResultsFoundCallback, callbackParams){
+        return handleResultsFoundCallback({ results: results, params: callbackParams });
+    }
+    
+    executeResultsNotFoundCallback(handleResultsNotFoundCallback, callbackParams){
+        return handleResultsNotFoundCallback({ params: callbackParams});
+    }
+
+    getRef(root, barcode = null){
         var ref;
         switch(root){
             case 'users':
@@ -58,8 +76,8 @@ export default class DbHandler{
                 break;
             case StringConcatenations.Prefix:
                 ref = this.dbRef
-                    .collection(root + barcodeType)
-                    .doc(barcodeData.toString());
+                    .collection(root + barcode.type)
+                    .doc(barcode.data.toString());
                 break;
             case 'MyChocolates':
                 ref = this.dbRef

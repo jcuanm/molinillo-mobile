@@ -1,26 +1,19 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity
-} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Logo from './components/Logo';
+import ForgotPassword from './components/ForgotPassword';
 import ForgotPasswordForm from './components/ForgotPasswordForm';
 
-export default class ForgotPasswordScreen extends Component {
-
+export default class ForgotPasswordScreen extends Component{
 	render() {
 		return(
 			<View style={styles.container}>
 				<Logo/>
 				<ForgotPasswordForm/>
-				<View style={styles.forgotPasswordTextCont}>
-					<Text style={styles.forgotPasswordText}>Forgot Password</Text>
-					<TouchableOpacity>
-            <Text style={styles.forgotPasswordButton}> Reset Password </Text>
-          </TouchableOpacity>
-				</View>
+        <ForgotPassword 
+          forgotPasswordText={"Forgot Password"}
+          resetPasswordButtonText={"Reset Password"}
+        />
 			</View>	
 		);
 	}

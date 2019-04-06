@@ -6,14 +6,16 @@ import {
     View
  } from 'react-native';
 import DbHandler from '../../helpers/DbHandler';
+import CallbacksAndParams from '../../helpers/CallbacksAndParams';
 import { StringConcatenations } from '../../helpers/Constants';
 import { ListItem, SearchBar } from 'react-native-elements';
+import Barcode from '../../helpers/Barcode';
 
 export default class MyChocolatesScreen extends Component {
     constructor(props) {
         super(props);
         this.dbHandler = new DbHandler();
-        this.barcodeTypeResultsSuccessCallback = this.barcodeTypeResultsSuccessCallback.bind(this); 
+        this.addToMyChocolates = this.addToMyChocolates.bind(this); 
         this.state = {
             myChocolates: []
         }
@@ -21,52 +23,34 @@ export default class MyChocolatesScreen extends Component {
 
     componentDidMount() {
         let myChocolatesRef = this.dbHandler.getRef("MyChocolates");
-        let myChocolatesResults = this.dbHandler.getData(
-            myChocolatesRef, 
-            this.myChocolatesResultsSuccessCallback, 
-            [], 
-            this.myChocolatesResultsErrorCallback, 
-            []);
+        let myChocolatesCallbacksAndParams = new CallbacksAndParams(
+            null, 
+            function(resultsAndParams){ return resultsAndParams.results; },
+            function(_){ console.log('Error getting myChocolates document'); });
+
+        let myChocolatesResults = this.dbHandler.getData(myChocolatesRef, myChocolatesCallbacksAndParams);
 
         myChocolatesResults.then(results => {
             let newMyChocolates = []; 
             for (let barcodeData in results.data()){
                 let barcodeType = results.data()[barcodeData];
-
-                let barcodeTypeRef = this.dbHandler.getRef(
-                    StringConcatenations.Prefix, 
-                    barcodeType, 
-                    barcodeData);
-
-                let barcodeTypeResults = this.dbHandler.getData(
-                    barcodeTypeRef,
-                    this.barcodeTypeResultsSuccessCallback,
-                    [newMyChocolates],
-                    this.barcodeTypeResultsErrorCallback,
-                    []);
+                let barcodeTypeRef = this.dbHandler.getRef(StringConcatenations.Prefix, new Barcode(barcodeType, barcodeData));
+                let barcodeTypeCallbacksAndParams = new CallbacksAndParams(
+                    newMyChocolates,
+                    this.addToMyChocolates,
+                    function(_){ console.log('Error getting myChocolates document'); });
+                let barcodeTypeResults = this.dbHandler.getData(barcodeTypeRef, barcodeTypeCallbacksAndParams);
             }
         })
         .catch(error => {
-            console.log("Empty");
+            console.log("Empty", error);
         })
     }
 
-    barcodeTypeResultsSuccessCallback(results, optionalParams){
-        let newMyChocolates = optionalParams[0];
-        newMyChocolates.push({key : results.data()})
+    addToMyChocolates(resultsAndParams){
+        let newMyChocolates = resultsAndParams.params;
+        newMyChocolates.push({key : resultsAndParams.results.data()})
         this.setState( { myChocolates: newMyChocolates } );
-    }
-
-    barcodeTypeResultsErrorCallback(error, optionalParams){
-        console.log("Error " + error);
-    }
-
-    myChocolatesResultsSuccessCallback(results, optionalParams){
-        if (results.exists) { return results; }
-    }
-
-    myChocolatesResultsErrorCallback(error, optionalParams){
-        console.log('Error getting myChocolates document', error);
     }
 
     static navigationOptions = ({ navigation }) => ({
@@ -110,7 +94,6 @@ export default class MyChocolatesScreen extends Component {
         }
         else {
             return <Text>Loading...</Text>
-        }
-        
+        } 
     }
 }

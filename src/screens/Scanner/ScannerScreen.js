@@ -5,29 +5,27 @@ import {
   View,
   Alert
 } from 'react-native';
-import { 
-  BarcodeTypeMappings, 
-  StringConcatenations, 
-  Warnings 
-} from '../../helpers/Constants';
+import { StringConcatenations, Warnings } from '../../helpers/Constants';
 import { BarCodeScanner, Permissions } from 'expo';
 import DbHandler from '../../helpers/DbHandler';
+import CallbacksAndParams from '../../helpers/CallbacksAndParams';
+import Barcode from '../../helpers/Barcode';
 
 export default class ScannerScreen extends Component {
   constructor(props) {
     super(props);
     this.dbHandler = new DbHandler();
-    this.handleBarcodeTypeSuccessCallback = this.handleBarcodeTypeSuccessCallback.bind(this); 
-    this.handleBarcodeTypeErrorCallback = this.handleBarcodeTypeErrorCallback.bind(this); 
-    this.handleBarcodeSuccessCallback = this.handleBarcodeSuccessCallback.bind(this); 
-    this.handleBarcodeErrorCallback = this.handleBarcodeErrorCallback.bind(this); 
+    this.handleBarcodeScanned = this.handleBarcodeScanned.bind(this);
     this.handleBarcodeFound = this.handleBarcodeFound.bind(this); 
     this.handleBarcodeNotFound = this.handleBarcodeNotFound.bind(this); 
-    this.handleBarcodeScanned = this.handleBarcodeScanned.bind(this);
-  }
-
-  state = {
-    hasCameraPermission: null,
+    this.navigateUserAndResultsToDetailScreen = this.navigateUserAndResultsToDetailScreen.bind(this); 
+    this.alertErrorRetrievingData = this.alertErrorRetrievingData.bind(this); 
+    this.delay = this.delay.bind(this);
+    this.delayTimeinMilliseconds = 500;
+    this.state = {
+      currBarcodeData: null,
+      hasCameraPermission: null,
+    }
   }
 
   static navigationOptions = ({ navigation }) => ({
@@ -39,68 +37,46 @@ export default class ScannerScreen extends Component {
     this.setState({ hasCameraPermission: status === 'granted' });
   }
 
-  handleBarcodeScanned({ type, data }) {
-    type = BarcodeTypeMappings[type];
-    let barcodeTypeRef = this.dbHandler.getRef(
-      StringConcatenations.Prefix, 
-      type, 
-      data);
-    
-    let barcodeTypeResults = this.dbHandler.getData(
-      barcodeTypeRef,
-      this.handleBarcodeSuccessCallback,
-      [type, data],
-      this.handleBarcodeErrorCallback,
-      []);
+  handleBarcodeScanned = async expoBarcode => {
+    await this.delay(this.delayTimeinMilliseconds);
+    if (this.state.currBarcodeData == expoBarcode.data) return;
+    this.setState({ currBarcodeData: expoBarcode.data });
+
+    let barcode = new Barcode(expoBarcode.type, expoBarcode.data);
+    let barcodeTypeRef = this.dbHandler.getRef(StringConcatenations.Prefix, barcode);
+    let barcodeTypeCallbacksAndParams = new CallbacksAndParams(
+      barcode,
+      this.handleBarcodeFound,
+      this.handleBarcodeNotFound);
+    let barcodeTypeResults = this.dbHandler.getData(barcodeTypeRef, barcodeTypeCallbacksAndParams);  
   }
 
-  handleBarcodeSuccessCallback(results, optionalParams){
-    let type = optionalParams[0];
-    let data = optionalParams[1];
-    if (!results.exists){
-      this.handleBarcodeNotFound(type, data);
-    } 
-    else {
-      this.handleBarcodeFound(results.data(), type, data);
-    }
+  handleBarcodeFound(resultsAndParams){
+    let barcode = resultsAndParams.params;
+    let myChocolatesRef = this.dbHandler.getRef("MyChocolates");
+    myChocolatesRef.set({[barcode.data] : barcode.type}, { merge : true });
+
+    let barcodeTypeRef = this.dbHandler.getRef(StringConcatenations.Prefix, barcode);
+    let barcodeTypeCallbacksAndParams = new CallbacksAndParams(
+      barcode,
+      this.navigateUserAndResultsToDetailScreen,
+      this.alertErrorRetrievingData);
+
+    let barcodeTypeResults = this.dbHandler.getData(barcodeTypeRef, barcodeTypeCallbacksAndParams);
   }
 
-  handleBarcodeErrorCallback(error, optionalParams){
-    console.log("error: " + error);
-    alert("Error getting chocolate: " + error);
+  navigateUserAndResultsToDetailScreen(resultsAndParams){
+    let results = resultsAndParams.results;
+    this.props.navigation.navigate("DetailScreen", { results: results.data() });
   }
 
-  handleBarcodeFound(results, barcodeType, barcodeData){
-    let myChocolatesRef = this.dbHandler.getRef(
-      "MyChocolates", 
-      barcodeType, 
-      barcodeData);
-
-    myChocolatesRef.set({[barcodeData] : barcodeType}, { merge : true });
-
-    let barcodeTypeRef = this.dbHandler.getRef(
-      StringConcatenations.Prefix, 
-      barcodeType, 
-      barcodeData)
-
-    let barcodeTypeResults = this.dbHandler.getData(
-      barcodeTypeRef,
-      this.handleBarcodeTypeSuccessCallback,
-      [],
-      this.handleBarcodeTypeErrorCallback,
-      []);
+  alertErrorRetrievingData(resultsAndParams){
+    let barcode = resultsAndParams.params;
+    alert("Error getting chocolate " + barcode.data.toString() + " of type " + barcode.type);  
   }
 
-  handleBarcodeTypeSuccessCallback(results, optionalParams){
-    this.props.navigation.navigate("DetailScreen", { results: results.data() })
-  }
-
-  handleBarcodeTypeErrorCallback(error, optionalParams){
-    console.log("error: " + error);
-    alert("Error getting chocolate: " + error);  
-  }
-
-  handleBarcodeNotFound(barcodeType, barcodeData){
+  handleBarcodeNotFound(resultsAndParams){
+    let barcode = resultsAndParams.params;
     Alert.alert(
       Warnings.FailedToFindChocolate,
       Warnings.HelpFindChocolate,
@@ -109,15 +85,17 @@ export default class ScannerScreen extends Component {
         {text: 'Add Chocolate', onPress: () => 
           this.props.navigation.navigate(
             "AddChocolateScreen",
-            { 
-              barcodeType: barcodeType, 
-              barcodeData: barcodeData, 
-            }
-          )
+            { barcode : barcode })
         },
       ],
       { cancelable: false }
     );
+  }
+
+  delay(time) {
+    return new Promise(function(resolve, reject) {
+      setTimeout(() => resolve(), time);
+    });
   }
 
   render() {
@@ -128,7 +106,6 @@ export default class ScannerScreen extends Component {
     if (hasCameraPermission === false) {
       return <Text>No access to camera</Text>;
     }
-
     return (
       <View style={{ flex: 1 }}>
         <BarCodeScanner
