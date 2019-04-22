@@ -17,18 +17,20 @@ export default class MyChocolatesScreen extends Component {
         this.dbHandler = new DbHandler();
         this.addToMyChocolates = this.addToMyChocolates.bind(this); 
         this.state = {
+            isLoading: false,
             myChocolates: []
         }
     }
 
-    componentDidMount() {
+    componentWillMount(){
         let myChocolatesRef = this.dbHandler.getRef("MyChocolates");
         let myChocolatesCallbacksAndParams = new CallbacksAndParams(
             null, 
             function(resultsAndParams){ return resultsAndParams.results; },
             function(_){ console.log('Error getting myChocolates document'); });
-
         let myChocolatesResults = this.dbHandler.getData(myChocolatesRef, myChocolatesCallbacksAndParams);
+
+        this.setState({ isLoading: true});
 
         myChocolatesResults.then(results => {
             let newMyChocolates = []; 
@@ -41,6 +43,8 @@ export default class MyChocolatesScreen extends Component {
                     function(_){ console.log('Error getting myChocolates document'); });
                 let barcodeTypeResults = this.dbHandler.getData(barcodeTypeRef, barcodeTypeCallbacksAndParams);
             }
+
+            this.setState({ isLoading: false})
         })
         .catch(error => {
             console.log("Empty", error);
@@ -74,8 +78,11 @@ export default class MyChocolatesScreen extends Component {
     }
 
     render() {
-        if(this.state.myChocolates.length){
-            return (
+        if(this.state.isLoading){
+            return <Text>Loading...</Text>
+        }
+        else {
+            return(
                 <View>
                     <SearchBar
                         onChangeText={() => console.log("Typeing...")}
@@ -90,10 +97,7 @@ export default class MyChocolatesScreen extends Component {
                         keyExtractor={(_, index) => index.toString()}
                     />
                 </View>
-            ); 
-        }
-        else {
-            return <Text>Loading...</Text>
+            );
         } 
     }
 }
