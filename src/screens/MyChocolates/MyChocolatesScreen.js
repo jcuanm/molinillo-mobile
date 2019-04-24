@@ -15,7 +15,7 @@ export default class MyChocolatesScreen extends Component {
     constructor(props) {
         super(props);
         this.dbHandler = new DbHandler();
-        this.addToMyChocolates = this.addToMyChocolates.bind(this); 
+        this.addToMyChocolatesList = this.addToMyChocolatesList.bind(this); 
         this.state = {
             isLoading: false,
             myChocolates: []
@@ -39,7 +39,7 @@ export default class MyChocolatesScreen extends Component {
                 let barcodeTypeRef = this.dbHandler.getRef(StringConcatenations.Prefix, new Barcode(barcodeType, barcodeData));
                 let barcodeTypeCallbacksAndParams = new CallbacksAndParams(
                     newMyChocolates,
-                    this.addToMyChocolates,
+                    this.addToMyChocolatesList,
                     function(_){ console.log('Error getting myChocolates document'); });
                 let barcodeTypeResults = this.dbHandler.getData(barcodeTypeRef, barcodeTypeCallbacksAndParams);
             }
@@ -48,10 +48,11 @@ export default class MyChocolatesScreen extends Component {
         })
         .catch(error => {
             console.log("Empty", error);
+            alert("Sorry! We're having trouble connecting.")
         })
     }
 
-    addToMyChocolates(resultsAndParams){
+    addToMyChocolatesList(resultsAndParams){
         let newMyChocolates = resultsAndParams.params;
         newMyChocolates.push({key : resultsAndParams.results.data()})
         this.setState( { myChocolates: newMyChocolates } );

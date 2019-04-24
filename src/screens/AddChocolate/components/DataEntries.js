@@ -25,9 +25,7 @@ export default class DataEntries extends Component {
         let barcodeTypeRef = this.dbHandler.getRef(StringConcatenations.Prefix, barcode);
         let myChocolatesRef = this.dbHandler.getRef('MyChocolates');
         barcodeTypeRef.set(inputValues);
-        myChocolatesRef.set(
-            { [barcode.data] : barcode.type }, 
-            { merge : true });
+        myChocolatesRef.set( { [barcode.data] : barcode.type }, { merge : true });
         navigate("DetailScreen", { results : inputValues });
     }
 

@@ -15,17 +15,17 @@ export default class ScannerScreen extends Component {
   constructor(props) {
     super(props);
     this.dbHandler = new DbHandler();
+    this.state = {
+      currBarcodeData: null,
+      hasCameraPermission: null,
+    }
+
     this.handleBarcodeScanned = this.handleBarcodeScanned.bind(this);
     this.handleBarcodeFound = this.handleBarcodeFound.bind(this); 
     this.handleBarcodeNotFound = this.handleBarcodeNotFound.bind(this); 
     this.navigateUserAndResultsToDetailScreen = this.navigateUserAndResultsToDetailScreen.bind(this); 
     this.alertErrorRetrievingData = this.alertErrorRetrievingData.bind(this); 
     this.delay = this.delay.bind(this);
-    this.delayTimeinMilliseconds = 500;
-    this.state = {
-      currBarcodeData: null,
-      hasCameraPermission: null,
-    }
   }
 
   static navigationOptions = ({ navigation }) => ({
@@ -38,7 +38,8 @@ export default class ScannerScreen extends Component {
   }
 
   handleBarcodeScanned = async expoBarcode => {
-    await this.delay(this.delayTimeinMilliseconds);
+    let delayTimeinMilliseconds = 500;
+    await this.delay(delayTimeinMilliseconds);
     if (this.state.currBarcodeData == expoBarcode.data) return;
     this.setState({ currBarcodeData: expoBarcode.data });
 
@@ -53,15 +54,11 @@ export default class ScannerScreen extends Component {
 
   handleBarcodeFound(resultsAndParams){
     let barcode = resultsAndParams.params;
-    let myChocolatesRef = this.dbHandler.getRef("MyChocolates");
-    myChocolatesRef.set({[barcode.data] : barcode.type}, { merge : true });
-
     let barcodeTypeRef = this.dbHandler.getRef(StringConcatenations.Prefix, barcode);
     let barcodeTypeCallbacksAndParams = new CallbacksAndParams(
       barcode,
       this.navigateUserAndResultsToDetailScreen,
       this.alertErrorRetrievingData);
-
     let barcodeTypeResults = this.dbHandler.getData(barcodeTypeRef, barcodeTypeCallbacksAndParams);
   }
 

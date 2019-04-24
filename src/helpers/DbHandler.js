@@ -15,8 +15,8 @@ export default class DbHandler{
             .then(() => {})
             .catch( error => { 
                 console.log(error);
-                alert(error.message)} 
-            );  
+                alert("Sorry! We couldn't log you in. There was a connection error.");
+            });  
     }
 
     signupUser(email, password, passwordConfirm){
@@ -31,9 +31,9 @@ export default class DbHandler{
             .auth()
             .createUserWithEmailAndPassword(email, password)
             .then()
-            .catch( err => { 
-                console.log(err);
-                alert(err.message); 
+            .catch( error => { 
+                console.log(error);
+                alert("Sorry! We couldn't sign you up. There was a connection error."); 
             });
     }
 
@@ -53,8 +53,9 @@ export default class DbHandler{
                         callbacksAndParams.params);
                 }
             })
-            .catch(err => {
-                console.log("Error!: ", err);
+            .catch(error => {
+                alert("Sorry! We we're having trouble connecting.");
+                console.log("Error!: ", error);
             });
     }
 
