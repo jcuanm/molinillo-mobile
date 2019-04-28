@@ -62,6 +62,16 @@ export default class MyChocolatesScreen extends Component {
         title: "My Chocolates",
     })
 
+    renderHeader(){
+        return(
+            <SearchBar 
+                placeholder="Type Here..." 
+                lightTheme 
+                round 
+            />
+        );
+    };
+
     renderItem(item, index){
         return(
             <TouchableOpacity 
@@ -78,24 +88,18 @@ export default class MyChocolatesScreen extends Component {
         )
     }
 
-    render() {
+    render(){
         if(this.state.isLoading){
             return <Text>Loading...</Text>
         }
         else {
             return(
                 <View>
-                    <SearchBar
-                        onChangeText={() => console.log("Typeing...")}
-                        onClear={() => console.log("Cleared...")}
-                        placeholder='Type Here...' 
-                        clearIcon={{name: 'clear'}}
-                    />
-    
                     <FlatList
                         data={this.state.myChocolates}
                         renderItem={({item, index}) => this.renderItem(item, index)}
                         keyExtractor={(_, index) => index.toString()}
+                        ListHeaderComponent={this.renderHeader}
                     />
                 </View>
             );

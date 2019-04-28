@@ -80,9 +80,7 @@ export default class ScannerScreen extends Component {
       [
         {text: 'No thanks', style: 'cancel'},
         {text: 'Add Chocolate', onPress: () => 
-          this.props.navigation.navigate(
-            "AddChocolateScreen",
-            { barcode : barcode })
+          this.props.navigation.navigate("AddChocolateScreen", { barcode : barcode })
         },
       ],
       { cancelable: false }
