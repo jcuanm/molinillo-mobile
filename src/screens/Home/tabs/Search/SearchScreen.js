@@ -9,19 +9,26 @@ import DbHandler from '../../../../helpers/DbHandler';
 import { ListItem, SearchBar } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 import ActionButton from 'react-native-action-button';
+import { AlgoliaSearchConfig } from '../../../../../assets/Config';
+import { InstantSearch } from 'react-instantsearch-native';
+import SearchBox from './components/SearchBox';
+import InfiniteHits from './components/InfiniteHits';
+import algoliasearch from 'algoliasearch/lite';
 import styles from '../../../../styles';
 
 export default class SearchScreen extends Component {
     constructor(props){
         super(props);
         this.dbHandler = new DbHandler();
-        this.state = {
-            searchInput: ''
-        }
-
-        this.updateInput = this.updateInput.bind(this); 
-        this.renderHeader = this.renderHeader.bind(this);
-        this.searchRef = '';
+        this.algoliaSearchClient = algoliasearch(AlgoliaSearchConfig.applicationID, AlgoliaSearchConfig.apiKey);
+        this.root = {
+            Root: View,
+            props: {
+                style: {
+                    flex: 1,
+                },
+            },
+        };
     }
 
     static navigationOptions = ({ navigation }) => ({
@@ -36,33 +43,18 @@ export default class SearchScreen extends Component {
         ),
     })
 
-    updateInput(input){
-        this.setState({ searchInput : input });
-    }
-
-    renderHeader(){
-        const { searchInput } = this.state;
-        return(
-            <SearchBar 
-                ref={searchRef => this.searchRef = searchRef }
-                placeholder='Search Molinillo' 
-                clearIcon={{name: 'clear'}}
-                onChangeText={this.updateInput}
-                lightTheme 
-                round 
-            />
-        );
-    }
-
     render(){
         return(
             <View style={styles.container}>
-                <FlatList
-                    data={[{key:'a'}, {key:'b'}]}
-                    renderItem={({item}) => <Text>{item.key}</Text>}
-                    ListHeaderComponent={this.renderHeader}
-                />
-                
+                <InstantSearch
+                    searchClient={this.algoliaSearchClient}
+                    indexName={AlgoliaSearchConfig.indexName}
+                    root={this.root}
+                >
+                    <SearchBox />
+                    <InfiniteHits />
+                </InstantSearch>
+
                 <ActionButton
                     buttonColor="rgba(231,76,60,1)"
                     onPress={() => { this.props.navigation.navigate("ScannerScreen") }}

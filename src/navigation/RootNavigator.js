@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import FirebaseConfig from '../../assets/config/FirebaseConfig';
+import React, { Component } from 'react';
+import { FirebaseConfig } from '../../assets/Config';
 import AuthNavigator from './AuthNavigator';
 import { Asset, AppLoading } from 'expo';
 import * as firebase from 'firebase';
@@ -14,17 +14,19 @@ export default class RootNavigator extends Component{
     };
 
     // Initialize firebase database
-    if (!firebase.apps.length) { firebase.initializeApp(FirebaseConfig.FirebaseConfig); }
+    if(!firebase.apps.length){ 
+      firebase.initializeApp(FirebaseConfig); 
+    }
     firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
 
     // Initializing firestore
     const firestore = firebase.firestore();
-    const settings = {timestampsInSnapshots: true};
-    firestore.settings(settings);
+    //const settings = {timestampsInSnapshots: true}; 
+    //firestore.settings(settings);
   }
 
   onAuthStateChanged = (user) => {
-    if (user){
+    if(user){
       this.setState({isAuthenticated: true, isLoading: false});
     } 
     else{
@@ -33,7 +35,7 @@ export default class RootNavigator extends Component{
   }
 
   /* Handles the images for the load screen */
-  async _cacheResourcesAsync() {
+  async _cacheResourcesAsync(){
     const images = [
       require('../../assets/images/splash.png'),
       require('../../assets/images/icon.png'),
@@ -45,8 +47,8 @@ export default class RootNavigator extends Component{
     return Promise.all(cacheImages)
   }
 
-  render() {
-    if (this.state.isLoading){
+  render(){
+    if(this.state.isLoading){
       return(
         <AppLoading
           startAsync={this._cacheResourcesAsync}
@@ -56,7 +58,7 @@ export default class RootNavigator extends Component{
       );
     }
 
-    return (
+    return(
       <AuthNavigator
         isAuthenticated={this.state.isAuthenticated}
       />
