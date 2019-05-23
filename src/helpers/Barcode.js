@@ -36,7 +36,6 @@ export default class Barcode{
         break;
       default:
         barcodeType = barcodeTypeCode;
-
     }
     return barcodeType;
   }

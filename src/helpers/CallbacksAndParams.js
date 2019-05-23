@@ -1,7 +1,7 @@
 export default class CallbacksAndParams{
-  constructor(params, handleResultsFoundCallback, handleResultsNotFoundCallback){
+  constructor(params, handleSuccessCallback, handleFailureCallback){
     this.params = params;
-    this.handleResultsFoundCallback = handleResultsFoundCallback;
-    this.handleResultsNotFoundCallback = handleResultsNotFoundCallback;
+    this.handleSuccessCallback = handleSuccessCallback;
+    this.handleFailureCallback = handleFailureCallback;
   }
 }

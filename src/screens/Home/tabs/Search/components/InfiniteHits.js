@@ -1,11 +1,13 @@
 import React from 'react';
 import { 
+  FlatList,
   StyleSheet, 
-  Text, 
+  Text,
+  TouchableOpacity, 
   View, 
-  FlatList 
 } from 'react-native';
 import PropTypes from 'prop-types';
+import { ListItem } from 'react-native-elements';
 import { connectInfiniteHits } from 'react-instantsearch-native';
 
 const styles = StyleSheet.create({
@@ -22,17 +24,25 @@ const styles = StyleSheet.create({
   },
 });
 
+function renderItem(item, index){
+  return( 
+    <TouchableOpacity>
+      <ListItem
+        roundAvatar
+        title={<Text>{item.confectionName}</Text>}
+        subtitle={<Text>{index.toString()}</Text>}
+      />
+    </TouchableOpacity>
+  );
+}
+
 const InfiniteHits = ({ hits, hasMore, refine }) => (
   <FlatList
     data={hits}
     keyExtractor={item => item.objectID}
     ItemSeparatorComponent={() => <View style={styles.separator} />}
     onEndReached={() => hasMore && refine()}
-    renderItem={({ item }) => (
-      <View style={styles.item}>
-        <Text>{JSON.stringify(item).slice(0, 100)}</Text>
-      </View>
-    )}
+    renderItem={({ item, index }) => renderItem(item, index) }
   />
 );
 

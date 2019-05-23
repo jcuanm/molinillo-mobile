@@ -6,6 +6,20 @@ export default class DbHandler{
     constructor(){
         this.dbRef = firebase.firestore();
         this.currUser = firebase.auth().currentUser;
+        this.executeSuccessCallback = this.executeSuccessCallback.bind(this); 
+    }
+
+    // For testing purposes
+    addData(){
+        this.dbRef
+            .collection('BarcodeType_Upc_a')
+            .doc('036000291452')
+            .set( { barcodeType : 'Upc_a' , barcodeData : '036000291452', confectionName : 'Javier'});
+        
+        this.dbRef
+            .collection('BarcodeType_Code128')
+            .doc(']C1Wikipedia')
+            .set( { barcodeType : 'Code128' , barcodeData : ']C1Wikipedia', confectionName : 'wiki'});
     }
 
     loginUser(email, password){
@@ -15,7 +29,7 @@ export default class DbHandler{
             .then(() => {})
             .catch( error => { 
                 console.log(error);
-                alert("Sorry! We couldn't log you in. There was a connection error.");
+                alert("We couldn't log you in! There was a connection error.");
             });  
     }
 
@@ -31,7 +45,7 @@ export default class DbHandler{
             .auth()
             .createUserWithEmailAndPassword(email, password)
             .then()
-            .catch( error => { 
+            .catch(error => { 
                 console.log(error);
                 alert("Sorry! We couldn't sign you up. There was a connection error."); 
             });
@@ -42,15 +56,11 @@ export default class DbHandler{
             .get()
             .then(results => {
                 if(results.exists){
-                    return this.executeResultsFoundCallback(
-                        results, 
-                        callbacksAndParams.handleResultsFoundCallback, 
-                        callbacksAndParams.params);
+                    callbacksAndParams.params['results'] = results;
+                    return this.executeSuccessCallback(callbacksAndParams.handleSuccessCallback, callbacksAndParams.params);
                 }
                 else{
-                    return this.executeResultsNotFoundCallback(
-                        callbacksAndParams.handleResultsNotFoundCallback, 
-                        callbacksAndParams.params);
+                    return this.executeFailureCallback(callbacksAndParams.handleFailureCallback, callbacksAndParams.params);
                 }
             })
             .catch(error => {
@@ -59,12 +69,24 @@ export default class DbHandler{
             });
     }
 
-    executeResultsFoundCallback(results, handleResultsFoundCallback, callbackParams){
-        return handleResultsFoundCallback({ results: results, params: callbackParams });
+    deleteItem(dbRef, callbacksAndParams){
+        return dbRef
+            .delete()
+            .then( _ => {
+                this.executeSuccessCallback(callbacksAndParams.handleSuccessCallback, callbacksAndParams.params);
+            })
+            .catch(error => {
+                console.log(error);
+                alert("Error deleting item!"); 
+            });
+    }
+
+    executeSuccessCallback(handleSuccessCallback, callbackParams){
+        return handleSuccessCallback({ results: callbackParams.results, params: callbackParams });
     }
     
-    executeResultsNotFoundCallback(handleResultsNotFoundCallback, callbackParams){
-        return handleResultsNotFoundCallback({ params: callbackParams});
+    executeFailureCallback(handleFailureCallback, callbackParams){
+        return handleFailureCallback({ params: callbackParams});
     }
 
     getRef(root, barcode = null){

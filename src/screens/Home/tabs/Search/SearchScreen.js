@@ -1,12 +1,5 @@
 import React, { Component } from 'react';
-import { 
-    FlatList, 
-    Text, 
-    TouchableOpacity,
-    View 
-} from 'react-native';
-import DbHandler from '../../../../helpers/DbHandler';
-import { ListItem, SearchBar } from 'react-native-elements';
+import { TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import ActionButton from 'react-native-action-button';
 import { AlgoliaSearchConfig } from '../../../../../assets/Config';
@@ -19,7 +12,6 @@ import styles from '../../../../styles';
 export default class SearchScreen extends Component {
     constructor(props){
         super(props);
-        this.dbHandler = new DbHandler();
         this.algoliaSearchClient = algoliasearch(AlgoliaSearchConfig.applicationID, AlgoliaSearchConfig.apiKey);
         this.root = {
             Root: View,
@@ -45,7 +37,7 @@ export default class SearchScreen extends Component {
 
     render(){
         return(
-            <View style={styles.container}>
+            <View style={{flex:1}} >
                 <InstantSearch
                     searchClient={this.algoliaSearchClient}
                     indexName={AlgoliaSearchConfig.indexName}
@@ -53,12 +45,11 @@ export default class SearchScreen extends Component {
                 >
                     <SearchBox />
                     <InfiniteHits />
-                </InstantSearch>
-
-                <ActionButton
-                    buttonColor="rgba(231,76,60,1)"
-                    onPress={() => { this.props.navigation.navigate("ScannerScreen") }}
-                />
+                    <ActionButton
+                        buttonColor="rgba(231,76,60,1)"
+                        onPress={() => { this.props.navigation.navigate("ScannerScreen") }}
+                    />
+                </InstantSearch> 
             </View>
         );
     }

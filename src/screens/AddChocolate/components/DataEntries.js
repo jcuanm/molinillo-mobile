@@ -13,7 +13,10 @@ export default class DataEntries extends Component {
         super(props);
         this.updateInput = this.updateInput.bind(this); 
         this.dbHandler = new DbHandler();
-        this.inputValues = {};
+        this.inputValues = {
+            barcodeType : this.props.barcode.type,
+            barcodeData : this.props.barcode.data
+        };
     }
 
     updateInput(input){
@@ -22,10 +25,13 @@ export default class DataEntries extends Component {
     
     submitInput(inputValues){
         const { barcode, navigate } = this.props;
+
         let barcodeTypeRef = this.dbHandler.getRef(StringConcatenations.Prefix, barcode);
         let myChocolatesRef = this.dbHandler.getRef('MyChocolates');
+
         barcodeTypeRef.set(inputValues);
         myChocolatesRef.set( { [barcode.data] : barcode.type }, { merge : true });
+        
         navigate("DetailScreen", { results : inputValues });
     }
 
