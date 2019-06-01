@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { 
-	View, 
+	Alert,
+	Button,
 	TouchableOpacity, 
-	Button
+	View, 
 } from 'react-native';
 import './components/Detail';
 import * as firebase from 'firebase';
@@ -12,13 +13,13 @@ import DbHandler from '../../helpers/DbHandler';
 import Detail from './components/Detail';
 import Barcode from '../../helpers/Barcode';
 import CallbacksAndParams from '../../helpers/CallbacksAndParams';
-import { StringConcatenations } from '../../helpers/Constants';
+import { StringConcatenations, Warnings } from '../../helpers/Constants';
 
 export default class DetailScreen extends Component {
 	constructor(props) {
     super(props);
 		this.dbHandler = new DbHandler();
-		this.results = this.props.navigation.getParam('results', 'none');
+		this.entries = this.props.navigation.getParam('results', 'none');
 		this.navigateOnSuccessfulDelete = this.navigateOnSuccessfulDelete.bind(this); 
 	}
 
@@ -31,8 +32,22 @@ export default class DetailScreen extends Component {
 		),		
 	})
 
+	promptDeleteItemPrompt(){
+		Alert.alert(
+			Warnings.ConfirmDeletion,
+			"",
+      [
+				{text: 'Delete', onPress: () => 
+					this.deleteItem()
+        },
+        {text: 'Cancel', style: 'cancel'}
+      ],
+      { cancelable: false }
+    );
+	}
+
 	deleteItem(){
-		const { barcodeType, barcodeData } = this.results;
+		const { barcodeType, barcodeData } = this.entries;
 		let barcodeToDelete = new Barcode(barcodeType, barcodeData);
 		let detailRef = this.dbHandler.getRef(StringConcatenations.Prefix, barcodeToDelete);
 
@@ -65,25 +80,36 @@ export default class DetailScreen extends Component {
 
 	render() {
 		const { navigation } = this.props;
+		const { 
+			brand, 
+			confectionName, 
+			type,
+			barcodeData,
+			barcodeType 
+		} = this.entries;
+
 		const shouldUserEditItem = navigation.getParam('shouldUserEditItem', 'none');
+		const curr_barcode = new Barcode(barcodeType, barcodeData)
 
 		return (
 			<View style={styles.container}>
-				<Detail title={this.results.confectionName} />
-				<Detail title={this.results.brand} />
-				<Detail title={this.results.type} />
+				<Detail title={confectionName} />
+				<Detail title={brand} />
+				<Detail title={type} />
 				
 				{ shouldUserEditItem ? 
 					<View>
 						<Button 
 							title="Delete"
-							onPress={() => this.deleteItem() } 
+							onPress={() => this.promptDeleteItemPrompt() } 
 							styles={styles.button}
 						/> 
 						
 						<Button 
 							title="Edit Chocolate"
-							onPress={() => { console.log("Edit Chocolate"); } } 
+							onPress={() => navigation.navigate(
+								"EditChocolateScreen", 
+								{ barcode: curr_barcode, entries: this.entries })} 
 							styles={styles.button}
 						/> 
 					</View> 

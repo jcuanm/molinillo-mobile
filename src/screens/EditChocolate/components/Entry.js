@@ -11,7 +11,7 @@ export default class Entry extends Component {
     constructor(props){
         super(props);
         this.state = {
-            value: '',
+            value: this.props.currValue,
             isDialogVisible: false,
         }
     }

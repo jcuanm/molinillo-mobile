@@ -33,7 +33,7 @@ export default class SearchScreen extends Component {
                 <Ionicons name="md-menu" size={32} />
             </TouchableOpacity>
         ),
-    })
+    });
 
     render(){
         return(
