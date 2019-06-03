@@ -16,11 +16,20 @@ export default class SearchScreen extends Component {
         this.root = {
             Root: View,
             props: {
-                style: {
-                    flex: 1,
-                },
+                style: { flex: 1 },
             },
         };
+    }
+
+    componentDidMount(){
+        this.didFocusListener = this.props.navigation.addListener(
+            'didFocus',
+            () => { this.algoliaSearchClient.clearCache(); },
+        );
+    }
+
+    componentWillUnmount(){
+        this.didFocusListener.remove();
     }
 
     static navigationOptions = ({ navigation }) => ({

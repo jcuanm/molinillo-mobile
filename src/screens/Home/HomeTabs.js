@@ -15,14 +15,9 @@ const HomeTabs = createMaterialBottomTabNavigator(
         inactiveColor: 'rgba(255,255,255,.7)',
         barStyle: {
             backgroundColor: '#8A2BE2'
-        },
-        navigationOptions: ({ navigation }) => ({
-            tabBarOnPress: (scene, jumpToIndex) => {
-                console.log('onPress:', scene.route);
-                jumpToIndex(scene.index);
-            },
-        }),
-    }
+        }
+    },
+
 );
 
 //Issue: the tab navigator needs to be wrapped inside a stack navigator
