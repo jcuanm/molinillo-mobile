@@ -10,47 +10,56 @@ import algoliasearch from 'algoliasearch/lite';
 import styles from '../../../../styles';
 
 export default class SearchScreen extends Component {
-    constructor(props){
-        super(props);
-        this.algoliaSearchClient = algoliasearch(AlgoliaSearchConfig.applicationID, AlgoliaSearchConfig.apiKey);
-        this.root = {
-            Root: View,
-            props: {
-                style: {
-                    flex: 1,
-                },
-            },
-        };
-    }
+  constructor(props){
+    super(props);
+    this.algoliaSearchClient = algoliasearch(AlgoliaSearchConfig.applicationID, AlgoliaSearchConfig.apiKey);
+    this.root = {
+      Root: View,
+      props: {
+        style: { flex: 1 },
+      },
+    };
+  }
 
-    static navigationOptions = ({ navigation }) => ({
-        title: "Search",
-        headerLeft: (
-            <TouchableOpacity
-                style={styles.headerButton}
-                onPress={() => navigation.openDrawer()}
-            >
-                <Ionicons name="md-menu" size={32} />
-            </TouchableOpacity>
-        ),
-    });
+  componentDidMount(){
+    this.didFocusListener = this.props.navigation.addListener(
+      'didFocus',
+      () => { this.algoliaSearchClient.clearCache(); },
+    );
+  }
 
-    render(){
-        return(
-            <View style={{flex:1}} >
-                <InstantSearch
-                    searchClient={this.algoliaSearchClient}
-                    indexName={AlgoliaSearchConfig.indexName}
-                    root={this.root}
-                >
-                    <SearchBox />
-                    <InfiniteHits />
-                    <ActionButton
-                        buttonColor="rgba(231,76,60,1)"
-                        onPress={() => { this.props.navigation.navigate("ScannerScreen") }}
-                    />
-                </InstantSearch> 
-            </View>
-        );
-    }
+  componentWillUnmount(){
+    this.didFocusListener.remove();
+  }
+
+  static navigationOptions = ({ navigation }) => ({
+    title: "Search",
+    headerLeft: (
+      <TouchableOpacity
+        style={styles.headerButton}
+        onPress={() => navigation.openDrawer()}
+      >
+        <Ionicons name="md-menu" size={32} />
+      </TouchableOpacity>
+    ),
+  });
+
+  render(){
+    return(
+      <View style={{flex:1}} >
+        <InstantSearch
+          searchClient={this.algoliaSearchClient}
+          indexName={AlgoliaSearchConfig.indexName}
+          root={this.root}
+        >
+          <SearchBox />
+          <InfiniteHits />
+          <ActionButton
+            buttonColor="rgba(231,76,60,1)"
+            onPress={() => { this.props.navigation.navigate("ScannerScreen") }}
+          />
+        </InstantSearch> 
+      </View>
+    );
+  }
 }

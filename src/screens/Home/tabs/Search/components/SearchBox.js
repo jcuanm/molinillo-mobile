@@ -1,5 +1,9 @@
 import React from 'react';
-import { StyleSheet, View, TextInput } from 'react-native';
+import { 
+  StyleSheet, 
+  View, 
+  TextInput 
+} from 'react-native';
 import PropTypes from 'prop-types';
 import { connectSearchBox } from 'react-instantsearch-native';
 

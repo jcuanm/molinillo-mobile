@@ -5,24 +5,18 @@ import ShopStack from '../../navigation/home_screen_stacks/ShopStack';
 import ProfileStack from '../../navigation/home_screen_stacks/ProfileStack';
 
 const HomeTabs = createMaterialBottomTabNavigator(
-    {
-        Shop: ShopStack,
-        Search: SearchStack,
-        Profile: ProfileStack,
-    },
-    {
-        activeColor: 'rgba(255,255,255,1)',
-        inactiveColor: 'rgba(255,255,255,.7)',
-        barStyle: {
-            backgroundColor: '#8A2BE2'
-        },
-        navigationOptions: ({ navigation }) => ({
-            tabBarOnPress: (scene, jumpToIndex) => {
-                console.log('onPress:', scene.route);
-                jumpToIndex(scene.index);
-            },
-        }),
+  {
+    Shop: ShopStack,
+    Search: SearchStack,
+    Profile: ProfileStack,
+  },
+  {
+    activeColor: 'rgba(255,255,255,1)',
+    inactiveColor: 'rgba(255,255,255,.7)',
+    barStyle: {
+      backgroundColor: '#8A2BE2'
     }
+  },
 );
 
 //Issue: the tab navigator needs to be wrapped inside a stack navigator
