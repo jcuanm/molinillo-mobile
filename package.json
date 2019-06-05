@@ -10,6 +10,7 @@
     "algoliasearch": "^3.32.1",
     "aws-amplify": "^1.1.17",
     "aws-amplify-react-native": "^2.1.5",
+    "axios": "^0.19.0",
     "expo": "^31.0.2",
     "firebase": "^5.11.1",
     "react": "16.5.0",
@@ -21,7 +22,8 @@
     "react-native-paper": "^2.2.8",
     "react-native-vector-icons": "^6.1.0",
     "react-navigation": "^3.0.6",
-    "react-navigation-material-bottom-tabs": "^1.0.0"
+    "react-navigation-material-bottom-tabs": "^1.0.0",
+    "ws": "^7.0.0"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.0.0"
