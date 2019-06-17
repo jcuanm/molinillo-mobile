@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Button } from 'react-native';
 import { StringConcatenations } from '../../../helpers/Constants';
 import Entry from './Entry';
+import ImageArea from './ImageArea';
 import DbHandler from '../../../helpers/DbHandler'
 import styles from '../../../styles';
 
@@ -35,12 +36,12 @@ export default class DataEntries extends Component {
   render(){
     return(
       <View style={styles.container}>
-        <Entry 
-          id={"Image"} 
-          displayName={"Image"}
-          updateInput={this.updateInput}
-        />
         <View style={{flex: 1, flexDirection: 'column'}}>
+          <ImageArea 
+            id={"image"} 
+            displayName={"Image"}
+            barcode={this.props.barcode}
+          />
           <Entry 
             id={"confectionName"} 
             displayName={"Confection Name"}

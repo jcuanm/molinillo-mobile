@@ -1,5 +1,6 @@
 import {  StringConcatenations } from '../helpers/Constants';
 import * as firebase from 'firebase';
+import Constants from '../helpers/Constants';
 import 'firebase/firestore';
 
 export default class DbHandler{
@@ -35,7 +36,7 @@ export default class DbHandler{
 
     signupUser(email, password, passwordConfirm){
         if(password !== passwordConfirm){
-            alert("Passwords do not match");
+            alert(Constants.PasswordsDontMatch);
             return;
         }
 
@@ -64,7 +65,7 @@ export default class DbHandler{
                 }
             })
             .catch(error => {
-                alert("Sorry! We we're having trouble connecting.");
+                alert("We're having trouble connecting.");
                 console.log("Error!: ", error);
             });
     }
