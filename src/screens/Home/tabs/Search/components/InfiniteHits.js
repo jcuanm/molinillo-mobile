@@ -2,12 +2,10 @@ import React from 'react';
 import { 
   FlatList,
   StyleSheet, 
-  Text,
-  TouchableOpacity, 
   View, 
 } from 'react-native';
 import PropTypes from 'prop-types';
-import { ListItem } from 'react-native-elements';
+import CustomListItem from "../../../../../helpers/CustomListItem";
 import { connectInfiniteHits } from 'react-instantsearch-native';
 
 const styles = StyleSheet.create({
@@ -24,25 +22,13 @@ const styles = StyleSheet.create({
   },
 });
 
-function renderItem(item, index){
-  return( 
-    <TouchableOpacity>
-      <ListItem
-        roundAvatar
-        title={<Text>{item.confectionName}</Text>}
-        subtitle={<Text>{index.toString()}</Text>}
-      />
-    </TouchableOpacity>
-  );
-}
-
-const InfiniteHits = ({ hits, hasMore, refine }) => (
+const InfiniteHits = ({ hits, hasMore, refine, navigate }) => (
   <FlatList
     data={hits}
     keyExtractor={item => item.objectID}
     ItemSeparatorComponent={() => <View style={styles.separator} />}
     onEndReached={() => hasMore && refine()}
-    renderItem={({ item, index }) => renderItem(item, index) }
+    renderItem={({ item }) => renderItem(item, navigate) }
   />
 );
 
@@ -50,6 +36,19 @@ InfiniteHits.propTypes = {
   hits: PropTypes.arrayOf(PropTypes.object).isRequired,
   hasMore: PropTypes.bool.isRequired,
   refine: PropTypes.func.isRequired,
+  navigate: PropTypes.func.isRequired,
 };
+
+function renderItem(item, navigate){
+  return( 
+    <CustomListItem 
+      navigate={navigate}
+      results={item}
+      title={item.confectionName}
+      shouldUserEditItem={false}
+      subtitle={item.objectID}
+    />
+  );
+}
 
 export default connectInfiniteHits(InfiniteHits);

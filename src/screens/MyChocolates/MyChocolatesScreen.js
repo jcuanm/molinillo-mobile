@@ -2,20 +2,19 @@ import React, { Component } from 'react';
 import { 
     FlatList,
     Text, 
-    TouchableOpacity,
     View
  } from 'react-native';
 import DbHandler from '../../helpers/DbHandler';
 import CallbacksAndParams from '../../helpers/CallbacksAndParams';
 import { StringConcatenations } from '../../helpers/Constants';
-import { ListItem, SearchBar } from 'react-native-elements';
+import { SearchBar } from 'react-native-elements';
 import Barcode from '../../helpers/Barcode';
+import CustomListItem from "../../helpers/CustomListItem";
 
 export default class MyChocolatesScreen extends Component {
     constructor(props) {
         super(props);
         this.dbHandler = new DbHandler();
-        this.onHoldDelayTimeinMilliseconds = 100;
         this.addToMyChocolatesList = this.addToMyChocolatesList.bind(this); 
         this.state = {
             isLoading: false,
@@ -75,42 +74,25 @@ export default class MyChocolatesScreen extends Component {
                         data={this.state.myChocolates}
                         renderItem={({item, index}) => this.renderItem(item, index)}
                         keyExtractor={(_, index) => index.toString()}
-                        ListHeaderComponent={this.renderHeader}
+                        //ListHeaderComponent={this.renderHeader}
                     />
                 </View>
             );
         } 
     }
 
-    renderHeader(){
-        return(
-            <SearchBar 
-                placeholder="Type Here..." 
-                lightTheme 
-                round 
-            />
-        );
-    };
-
     renderItem(item, index){
         const { myChocolates } = this.state;
 
         if(this.isValidBarcode(item)){
             return(
-                <TouchableOpacity
-                    onPress={ () => this.props.navigation.navigate(
-                        "DetailScreen",
-                        { 
-                            results : myChocolates[index].key, 
-                            shouldUserEditItem : true,
-                        })}
-                >
-                    <ListItem
-                        roundAvatar
-                        title={<Text>{item.key.confectionName}</Text>}
-                        subtitle={<Text>{index.toString()}</Text>}
-                    />
-                </TouchableOpacity>
+                <CustomListItem 
+                    navigate={this.props.navigation.navigate}
+                    results={myChocolates[index].key}
+                    title={item.key.confectionName}
+                    subtitle={index.toString()}
+                    shouldUserEditItem={true}
+                />
             );
         }
         else{
@@ -124,4 +106,15 @@ export default class MyChocolatesScreen extends Component {
             typeof(item.key.barcodeType) !== 'undefined'
         );
     }
+
+    // Searching MyChocolates is not within scope!
+    renderHeader(){
+        return(
+            <SearchBar 
+                placeholder="Type Here..." 
+                lightTheme 
+                round 
+            />
+        );
+    };
 }

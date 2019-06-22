@@ -30,7 +30,10 @@ export default class DataEntries extends Component {
     barcodeTypeRef.set(inputValues);
     myChocolatesRef.set( { [barcode.data] : barcode.type }, { merge : true });
     
-    navigate("DetailScreen", { results : inputValues });
+    navigate(
+      "DetailScreen", 
+      { results : inputValues, shouldUserEditItem : true }
+    );
   }
   
   render(){

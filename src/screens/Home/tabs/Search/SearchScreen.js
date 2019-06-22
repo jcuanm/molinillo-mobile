@@ -53,7 +53,7 @@ export default class SearchScreen extends Component {
           root={this.root}
         >
           <SearchBox />
-          <InfiniteHits />
+          <InfiniteHits navigate={this.props.navigation.navigate}/>
           <ActionButton
             buttonColor="rgba(231,76,60,1)"
             onPress={() => { this.props.navigation.navigate("ScannerScreen") }}

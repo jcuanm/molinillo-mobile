@@ -19,7 +19,7 @@ export default class DetailScreen extends Component {
 	constructor(props) {
     super(props);
 		this.dbHandler = new DbHandler();
-		this.entries = this.props.navigation.getParam('results', 'none');
+		this.entries = this.props.navigation.getParam('results', {});
 		this.navigateOnSuccessfulDelete = this.navigateOnSuccessfulDelete.bind(this); 
 	}
 
@@ -37,8 +37,8 @@ export default class DetailScreen extends Component {
 			Warnings.ConfirmDeletion,
 			"",
       [
-				{text: 'Delete', onPress: () => 
-					this.deleteItem()
+			{text: 'Delete', onPress: () => 
+				this.deleteItem()
         },
         {text: 'Cancel', style: 'cancel'}
       ],
@@ -88,9 +88,8 @@ export default class DetailScreen extends Component {
 			barcodeType 
 		} = this.entries;
 
-		const shouldUserEditItem = navigation.getParam('shouldUserEditItem', 'none');
+		const shouldUserEditItem = navigation.getParam('shouldUserEditItem', false);
 		const curr_barcode = new Barcode(barcodeType, barcodeData)
-
 		return (
 			<View style={styles.container}>
 				<Detail title={confectionName} />

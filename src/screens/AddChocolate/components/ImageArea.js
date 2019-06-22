@@ -92,10 +92,12 @@ export default class ImageArea extends Component {
 
   renderImage(){
     return(
-      <Image 
-        style={{width: Dimensions.get('window').width, height: 250}}
-        source={{ uri: this.state.imageDownloadUrl }}
-      />
+      <TouchableOpacity onPress={()=>{ this.getPicture(); }}>
+        <Image 
+          style={{width: Dimensions.get('window').width, height: 250}}
+          source={{ uri: this.state.imageDownloadUrl }}
+        />
+      </TouchableOpacity>
     );
   }
   
