@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { 
 	Alert,
 	Button,
+	Dimensions,
+	Image,
 	TouchableOpacity, 
 	View, 
 } from 'react-native';
@@ -81,17 +83,23 @@ export default class DetailScreen extends Component {
 	render() {
 		const { navigation } = this.props;
 		const { 
-			brand, 
-			confectionName, 
-			type,
 			barcodeData,
-			barcodeType 
+			barcodeType, 
+			brand, 
+			confectionName,
+			imageDownloadUrl, 
+			type,
 		} = this.entries;
 
 		const shouldUserEditItem = navigation.getParam('shouldUserEditItem', false);
 		const curr_barcode = new Barcode(barcodeType, barcodeData)
 		return (
 			<View style={styles.container}>
+				<Image 
+                    style={{width: Dimensions.get('window').width, height: 200}}
+                    source={{ uri : imageDownloadUrl }}
+                />
+
 				<Detail title={confectionName} />
 				<Detail title={brand} />
 				<Detail title={type} />

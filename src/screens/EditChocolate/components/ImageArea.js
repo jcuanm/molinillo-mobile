@@ -14,7 +14,7 @@ export default class ImageArea extends Component {
   constructor(props){
     super(props);
     this.state = {
-      imageDownloadUrl: '',
+      imageDownloadUrl: this.props.imageDownloadUrl,
     }
   }
 

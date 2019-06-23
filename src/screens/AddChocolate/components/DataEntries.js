@@ -15,6 +15,7 @@ export default class DataEntries extends Component {
       barcodeType : this.props.barcode.type,
       barcodeData : this.props.barcode.data
     };
+    this.requiredInputFields = ["imageDownloadUrl", "confectionName"];
   }
 
   updateInput(input){
@@ -23,6 +24,11 @@ export default class DataEntries extends Component {
   
   submitInput(inputValues){
     const { barcode, navigate } = this.props;
+
+    if(!this.isValidInput(inputValues)){
+      alert("There are required fields that are missing");
+      return;
+    }
 
     let barcodeTypeRef = this.dbHandler.getRef(StringConcatenations.Prefix, barcode);
     let myChocolatesRef = this.dbHandler.getRef('MyChocolates');
@@ -35,6 +41,17 @@ export default class DataEntries extends Component {
       { results : inputValues, shouldUserEditItem : true }
     );
   }
+
+  isValidInput(inputValues){
+    for(let i = 0; i < this.requiredInputFields.length; i++){
+      let requiredField = this.requiredInputFields[i];
+      if(!(requiredField in inputValues)){
+        return false;
+      }
+    }
+
+    return true;
+  }
   
   render(){
     return(
@@ -44,6 +61,7 @@ export default class DataEntries extends Component {
             id={"image"} 
             displayName={"Image"}
             barcode={this.props.barcode}
+            updateInput={this.updateInput}
           />
           <Entry 
             id={"confectionName"} 
