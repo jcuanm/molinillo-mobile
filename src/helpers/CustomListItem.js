@@ -28,7 +28,7 @@ export default class CustomListItem extends Component {
             >
                 <Image 
                     style={{width: Dimensions.get('window').width, height: 200}}
-                    source={ require("../../assets/images/cacao-pod.jpg") }
+                    source={{ uri : results.imageDownloadUrl }}
                 />
                 <ListItem
                     title={<Text>{ title }</Text>}

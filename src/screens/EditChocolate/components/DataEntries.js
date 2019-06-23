@@ -4,6 +4,7 @@ import {
     Button
 } from 'react-native';
 import { StringConcatenations } from '../../../helpers/Constants';
+import ImageArea from './ImageArea';
 import Entry from './Entry';
 import DbHandler from '../../../helpers/DbHandler'
 import styles from '../../../styles';
@@ -34,16 +35,24 @@ export default class DataEntries extends Component {
 
     render(){
         const {
-            confectionName,
             brand,
-            type,
             cacaoVariety,
-            countryOfOrigin
+            confectionName,
+            countryOfOrigin,
+            imageDownloadUrl,
+            type,
         } = this.props.entries;
 
         return(
             <View style={styles.container}>
                 <View style={{flex: 1, flexDirection: 'column'}}>
+                    <ImageArea 
+                        id={"image"} 
+                        displayName={"Image"}
+                        barcode={this.props.barcode}
+                        imageDownloadUrl={imageDownloadUrl}
+                        updateInput={this.updateInput}
+                    />
                     <Entry 
                         id={"confectionName"} 
                         displayName={"Confection Name"}

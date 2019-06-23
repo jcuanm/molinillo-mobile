@@ -64,15 +64,17 @@ export default class MyChocolatesScreen extends Component {
     })
 
     render(){
-        if(this.state.isLoading){
+        const { myChocolates, isLoading } = this.state;
+
+        if(isLoading){
             return <Text>Loading...</Text>
         }
         else {
             return(
                 <View>
                     <FlatList
-                        data={this.state.myChocolates}
-                        renderItem={({item, index}) => this.renderItem(item, index)}
+                        data={myChocolates}
+                        renderItem={({_, index}) => this.renderItem(myChocolates[index].key)}
                         keyExtractor={(_, index) => index.toString()}
                         //ListHeaderComponent={this.renderHeader}
                     />
@@ -81,16 +83,14 @@ export default class MyChocolatesScreen extends Component {
         } 
     }
 
-    renderItem(item, index){
-        const { myChocolates } = this.state;
-
-        if(this.isValidBarcode(item)){
+    renderItem(item){
+        if(this.isValidItem(item)){
             return(
                 <CustomListItem 
                     navigate={this.props.navigation.navigate}
-                    results={myChocolates[index].key}
-                    title={item.key.confectionName}
-                    subtitle={index.toString()}
+                    results={item}
+                    title={item.confectionName}
+                    subtitle={"hello"}
                     shouldUserEditItem={true}
                 />
             );
@@ -100,10 +100,10 @@ export default class MyChocolatesScreen extends Component {
         }
     }
 
-    isValidBarcode(item){
+    isValidItem(item){
         return(
-            typeof(item.key.barcodeData) !== 'undefined' && 
-            typeof(item.key.barcodeType) !== 'undefined'
+            typeof(item.barcodeData) !== 'undefined' && 
+            typeof(item.barcodeType) !== 'undefined'
         );
     }
 
