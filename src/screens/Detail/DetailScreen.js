@@ -8,7 +8,6 @@ import {
 	View, 
 } from 'react-native';
 import './components/Detail';
-import * as firebase from 'firebase';
 import styles from '../../styles';
 import { Ionicons } from '@expo/vector-icons';
 import DbHandler from '../../helpers/DbHandler';
@@ -34,18 +33,16 @@ export default class DetailScreen extends Component {
 		),		
 	})
 
-	promptDeleteItemPrompt(){
+	promptDeleteItem(){
 		Alert.alert(
 			Warnings.ConfirmDeletion,
 			"",
-      [
-			{text: 'Delete', onPress: () => 
-				this.deleteItem()
-        },
-        {text: 'Cancel', style: 'cancel'}
-      ],
-      { cancelable: false }
-    );
+    		[
+				{ text: 'Delete', onPress: () => this.deleteItem() },
+				{ text: 'Cancel', style: 'cancel' }
+      		],
+      		{ cancelable: false }
+    	);
 	}
 
 	deleteItem(){
@@ -54,26 +51,12 @@ export default class DetailScreen extends Component {
 		let detailRef = this.dbHandler.getRef(StringConcatenations.Prefix, barcodeToDelete);
 
 		let deleteItemCallbackAndParams = new CallbacksAndParams(
-			{}, 
+			barcodeToDelete, 
 			this.navigateOnSuccessfulDelete, 
 			function(){}
 		);
 
 		this.dbHandler.deleteItem(detailRef, deleteItemCallbackAndParams);
-
-		let dbRef = this.dbHandler.getRef('MyChocolates');
-		this.deleteFieldFromDocument(dbRef, barcodeToDelete);
-	}
-
-	deleteFieldFromDocument(dbRef, barcodeToDelete){
-		try{
-			dbRef.update({
-				[barcodeToDelete.data] : firebase.firestore.FieldValue.delete()
-			});
-		}
-		catch{
-			console.log("Could not delete field in document from myChocolates collection: ", barcodeToDelete);
-		}
 	}
 
 	navigateOnSuccessfulDelete(){
@@ -108,7 +91,7 @@ export default class DetailScreen extends Component {
 					<View>
 						<Button 
 							title="Delete"
-							onPress={() => this.promptDeleteItemPrompt() } 
+							onPress={() => this.promptDeleteItem() } 
 							styles={styles.button}
 						/> 
 						
