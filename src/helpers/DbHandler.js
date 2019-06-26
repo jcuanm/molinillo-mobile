@@ -74,13 +74,27 @@ export default class DbHandler{
         return dbRef
             .delete()
             .then( _ => {
+                let myChocolatesRef = this.getRef("MyChocolates");
+                let barcodeToDelete = callbacksAndParams.params;
+                this.deleteFieldFromDocument(myChocolatesRef, barcodeToDelete);
                 this.executeSuccessCallback(callbacksAndParams.handleSuccessCallback, callbacksAndParams.params);
             })
             .catch(error => {
                 console.log(error);
-                alert("Error deleting item!"); 
+                alert("Error deleting item"); 
             });
     }
+
+    deleteFieldFromDocument(dbRef, barcodeToDelete){
+		try{
+			dbRef.update({
+				[barcodeToDelete.data] : firebase.firestore.FieldValue.delete(),
+			});
+		}
+		catch{
+			console.log("Could not delete field in document from myChocolates collection: ", barcodeToDelete);
+		}
+	}
 
     executeSuccessCallback(handleSuccessCallback, callbackParams){
         return handleSuccessCallback({ results: callbackParams.results, params: callbackParams });

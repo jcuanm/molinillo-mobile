@@ -18,6 +18,8 @@ export default class ForgotPasswordForm extends Component {
   onResetPasswordPress = () => {
     firebase.auth().sendPasswordResetEmail(this.state.email)
       .then(() => {
+          this.props.navigate();
+          console.log(this.props);
           alert("Password reset email has been sent.");
       }, (error) => {
           alert(error.message);

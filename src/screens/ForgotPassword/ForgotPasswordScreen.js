@@ -5,11 +5,12 @@ import ForgotPassword from './components/ForgotPassword';
 import ForgotPasswordForm from './components/ForgotPasswordForm';
 
 export default class ForgotPasswordScreen extends Component{
+  
 	render() {
 		return(
 			<View style={styles.container}>
 				<Logo/>
-				<ForgotPasswordForm/>
+				<ForgotPasswordForm navigate={this.props.navigation.popToTop} />
         <ForgotPassword 
           forgotPasswordText={"Forgot Password"}
           resetPasswordButtonText={"Reset Password"}
