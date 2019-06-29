@@ -16,6 +16,7 @@ import Barcode from '../../helpers/Barcode';
 import CallbacksAndParams from '../../helpers/CallbacksAndParams';
 import { StringConcatenations, Warnings } from '../../helpers/Constants';
 
+
 export default class DetailScreen extends Component {
 	constructor(props) {
     super(props);
