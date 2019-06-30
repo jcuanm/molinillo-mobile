@@ -16,13 +16,34 @@ import Barcode from '../../helpers/Barcode';
 import CallbacksAndParams from '../../helpers/CallbacksAndParams';
 import { StringConcatenations, Warnings } from '../../helpers/Constants';
 
-
 export default class DetailScreen extends Component {
 	constructor(props) {
-    super(props);
+    	super(props);
 		this.dbHandler = new DbHandler();
 		this.entries = this.props.navigation.getParam('results', {});
 		this.navigateOnSuccessfulDelete = this.navigateOnSuccessfulDelete.bind(this); 
+		this.updateIsFlagged = this.updateIsFlagged.bind(this); 
+		this.state = {}
+	}
+
+	componentWillMount(){
+		this.checkItemIsFlagged();
+	}
+
+	checkItemIsFlagged(){
+		const { barcodeType, barcodeData } = this.entries;
+		let barcodeTypeRef = this.dbHandler.getRef(StringConcatenations.Prefix, new Barcode(barcodeType, barcodeData));
+		let checkItemIsFlaggedCallbacksAndParams = new CallbacksAndParams(
+			{}, 
+			this.updateIsFlagged, 
+			function(){}
+		);
+		this.dbHandler.getData(barcodeTypeRef, checkItemIsFlaggedCallbacksAndParams);
+	}
+
+	updateIsFlagged(resultsAndParams){
+		let isFlagged = resultsAndParams.results.data().numFlags > 0;
+		this.setState({ isFlagged : isFlagged })
 	}
 
 	static navigationOptions = ({ navigation }) => ({
@@ -64,6 +85,30 @@ export default class DetailScreen extends Component {
 		this.props.navigation.popToTop();
 	}
 
+	flagItem(curr_barcode){
+		const fieldName = "numFlags";
+		
+		if(this.state.isFlagged){
+			const decrementAmount = -1;
+			this.dbHandler.incrementValue(
+				StringConcatenations.Prefix, 
+				fieldName, 
+				decrementAmount, 
+				curr_barcode);
+			this.setState({ isFlagged : false });
+		}
+		else{
+			const incrementAmount = 1;
+			this.dbHandler.setData('FlagsPerUser', { [curr_barcode.data] : curr_barcode.type });
+			this.dbHandler.incrementValue(
+				StringConcatenations.Prefix, 
+				fieldName, 
+				incrementAmount, 
+				curr_barcode);
+			this.setState({ isFlagged : true });
+		}
+	}
+
 	render() {
 		const { navigation } = this.props;
 		const { 
@@ -87,7 +132,13 @@ export default class DetailScreen extends Component {
 				<Detail title={confectionName} />
 				<Detail title={brand} />
 				<Detail title={type} />
-				
+				<Ionicons 
+					name="md-flag" 
+					size={32} 
+					color={this.state.isFlagged ? "red" : "grey"} 
+					onPress={() => this.flagItem(curr_barcode) }
+				/>
+
 				{ shouldUserEditItem ? 
 					<View>
 						<Button 
@@ -102,7 +153,7 @@ export default class DetailScreen extends Component {
 								"EditChocolateScreen", 
 								{ barcode: curr_barcode, entries: this.entries })} 
 							styles={styles.button}
-						/> 
+						/>
 					</View> 
 				: null }
 			</View>
