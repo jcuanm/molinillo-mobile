@@ -27,7 +27,7 @@ export default class MyChocolatesScreen extends Component {
         let myChocolatesCallbacksAndParams = new CallbacksAndParams(
             {}, 
             function(resultsAndParams){ return resultsAndParams.results; },
-            function(_){ console.log('Error getting myChocolates document'); });
+            function(){ console.log('Error getting myChocolates document'); });
 
         let myChocolatesResults = this.dbHandler.getData(myChocolatesRef, myChocolatesCallbacksAndParams);
         this.setState({ isLoading: true });
@@ -37,19 +37,20 @@ export default class MyChocolatesScreen extends Component {
                 let newMyChocolates = []; 
                 for(let barcodeData in results.data()){
                     let barcodeType = results.data()[barcodeData];
-                    let barcodeTypeRef = this.dbHandler.getRef(StringConcatenations.Prefix, new Barcode(barcodeType, barcodeData));
+                    let currBarcode = new Barcode(barcodeType, barcodeData);
+                    let barcodeTypeRef = this.dbHandler.getRef(StringConcatenations.Prefix, currBarcode);
                     let barcodeTypeCallbacksAndParams = new CallbacksAndParams(
                         newMyChocolates,
                         this.addToMyChocolatesList,
-                        function(_){ console.log('Error getting myChocolates document'); });
+                        function(){ console.log('Error getting the following barcode: ', currBarcode); });
                     let barcodeTypeResults = this.dbHandler.getData(barcodeTypeRef, barcodeTypeCallbacksAndParams);
                 }
 
                 this.setState({ isLoading: false})
             })
-            .catch(error => {
-                console.log("Empty", error);
-                alert("Sorry! We're having trouble connecting.")
+            // User has no chocolates in myChocolates
+            .catch( _ => {
+                this.setState({ isLoading: false });
             });
     }
 
@@ -76,7 +77,6 @@ export default class MyChocolatesScreen extends Component {
                         data={myChocolates}
                         renderItem={({_, index}) => this.renderItem(myChocolates[index].key)}
                         keyExtractor={(_, index) => index.toString()}
-                        //ListHeaderComponent={this.renderHeader}
                     />
                 </View>
             );
@@ -106,15 +106,4 @@ export default class MyChocolatesScreen extends Component {
             typeof(item.barcodeType) !== 'undefined'
         );
     }
-
-    // Searching MyChocolates is not within scope!
-    renderHeader(){
-        return(
-            <SearchBar 
-                placeholder="Type Here..." 
-                lightTheme 
-                round 
-            />
-        );
-    };
 }
