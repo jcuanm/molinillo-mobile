@@ -32,17 +32,27 @@ export default class DetailScreen extends Component {
 
 	checkItemIsFlagged(){
 		const { barcodeType, barcodeData } = this.entries;
-		let barcodeTypeRef = this.dbHandler.getRef(StringConcatenations.Prefix, new Barcode(barcodeType, barcodeData));
+		let currBarcode = new Barcode(barcodeType, barcodeData);
+		let flagsPerUserRef = this.dbHandler.getRef("FlagsPerUser");
 		let checkItemIsFlaggedCallbacksAndParams = new CallbacksAndParams(
-			{}, 
+			currBarcode, 
 			this.updateIsFlagged, 
 			function(){}
 		);
-		this.dbHandler.getData(barcodeTypeRef, checkItemIsFlaggedCallbacksAndParams);
+		this.dbHandler.getData(flagsPerUserRef, checkItemIsFlaggedCallbacksAndParams);
 	}
 
 	updateIsFlagged(resultsAndParams){
-		let isFlagged = resultsAndParams.results.data().numFlags > 0;
+		let currBarcode = resultsAndParams.params;
+		let results = resultsAndParams.results.data();
+		let isFlagged = false;
+
+		if(currBarcode.data in results){
+			if(results[currBarcode.data] == currBarcode.type){
+				isFlagged = true;
+			}
+		}
+		
 		this.setState({ isFlagged : isFlagged })
 	}
 
@@ -85,7 +95,7 @@ export default class DetailScreen extends Component {
 		this.props.navigation.popToTop();
 	}
 
-	flagItem(curr_barcode){
+	flagItem(currBarcode){
 		const fieldName = "numFlags";
 		
 		if(this.state.isFlagged){
@@ -94,17 +104,20 @@ export default class DetailScreen extends Component {
 				StringConcatenations.Prefix, 
 				fieldName, 
 				decrementAmount, 
-				curr_barcode);
+				currBarcode);
+
+			let flagsPerUserRef = this.dbHandler.getRef("FlagsPerUser");
+			this.dbHandler.deleteFieldFromDocument(flagsPerUserRef, currBarcode);
 			this.setState({ isFlagged : false });
 		}
 		else{
 			const incrementAmount = 1;
-			this.dbHandler.setData('FlagsPerUser', { [curr_barcode.data] : curr_barcode.type });
+			this.dbHandler.setData('FlagsPerUser', { [currBarcode.data] : currBarcode.type });
 			this.dbHandler.incrementValue(
 				StringConcatenations.Prefix, 
 				fieldName, 
 				incrementAmount, 
-				curr_barcode);
+				currBarcode);
 			this.setState({ isFlagged : true });
 		}
 	}
@@ -121,7 +134,7 @@ export default class DetailScreen extends Component {
 		} = this.entries;
 
 		const shouldUserEditItem = navigation.getParam('shouldUserEditItem', false);
-		const curr_barcode = new Barcode(barcodeType, barcodeData)
+		const currBarcode = new Barcode(barcodeType, barcodeData)
 		return (
 			<View style={styles.container}>
 				<Image 
@@ -136,7 +149,7 @@ export default class DetailScreen extends Component {
 					name="md-flag" 
 					size={32} 
 					color={this.state.isFlagged ? "red" : "grey"} 
-					onPress={() => this.flagItem(curr_barcode) }
+					onPress={() => this.flagItem(currBarcode) }
 				/>
 
 				{ shouldUserEditItem ? 
@@ -151,7 +164,7 @@ export default class DetailScreen extends Component {
 							title="Edit Chocolate"
 							onPress={() => navigation.navigate(
 								"EditChocolateScreen", 
-								{ barcode: curr_barcode, entries: this.entries })} 
+								{ barcode: currBarcode, entries: this.entries })} 
 							styles={styles.button}
 						/>
 					</View> 
