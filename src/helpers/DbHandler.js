@@ -2,6 +2,7 @@ import {  StringConcatenations } from '../helpers/Constants';
 import * as firebase from 'firebase';
 import Constants from '../helpers/Constants';
 import 'firebase/firestore';
+import CallbacksAndParams from './CallbacksAndParams';
 
 export default class DbHandler{
     constructor(){
@@ -70,6 +71,11 @@ export default class DbHandler{
             });
     }
 
+    setData(rootName, inputData){
+        let ref = this.getRef(rootName);
+        ref.set(inputData);
+    }
+
     deleteItem(dbRef, callbacksAndParams){
         return dbRef
             .delete()
@@ -94,7 +100,19 @@ export default class DbHandler{
 		catch{
 			console.log("Could not delete field in document from myChocolates collection: ", barcodeToDelete);
 		}
-	}
+    }
+    
+    incrementValue(rootName, fieldname, amount, barcode=null){
+        let ref = this.getRef(rootName, barcode);
+        let increment = firebase.firestore.FieldValue.increment(amount);
+        try{
+            ref.update({ [fieldname] : increment });
+        }
+        catch(error){
+            console.log(error);
+            console.log("Could not update field!");
+        }  
+    }
 
     executeSuccessCallback(handleSuccessCallback, callbackParams){
         return handleSuccessCallback({ results: callbackParams.results, params: callbackParams });
@@ -118,6 +136,11 @@ export default class DbHandler{
                     .doc(barcode.data.toString());
                 break;
             case 'MyChocolates':
+                ref = this.dbRef
+                    .collection(root)
+                    .doc(this.currUser.uid);
+                break;
+            case 'FlagsPerUser':
                 ref = this.dbRef
                     .collection(root)
                     .doc(this.currUser.uid);

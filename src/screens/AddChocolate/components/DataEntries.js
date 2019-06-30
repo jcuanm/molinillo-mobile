@@ -12,8 +12,10 @@ export default class DataEntries extends Component {
     this.updateInput = this.updateInput.bind(this); 
     this.dbHandler = new DbHandler();
     this.inputValues = {
+      numFlags : 0,
+      numLikes : 0,
       barcodeType : this.props.barcode.type,
-      barcodeData : this.props.barcode.data
+      barcodeData : this.props.barcode.data,
     };
     this.requiredInputFields = ["imageDownloadUrl", "confectionName"];
   }
