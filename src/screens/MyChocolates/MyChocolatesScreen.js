@@ -7,7 +7,6 @@ import {
 import DbHandler from '../../helpers/DbHandler';
 import CallbacksAndParams from '../../helpers/CallbacksAndParams';
 import { StringConcatenations } from '../../helpers/Constants';
-import { SearchBar } from 'react-native-elements';
 import Barcode from '../../helpers/Barcode';
 import CustomListItem from "../../helpers/CustomListItem";
 
