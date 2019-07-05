@@ -84,6 +84,7 @@ export default class DbHandler{
                 let barcodeToDelete = callbacksAndParams.params;
                 this.deleteFieldFromDocument(myChocolatesRef, barcodeToDelete);
                 this.executeSuccessCallback(callbacksAndParams.handleSuccessCallback, callbacksAndParams.params);
+                this.deleteImageFromWeb(barcodeToDelete);
             })
             .catch(error => {
                 console.log(error);
@@ -112,6 +113,21 @@ export default class DbHandler{
             console.log(error);
             console.log("Could not update field!");
         }  
+    }
+
+    deleteImageFromWeb(barcodeToDelete){
+        let pathToImage = barcodeToDelete.type + "/" + barcodeToDelete.data;
+        let imageStorageRef = firebase
+            .storage()
+            .ref()
+            .child(pathToImage);
+        
+        imageStorageRef
+            .delete()
+            .then()
+            .catch( error => {
+                console.log("Error deleting image from storage: ", error);
+            });
     }
 
     executeSuccessCallback(handleSuccessCallback, callbackParams){
