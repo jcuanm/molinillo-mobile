@@ -27,7 +27,7 @@ exports.index_Upc_a = functions.firestore
   .document('BarcodeType_Upc_a/{barcodeData}')
   .onCreate(document => {
     const data = document.data();
-    const objectID = document.id;
+    const objectID = data.uuid;
     return index.addObject({
       objectID: objectID,
       ...data
@@ -53,7 +53,7 @@ exports.update_Upc_a = functions.firestore
 exports.unindex_Upc_a = functions.firestore
   .document('BarcodeType_Upc_a/{barcodeData}')
   .onDelete(document => {
-    const objectID = document.id;
+    const objectID = document.data().uuid;
     return index.deleteObject(objectID);
   });
 
@@ -62,7 +62,7 @@ exports.index_Upc_e = functions.firestore
   .document('BarcodeType_Upc_e/{barcodeData}')
   .onCreate(document => {
     const data = document.data();
-    const objectID = document.id;
+    const objectID = data.uuid;
     return index.addObject({
       objectID: objectID,
       ...data
@@ -88,7 +88,7 @@ exports.update_Upc_e = functions.firestore
 exports.unindex_Upc_e = functions.firestore
   .document('BarcodeType_Upc_e/{barcodeData}')
   .onDelete(document => {
-    const objectID = document.id;
+    const objectID = document.data().uuid;
     return index.deleteObject(objectID);
   });
 
@@ -97,7 +97,7 @@ exports.index_Ean8 = functions.firestore
   .document('BarcodeType_Ean8/{barcodeData}')
   .onCreate(document => {
     const data = document.data();
-    const objectID = document.id;
+    const objectID = data.uuid;
     return index.addObject({
       objectID: objectID,
       ...data
@@ -123,7 +123,7 @@ exports.update_Ean8 = functions.firestore
 exports.unindex_Ean8 = functions.firestore
   .document('BarcodeType_Ean8/{barcodeData}')
   .onDelete(document => {
-    const objectID = document.id;
+    const objectID = document.data().uuid;
     return index.deleteObject(objectID);
   });
 
@@ -132,7 +132,7 @@ exports.index_Ean13 = functions.firestore
   .document('BarcodeType_Ean13/{barcodeData}')
   .onCreate(document => {
     const data = document.data();
-    const objectID = document.id;
+    const objectID = data.uuid;
     return index.addObject({
       objectID: objectID,
       ...data
@@ -158,7 +158,7 @@ exports.update_Ean13 = functions.firestore
 exports.unindex_Ean13 = functions.firestore
   .document('BarcodeType_Ean13/{barcodeData}')
   .onDelete(document => {
-    const objectID = document.id;
+    const objectID = document.data().uuid;
     return index.deleteObject(objectID);
   });
 
@@ -167,7 +167,7 @@ exports.index_Code39 = functions.firestore
   .document('BarcodeType_Code39/{barcodeData}')
   .onCreate(document => {
     const data = document.data();
-    const objectID = document.id;
+    const objectID = data.uuid;
     return index.addObject({
       objectID: objectID,
       ...data
@@ -193,7 +193,7 @@ exports.update_Code39 = functions.firestore
 exports.unindex_Code39 = functions.firestore
   .document('BarcodeType_Code39/{barcodeData}')
   .onDelete(document => {
-    const objectID = document.id;
+    const objectID = document.data().uuid;
     return index.deleteObject(objectID);
   });
 
@@ -202,7 +202,7 @@ exports.index_Code128 = functions.firestore
   .document('BarcodeType_Code128/{barcodeData}')
   .onCreate(document => {
     const data = document.data();
-    const objectID = document.id;
+    const objectID = data.uuid;
     return index.addObject({
       objectID: objectID,
       ...data
@@ -228,7 +228,7 @@ exports.update_Code128 = functions.firestore
 exports.unindex_Code128 = functions.firestore
   .document('BarcodeType_Code128/{barcodeData}')
   .onDelete(document => {
-    const objectID = document.id;
+    const objectID = document.data().uuid;
     return index.deleteObject(objectID);
   });
 
@@ -237,7 +237,7 @@ exports.index_Itf14 = functions.firestore
   .document('BarcodeType_Itf14/{barcodeData}')
   .onCreate(document => {
     const data = document.data();
-    const objectID = document.id;
+    const objectID = data.uuid;
     return index.addObject({
       objectID: objectID,
       ...data
@@ -263,7 +263,7 @@ exports.update_Itf14 = functions.firestore
 exports.unindex_Itf14 = functions.firestore
   .document('BarcodeType_Itf14/{barcodeData}')
   .onDelete(document => {
-    const objectID = document.id;
+    const objectID = document.data().uuid;
     return index.deleteObject(objectID);
   });
 
@@ -272,7 +272,7 @@ exports.index_Codabar = functions.firestore
   .document('BarcodeType_Codabar/{barcodeData}')
   .onCreate(document => {
     const data = document.data();
-    const objectID = document.id;
+    const objectID = data.uuid;
     return index.addObject({
       objectID: objectID,
       ...data
@@ -298,7 +298,7 @@ exports.update_Codabar = functions.firestore
 exports.unindex_Codabar = functions.firestore
   .document('BarcodeType_Codabar/{barcodeData}')
   .onDelete(document => {
-    const objectID = document.id;
+    const objectID = document.data().uuid;
     return index.deleteObject(objectID);
   });
 
@@ -307,7 +307,7 @@ exports.index_Code93 = functions.firestore
   .document('BarcodeType_Code93/{barcodeData}')
   .onCreate(document => {
     const data = document.data();
-    const objectID = document.id;
+    const objectID = data.uuid;
     return index.addObject({
       objectID: objectID,
       ...data
@@ -333,6 +333,6 @@ exports.update_Code93 = functions.firestore
 exports.unindex_Code93 = functions.firestore
   .document('BarcodeType_Code93/{barcodeData}')
   .onDelete(document => {
-    const objectID = document.id;
+    const objectID = document.data().uuid;
     return index.deleteObject(objectID);
   });
