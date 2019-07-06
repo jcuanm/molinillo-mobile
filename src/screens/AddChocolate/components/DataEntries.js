@@ -1,9 +1,10 @@
+const uuidv4 = require('uuid/v4');
 import React, { Component } from 'react';
 import { View, Button } from 'react-native';
 import { StringConcatenations } from '../../../helpers/Constants';
 import Entry from './Entry';
 import ImageArea from './ImageArea';
-import DbHandler from '../../../helpers/DbHandler'
+import DbHandler from '../../../helpers/DbHandler';
 import styles from '../../../styles';
 
 export default class DataEntries extends Component {
@@ -16,6 +17,7 @@ export default class DataEntries extends Component {
       numLikes : 0,
       barcodeType : this.props.barcode.type,
       barcodeData : this.props.barcode.data,
+      uuid : uuidv4(),
     };
     this.requiredInputFields = ["imageDownloadUrl", "confectionName"];
   }
