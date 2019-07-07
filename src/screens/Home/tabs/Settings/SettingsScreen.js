@@ -5,7 +5,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import styles from '../../styles';
+import styles from '../../../../styles/index';
 import * as firebase from 'firebase';
 
 export default class SettingsScreen extends Component {
@@ -13,9 +13,7 @@ export default class SettingsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: "Settings",
     headerLeft: (
-      <TouchableOpacity
-        style={styles.headerButton}
-        onPress={() => navigation.openDrawer()}>
+      <TouchableOpacity style={styles.headerButton} >
         <Ionicons name="md-checkmark-circle" size={32} color="purple" />
       </TouchableOpacity>
     ),

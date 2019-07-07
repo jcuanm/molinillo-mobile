@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  View,
-} from 'react-native';
+import { View } from 'react-native';
 import Logo from './components/Logo';
 import LoginForm from './components/LoginForm';
 import Signup from './components/Signup';
 import ForgotPassword from './components/ForgotPassword';
+import { styles } from './styles';
 
 export default class LoginScreen extends Component {
 	render() {
@@ -20,12 +18,3 @@ export default class LoginScreen extends Component {
 		);
 	}
 }
-
-const styles = StyleSheet.create({
-  container : {
-    backgroundColor:'#455a64',
-    flex: 1,
-    alignItems:'center',
-    justifyContent :'center'
-  },
-});

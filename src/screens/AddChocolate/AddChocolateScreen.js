@@ -9,8 +9,7 @@ export default class AddChocolateScreen extends Component {
   
   render() {
     const { navigation } = this.props;
-    let error_barcode = new Barcode("None", "None");
-    const barcode = navigation.getParam('barcode', error_barcode);
+    const barcode = navigation.getParam('barcode', new Barcode("None", "None"));
     return ( 
       <DataEntries 
         barcode = { barcode }
