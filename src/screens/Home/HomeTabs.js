@@ -1,14 +1,14 @@
 import { createStackNavigator } from 'react-navigation';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import SearchStack from '../../navigation/home_screen_stacks/SearchStack';
-import ShopStack from '../../navigation/home_screen_stacks/ShopStack';
+import SettingsStack from '../../navigation/home_screen_stacks/SettingsStack';
 import ProfileStack from '../../navigation/home_screen_stacks/ProfileStack';
 
 const HomeTabs = createMaterialBottomTabNavigator(
   {
-    Shop: ShopStack,
     Search: SearchStack,
     Profile: ProfileStack,
+    Settings: SettingsStack,
   },
   {
     activeColor: 'rgba(255,255,255,1)',

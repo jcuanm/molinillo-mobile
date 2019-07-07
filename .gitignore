@@ -5,8 +5,11 @@ npm-debug.*
 *.p12
 *.key
 *.mobileprovision
+*.DS_Store
 
 assets/Config.js
 
 appsync-info.json
 project-info.json
+
+

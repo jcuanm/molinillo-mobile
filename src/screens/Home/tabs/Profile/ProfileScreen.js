@@ -16,10 +16,8 @@ export default class ProfileScreen extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: "Profile",
         headerLeft: (
-            <TouchableOpacity
-                style={styles.headerButton}
-                onPress={() => navigation.openDrawer()}>
-                <Ionicons name="md-menu" size={32} />
+            <TouchableOpacity style={styles.headerButton} >
+                <Ionicons name="md-checkmark-circle" size={32} color="purple" />
             </TouchableOpacity>
         ),
     })

@@ -95,31 +95,47 @@ export default class DetailScreen extends Component {
 		this.props.navigation.popToTop();
 	}
 
-	flagItem(currBarcode){
-		const fieldName = "numFlags";
-		
+	promptFlagItem(currBarcode){
 		if(this.state.isFlagged){
-			const decrementAmount = -1;
+			this.unflagItem(currBarcode);
+		}
+		else{
+			Alert.alert(
+				"Are you sure you want to flag this item for innappropriate content?",
+				"",
+				[
+					{ text: 'Flag', onPress: () => this.flagItem(currBarcode) },
+					{ text: 'Cancel', style: 'cancel' }
+				],
+				{ cancelable: false }
+			);
+		}
+	}
+
+	unflagItem(currBarcode){
+		const fieldName = "numFlags";
+		const decrementAmount = -1;
 			this.dbHandler.incrementValue(
 				StringConcatenations.Prefix, 
 				fieldName, 
 				decrementAmount, 
 				currBarcode);
 
-			let flagsPerUserRef = this.dbHandler.getRef("FlagsPerUser");
-			this.dbHandler.deleteFieldFromDocument(flagsPerUserRef, currBarcode);
-			this.setState({ isFlagged : false });
-		}
-		else{
-			const incrementAmount = 1;
-			this.dbHandler.setData('FlagsPerUser', { [currBarcode.data] : currBarcode.type });
-			this.dbHandler.incrementValue(
-				StringConcatenations.Prefix, 
-				fieldName, 
-				incrementAmount, 
-				currBarcode);
-			this.setState({ isFlagged : true });
-		}
+		let flagsPerUserRef = this.dbHandler.getRef("FlagsPerUser");
+		this.dbHandler.deleteFieldFromDocument(flagsPerUserRef, currBarcode);
+		this.setState({ isFlagged : false });
+	}
+
+	flagItem(currBarcode){
+		const fieldName = "numFlags";
+		const incrementAmount = 1;
+		this.dbHandler.setData('FlagsPerUser', { [currBarcode.data] : currBarcode.type });
+		this.dbHandler.incrementValue(
+			StringConcatenations.Prefix, 
+			fieldName, 
+			incrementAmount, 
+			currBarcode);
+		this.setState({ isFlagged : true });
 	}
 
 	render() {
@@ -149,7 +165,7 @@ export default class DetailScreen extends Component {
 					name="md-flag" 
 					size={32} 
 					color={this.state.isFlagged ? "red" : "grey"} 
-					onPress={() => this.flagItem(currBarcode) }
+					onPress={() => this.promptFlagItem(currBarcode) }
 				/>
 
 				{ shouldUserEditItem ? 
