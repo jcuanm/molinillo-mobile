@@ -7,5 +7,9 @@ export const Warnings = {
 }
 
 export const StringConcatenations = {
-    Prefix: "BarcodeType_"
+    Prefix: "BarcodeType_",
+}
+
+export const Colors = {
+    Primary: "#4B006E",
 }

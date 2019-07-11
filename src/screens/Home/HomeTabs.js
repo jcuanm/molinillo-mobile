@@ -1,23 +1,47 @@
-import { createStackNavigator } from 'react-navigation';
+import React from 'react';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import SearchStack from '../../navigation/home_screen_stacks/SearchStack';
 import SettingsStack from '../../navigation/home_screen_stacks/SettingsStack';
 import ProfileStack from '../../navigation/home_screen_stacks/ProfileStack';
+import { Ionicons } from '@expo/vector-icons';
+import { Colors } from '../../helpers/Constants';
 
-const HomeTabs = createMaterialBottomTabNavigator(
+export default HomeTabs = createMaterialBottomTabNavigator(
   {
-    Search: SearchStack,
-    Profile: ProfileStack,
-    Settings: SettingsStack,
+    Search: { 
+      screen : SearchStack,
+      navigationOptions : {
+        tabLabel: "Search",
+        tabBarIcon: ({ tintColor }) => (    
+            <Ionicons color={tintColor} size={28} name='md-search'/>  
+          ),  
+      }
+    },
+    Profile: { 
+      screen : ProfileStack,
+      navigationOptions : {
+        tabLabel: "Profile",
+        tabBarIcon: ({ tintColor }) => (    
+            <Ionicons color={tintColor} size={28} name='md-person'/>  
+          ),  
+      }
+    },
+    Settings: { 
+      screen : SettingsStack,
+      navigationOptions : {
+        tabLabel: "Settings",
+        tabBarIcon: ({ tintColor }) => (    
+            <Ionicons color={tintColor} size={25} name='md-settings'/>  
+          ),  
+      }
+    },
   },
   {
-    activeColor: 'rgba(255,255,255,1)',
-    inactiveColor: 'rgba(255,255,255,.7)',
+    activeColor: 'rgba(255,255,255, 1)',
+    inactiveColor: 'rgba(255,255,255, .6)',
     barStyle: {
-      backgroundColor: '#8A2BE2'
-    }
+      backgroundColor: Colors.Primary
+    },
+    labeled: false, 
   },
 );
-
-//Issue: the tab navigator needs to be wrapped inside a stack navigator
-export default createStackNavigator({ HomeTabs }, { headerMode: "none" });
