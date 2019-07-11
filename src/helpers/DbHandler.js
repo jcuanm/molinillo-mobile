@@ -1,6 +1,5 @@
-import {  StringConcatenations } from '../helpers/Constants';
+import {  StringConcatenations, Warnings } from '../helpers/Constants';
 import * as firebase from 'firebase';
-import Constants from '../helpers/Constants';
 import 'firebase/firestore';
 import CallbacksAndParams from './CallbacksAndParams';
 
@@ -37,7 +36,7 @@ export default class DbHandler{
 
     signupUser(email, password, passwordConfirm){
         if(password !== passwordConfirm){
-            alert(Constants.PasswordsDontMatch);
+            alert(Warnings.PasswordsDontMatch);
             return;
         }
 

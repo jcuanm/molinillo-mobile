@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
+import { SignupStyles } from '../styles';
 import {
-  StyleSheet,
   Text,
   View,
   TouchableOpacity
@@ -9,31 +9,12 @@ import {
 export default class Signup extends Component {
 	render() {
 		return(
-      <View style={styles.textContent}>
-        <Text style={styles.text}>Don't have an account yet?</Text>
+      <View style={SignupStyles.textContent}>
+        <Text style={SignupStyles.text}>Don't have an account yet?</Text>
         <TouchableOpacity onPress={() => this.props.navigate("SignupScreen")}>
-          <Text style={styles.button}> Signup </Text>
+          <Text style={SignupStyles.button}> Signup </Text>
         </TouchableOpacity>
       </View>
 		);
 	}
 }
-
-const styles = StyleSheet.create({
-  textContent: {
-  	flexGrow: 1,
-    alignItems:'flex-end',
-    justifyContent :'center',
-    paddingVertical:16,
-    flexDirection:'row'
-  },
-  text: {
-  	color:'rgba(255,255,255,0.6)',
-  	fontSize:16
-  },
-  button: {
-  	color:'#ffffff',
-  	fontSize:16,
-  	fontWeight:'500'
-  },
-});

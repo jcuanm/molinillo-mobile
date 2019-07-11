@@ -1,12 +1,11 @@
 const uuidv4 = require('uuid/v4');
 import React, { Component } from 'react';
 import { View, Button } from 'react-native';
-import { StringConcatenations } from '../../../helpers/Constants';
+import { StringConcatenations, Warnings } from '../../../helpers/Constants';
 import CallbacksAndParams from '../../../helpers/CallbacksAndParams';
 import Entry from './Entry';
 import ImageArea from './ImageArea';
 import DbHandler from '../../../helpers/DbHandler';
-import Constants from '../../../helpers/Constants';
 import styles from '../../../styles';
 import * as firebase from 'firebase';
 
@@ -103,7 +102,7 @@ export default class DataEntries extends Component {
       .then(() => {})
       .catch(error => {
         console.log(error);
-        alert(Constants.ErrorGettingImage);
+        alert(Warnings.ErrorGettingImage);
       });
 
     blob.close();
@@ -121,7 +120,7 @@ export default class DataEntries extends Component {
       })
       .catch(error => {
         console.log(error);
-        alert(Constants.ErrorGettingImage);
+        alert(Warnings.ErrorGettingImage);
       });
   }
 

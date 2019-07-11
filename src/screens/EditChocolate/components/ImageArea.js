@@ -7,7 +7,7 @@ import {
   View, 
  } from 'react-native';
 import { ImagePicker, Permissions } from 'expo';
-import Constants from '../../../helpers/Constants';
+import { Warnings } from '../../../helpers/Constants';
 import * as firebase from 'firebase';
 
 export default class ImageArea extends Component {
@@ -46,7 +46,7 @@ export default class ImageArea extends Component {
       .then(() => {})
       .catch(error => {
         console.log(error);
-        alert(Constants.ErrorGettingImage);
+        alert(Warnings.ErrorGettingImage);
       });
 
     blob.close();
@@ -64,7 +64,7 @@ export default class ImageArea extends Component {
       })
       .catch(error => {
         console.log(error);
-        alert(Constants.ErrorGettingImage);
+        alert(Warnings.ErrorGettingImage);
       });
   }
 

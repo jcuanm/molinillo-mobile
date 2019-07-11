@@ -5,22 +5,22 @@ import {
     TouchableOpacity,
     Dimensions,
  } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import ActionButton from 'react-native-action-button';
 import styles from '../../../../styles';
-import ProfileOptions from './components/ProfileOptions'
+import ProfileOptions from './components/ProfileOptions';
+import { Ionicons } from '@expo/vector-icons';
 import * as firebase from 'firebase';
 
 export default class ProfileScreen extends Component {
 
-    static navigationOptions = ({ navigation }) => ({
+    static navigationOptions = {
         title: "Profile",
         headerLeft: (
             <TouchableOpacity style={styles.headerButton} >
                 <Ionicons name="md-checkmark-circle" size={32} color="purple" />
             </TouchableOpacity>
         ),
-    })
+    }
     
     render() {
         return (
