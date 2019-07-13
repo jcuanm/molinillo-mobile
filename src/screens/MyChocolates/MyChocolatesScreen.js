@@ -9,6 +9,7 @@ import CallbacksAndParams from '../../helpers/CallbacksAndParams';
 import { StringConcatenations } from '../../helpers/Constants';
 import Barcode from '../../helpers/Barcode';
 import CustomListItem from "../../helpers/CustomListItem";
+import { Colors } from '../../helpers/Constants';
 
 export default class MyChocolatesScreen extends Component {
     constructor(props) {
@@ -60,6 +61,13 @@ export default class MyChocolatesScreen extends Component {
     }
 
     static navigationOptions = ({ navigation }) => ({
+        headerTintColor: 'white',
+        headerStyle: {
+            backgroundColor: Colors.Primary,
+        },
+        headerTitleStyle: {
+            color: 'white'
+        },
         title: "My Chocolates",
     })
 
@@ -74,6 +82,7 @@ export default class MyChocolatesScreen extends Component {
                 <View>
                     <FlatList
                         data={myChocolates}
+                        scrollEnabled={true}
                         renderItem={({_, index}) => this.renderItem(myChocolates[index].key)}
                         keyExtractor={(_, index) => index.toString()}
                     />

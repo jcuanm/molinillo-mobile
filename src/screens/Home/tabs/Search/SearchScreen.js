@@ -7,6 +7,7 @@ import { InstantSearch } from 'react-instantsearch-native';
 import SearchBox from './components/SearchBox';
 import InfiniteHits from './components/InfiniteHits';
 import algoliasearch from 'algoliasearch/lite';
+import { Colors } from '../../../../helpers/Constants';
 import styles from '../../../../styles';
 
 export default class SearchScreen extends Component {
@@ -34,6 +35,12 @@ export default class SearchScreen extends Component {
 
   static navigationOptions = ({ navigation }) => ({
     title: "Search",
+    headerStyle: {
+      backgroundColor: Colors.Primary,
+    },
+    headerTitleStyle: {
+      color: 'white'
+    },
     headerLeft: (
       <TouchableOpacity style={styles.headerButton} >
         <Ionicons name="md-checkmark-circle" size={32} color="purple" />
@@ -52,7 +59,8 @@ export default class SearchScreen extends Component {
           <SearchBox />
           <InfiniteHits navigate={this.props.navigation.navigate}/>
           <ActionButton
-            buttonColor="rgba(231,76,60,1)"
+            buttonColor={Colors.Primary}
+            icon={<Ionicons name="md-camera" size={25} color="white" />}
             onPress={() => { this.props.navigation.navigate("ScannerScreen") }}
           />
         </InstantSearch> 

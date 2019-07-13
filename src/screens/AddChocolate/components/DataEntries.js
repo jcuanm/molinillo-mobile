@@ -147,7 +147,7 @@ export default class DataEntries extends Component {
         <View style={{flex: 1, flexDirection: 'column'}}>
           <ImageArea 
             id={"image"} 
-            displayName={"Image"}
+            displayName={"Add Image"}
             barcode={this.props.barcode}
             updateInput={this.updateInput}
           />
