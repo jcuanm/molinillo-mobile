@@ -32,15 +32,13 @@ export default class Entry extends Component {
 
   render(){
     return(
-      <TouchableOpacity onPress={()=>{this.showDialog(true)}}>
-        <View style={{width: Dimensions.get('window').width, height: 50, backgroundColor: 'powderblue'}}>
-          <Text>{this.props.displayName}</Text> 
-          <Text style={{textAlign: 'right'}}>{this.state.value}</Text>
+      <TouchableOpacity style={{borderBottomWidth: 0.5, borderBottomColor: "grey"}} onPress={()=>{this.showDialog(true)}}>
+        <View style={{justifyContent: 'center', width: Dimensions.get('window').width, height: 50, backgroundColor: 'white' }}>
+          <Text style={{textAlign: 'left', paddingLeft: 10}}>{this.props.displayName}</Text> 
+          <Text style={{textAlign: 'right', paddingRight: 10}}>{this.state.value}</Text>
         </View>
         <DialogInput isDialogVisible={this.state.isDialogVisible}
-          title={"DialogInput 1"}
-          message={"Message for DialogInput #1"}
-          hintInput ={"HINT INPUT"}
+          title={this.props.displayName}
           submitInput={ inputText => {
             this.sendInput(inputText); 
             this.showDialog(false); 

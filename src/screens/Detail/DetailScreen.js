@@ -14,7 +14,11 @@ import DbHandler from '../../helpers/DbHandler';
 import Detail from './components/Detail';
 import Barcode from '../../helpers/Barcode';
 import CallbacksAndParams from '../../helpers/CallbacksAndParams';
-import { StringConcatenations, Warnings } from '../../helpers/Constants';
+import { 
+	Colors, 
+	StringConcatenations, 
+	Warnings } 
+from '../../helpers/Constants';
 
 export default class DetailScreen extends Component {
 	constructor(props) {
@@ -57,10 +61,16 @@ export default class DetailScreen extends Component {
 	}
 
 	static navigationOptions = ({ navigation }) => ({
-		title: "Chocolate Details",
+		title: "Item Details",
+		headerStyle: {
+			backgroundColor: Colors.Primary,
+		},
+		headerTitleStyle: {
+			color: 'white'
+		},
 		headerLeft: (
 			<TouchableOpacity style={styles.headerButton}>
-				<Ionicons name="md-arrow-back" size={32} onPress={() => navigation.popToTop()} size={35} color="black" />
+				<Ionicons name="md-arrow-back" size={25} onPress={() => navigation.popToTop()} color="white" />
 			</TouchableOpacity>
 		),		
 	})

@@ -7,6 +7,7 @@ import {
   View, 
  } from 'react-native';
 import { ImagePicker, Permissions } from 'expo';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default class ImageArea extends Component {
   constructor(props){
@@ -36,9 +37,11 @@ export default class ImageArea extends Component {
   renderBlankImage(){
     return(
       <TouchableOpacity onPress={()=>{ this.getPicture(); }}>
-        <View style={{width: Dimensions.get('window').width, height: 250, backgroundColor: 'grey'}}>
-          <Text>{this.props.displayName}</Text> 
-          <Text style={{textAlign: 'right'}}>{this.state.value}</Text>
+        <View style={{ justifyContent: 'center', alignItems: 'center', width: Dimensions.get('window').width, height: 150, backgroundColor: 'rgb(255,255,240)'}}>
+          <Text style={{ fontSize: 25 }}>
+            <Ionicons size={25} name="md-add" color="grey"/>
+            {" " + this.props.displayName}
+          </Text> 
         </View>
       </TouchableOpacity> 
     );  

@@ -9,12 +9,19 @@ import ActionButton from 'react-native-action-button';
 import styles from '../../../../styles';
 import ProfileOptions from './components/ProfileOptions';
 import { Ionicons } from '@expo/vector-icons';
+import { Colors } from '../../../../helpers/Constants';
 import * as firebase from 'firebase';
 
 export default class ProfileScreen extends Component {
 
     static navigationOptions = {
         title: "Profile",
+        headerStyle: {
+            backgroundColor: Colors.Primary,
+        },
+        headerTitleStyle: {
+        color: 'white'
+        },
         headerLeft: (
             <TouchableOpacity style={styles.headerButton} >
                 <Ionicons name="md-checkmark-circle" size={32} color="purple" />
@@ -25,7 +32,7 @@ export default class ProfileScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={{width: Dimensions.get('window').width, height: 50, backgroundColor: 'steelblue'}}>
+                <View style={{ marginBottom: 35, width: Dimensions.get('window').width, height: 100, backgroundColor: 'steelblue'}}>
                     <Text>
                         Welcome {firebase.auth().currentUser.email}
                     </Text>
@@ -34,7 +41,8 @@ export default class ProfileScreen extends Component {
                 <ProfileOptions navigationFunc={this.props.navigation.navigate}/>
                 
                 <ActionButton
-                    buttonColor="rgba(231,76,60,1)"
+                    buttonColor={Colors.Primary}
+                    icon={<Ionicons name="md-camera" size={25} color="white" />}
                     onPress={() => { this.props.navigation.navigate("ScannerScreen") }}
                 />
             </View>
