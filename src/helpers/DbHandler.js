@@ -160,6 +160,11 @@ export default class DbHandler{
                     .collection(root)
                     .doc(this.currUser.uid);
                 break;
+            case 'ScansPerChocolate':
+                ref = this.dbRef
+                    .collection(root)
+                    .doc((new Date()).toString());
+                break;
             default:
                 ref = null; 
         }

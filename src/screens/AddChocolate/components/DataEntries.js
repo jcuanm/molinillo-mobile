@@ -155,26 +155,31 @@ export default class DataEntries extends Component {
             id={"confectionName"} 
             displayName={"Confection Name"}
             updateInput={this.updateInput}
+            dialogType={"typing"}
           />
           <Entry 
             id={"brand"}
             displayName={"Brand"} 
             updateInput={this.updateInput} 
+            dialogType={"typing"}        
           />
           <Entry 
             id={"type"}
             displayName={"Type"} 
-            updateInput={this.updateInput} 
+            updateInput={this.updateInput}
+            dialogType={"options"} 
           />
           <Entry 
             id={"cacaoVariety"} 
             displayName={"Cacao Variety"}
             updateInput={this.updateInput} 
+            dialogType={"options"} 
           />
           <Entry 
             id={"countryOfOrigin"}
             displayName={"Country of Origin"} 
             updateInput={this.updateInput} 
+            dialogType={"options"} 
           />
         </View>
         <Button

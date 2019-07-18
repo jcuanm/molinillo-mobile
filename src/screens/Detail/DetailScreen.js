@@ -125,11 +125,11 @@ export default class DetailScreen extends Component {
 	unflagItem(currBarcode){
 		const fieldName = "numFlags";
 		const decrementAmount = -1;
-			this.dbHandler.incrementValue(
-				StringConcatenations.Prefix, 
-				fieldName, 
-				decrementAmount, 
-				currBarcode);
+		this.dbHandler.incrementValue(
+			StringConcatenations.Prefix, 
+			fieldName, 
+			decrementAmount, 
+			currBarcode);
 
 		let flagsPerUserRef = this.dbHandler.getRef("FlagsPerUser");
 		this.dbHandler.deleteFieldFromDocument(flagsPerUserRef, currBarcode);
