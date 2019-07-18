@@ -32,7 +32,7 @@ export default class CustomListItem extends Component {
                 />
                 <ListItem
                     title={<Text>{ title }</Text>}
-                    subtitle={<Text>{ subtitle }</Text>}
+                    // subtitle={<Text>{ subtitle }</Text>}
                 />
             </TouchableOpacity>
         );

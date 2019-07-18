@@ -72,6 +72,21 @@ export default class ScannerScreen extends Component {
 
   navigateUserAndResultsToDetailScreen(resultsAndParams){
     let results = resultsAndParams.results;
+    const { barcodeData, barcodeType, uuid } = results.data();
+
+    // Update num scans
+    const incrementAmount = 1;
+    const fieldName = "numScans";
+    const currBarcode = new Barcode(barcodeType, barcodeData, uuid);
+    this.dbHandler.incrementValue(StringConcatenations.Prefix, fieldName, incrementAmount, currBarcode);
+    let scansPerChocolateRef = this.dbHandler.getRef("ScansPerChocolate", currBarcode);
+    scansPerChocolateRef.set({
+      time: new Date(),
+      user: this.dbHandler.currUser.uid,
+      barcodeData: barcodeData,
+      barcodeType: barcodeType
+    },{ merge : true });
+
     this.props.navigation.navigate("DetailScreen", { results: results.data() });
   }
 
@@ -137,7 +152,7 @@ export default class ScannerScreen extends Component {
             <View style={styles.layerRight} />
           </View>
           <View style={styles.layerBottom} >
-            <Text style={{ color: 'white', fontSize: 25 }}> Scan the item's barcode </Text>
+            <Text style={{ color: 'white', fontSize: 25 }}> Scan the chocolate's barcode </Text>
           </View>
         </BarCodeScanner>
       </View>
