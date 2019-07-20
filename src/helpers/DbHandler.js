@@ -160,7 +160,12 @@ export default class DbHandler{
                     .collection(root)
                     .doc(this.currUser.uid);
                 break;
-            case 'ScansPerChocolate':
+            case 'ScansPerDatetime':
+                ref = this.dbRef
+                    .collection(root)
+                    .doc((new Date()).toString());
+                break;
+            case 'SearchClicksPerDatetime':
                 ref = this.dbRef
                     .collection(root)
                     .doc((new Date()).toString());

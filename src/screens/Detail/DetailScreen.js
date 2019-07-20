@@ -24,10 +24,10 @@ export default class DetailScreen extends Component {
 	constructor(props) {
     	super(props);
 		this.dbHandler = new DbHandler();
-		this.entries = this.props.navigation.getParam('results', {});
+		this.results = this.props.navigation.getParam('results', {});
 		this.navigateOnSuccessfulDelete = this.navigateOnSuccessfulDelete.bind(this); 
 		this.updateIsFlagged = this.updateIsFlagged.bind(this); 
-		this.state = {}
+		this.state = {};
 	}
 
 	componentWillMount(){
@@ -35,7 +35,7 @@ export default class DetailScreen extends Component {
 	}
 
 	checkItemIsFlagged(){
-		const { barcodeType, barcodeData } = this.entries;
+		const { barcodeType, barcodeData } = this.results;
 		let currBarcode = new Barcode(barcodeType, barcodeData);
 		let flagsPerUserRef = this.dbHandler.getRef("FlagsPerUser");
 		let checkItemIsFlaggedCallbacksAndParams = new CallbacksAndParams(
@@ -88,7 +88,7 @@ export default class DetailScreen extends Component {
 	}
 
 	deleteItem(){
-		const { barcodeType, barcodeData } = this.entries;
+		const { barcodeType, barcodeData } = this.results;
 		let barcodeToDelete = new Barcode(barcodeType, barcodeData);
 		let detailRef = this.dbHandler.getRef(StringConcatenations.Prefix, barcodeToDelete);
 
@@ -157,7 +157,7 @@ export default class DetailScreen extends Component {
 			confectionName,
 			imageDownloadUrl, 
 			type,
-		} = this.entries;
+		} = this.results;
 
 		const shouldUserEditItem = navigation.getParam('shouldUserEditItem', false);
 		const currBarcode = new Barcode(barcodeType, barcodeData)
@@ -190,7 +190,7 @@ export default class DetailScreen extends Component {
 							title="Edit Chocolate"
 							onPress={() => navigation.navigate(
 								"EditChocolateScreen", 
-								{ barcode: currBarcode, entries: this.entries })} 
+								{ barcode: currBarcode, entries: this.results })} 
 							styles={styles.button}
 						/>
 					</View> 

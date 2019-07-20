@@ -1,8 +1,7 @@
 export default class Barcode{
-  constructor(type, data, uuid=""){
+  constructor(type, data){
     this.type = this.mapCodeToType(type);
     this.data = data;
-    this.uuid = uuid
   }
 
   mapCodeToType(barcodeTypeCode){

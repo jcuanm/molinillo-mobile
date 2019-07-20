@@ -17,8 +17,6 @@ export default class DataEntries extends Component {
     this.denySubmission = this.denySubmission.bind(this); 
     this.dbHandler = new DbHandler();
     this.inputValues = {
-      numFlags : 0,
-      numLikes : 0,
       barcodeType : this.props.barcode.type,
       barcodeData : this.props.barcode.data,
       uuid : uuidv4(),
