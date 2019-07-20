@@ -43,7 +43,7 @@ exports.update_Upc_a = functions.firestore
       return;
     }
     const data = currentDocument.data();
-    const objectID = context.params.barcodeData;
+    const objectID = data.uuid;
     return index.partialUpdateObject({
       objectID: objectID,
       ...data
@@ -78,7 +78,7 @@ exports.update_Upc_e = functions.firestore
       return;
     }
     const data = currentDocument.data();
-    const objectID = context.params.barcodeData;
+    const objectID = data.uuid;
     return index.partialUpdateObject({
       objectID: objectID,
       ...data
@@ -113,7 +113,7 @@ exports.update_Ean8 = functions.firestore
       return;
     }
     const data = currentDocument.data();
-    const objectID = context.params.barcodeData;
+    const objectID = data.uuid;
     return index.partialUpdateObject({
       objectID: objectID,
       ...data
@@ -148,7 +148,7 @@ exports.update_Ean13 = functions.firestore
       return;
     }
     const data = currentDocument.data();
-    const objectID = context.params.barcodeData;
+    const objectID = data.uuid;
     return index.partialUpdateObject({
       objectID: objectID,
       ...data
@@ -183,7 +183,7 @@ exports.update_Code39 = functions.firestore
       return;
     }
     const data = currentDocument.data();
-    const objectID = context.params.barcodeData;
+    const objectID = data.uuid;
     return index.partialUpdateObject({
       objectID: objectID,
       ...data
@@ -218,7 +218,7 @@ exports.update_Code128 = functions.firestore
       return;
     }
     const data = currentDocument.data();
-    const objectID = context.params.barcodeData;
+    const objectID = data.uuid;
     return index.partialUpdateObject({
       objectID: objectID,
       ...data
@@ -253,7 +253,7 @@ exports.update_Itf14 = functions.firestore
       return;
     }
     const data = currentDocument.data();
-    const objectID = context.params.barcodeData;
+    const objectID = data.uuid;
     return index.partialUpdateObject({
       objectID: objectID,
       ...data
@@ -288,7 +288,7 @@ exports.update_Codabar = functions.firestore
       return;
     }
     const data = currentDocument.data();
-    const objectID = context.params.barcodeData;
+    const objectID = data.uuid;
     return index.partialUpdateObject({
       objectID: objectID,
       ...data
@@ -323,7 +323,7 @@ exports.update_Code93 = functions.firestore
       return;
     }
     const data = currentDocument.data();
-    const objectID = context.params.barcodeData;
+    const objectID = data.uuid;
     return index.partialUpdateObject({
       objectID: objectID,
       ...data

@@ -24,7 +24,6 @@ export default class ScannerScreen extends Component {
     this.handleBarcodeScanned = this.handleBarcodeScanned.bind(this);
     this.handleBarcodeFound = this.handleBarcodeFound.bind(this); 
     this.handleBarcodeNotFound = this.handleBarcodeNotFound.bind(this); 
-    this.navigateUserAndResultsToDetailScreen = this.navigateUserAndResultsToDetailScreen.bind(this); 
     this.alertErrorRetrievingData = this.alertErrorRetrievingData.bind(this); 
     this.delay = this.delay.bind(this);
   }
@@ -49,7 +48,7 @@ export default class ScannerScreen extends Component {
     let delayTimeinMilliseconds = 500;
     await this.delay(delayTimeinMilliseconds);
     if (this.state.currBarcodeData == expoBarcode.data) return;
-    this.setState({ currBarcodeData: expoBarcode.data });
+    this.setState({ currBarcodeData: expoBarcode.data }); // Move this setState to the very bottom of the function
 
     let barcode = new Barcode(expoBarcode.type, expoBarcode.data);
     let barcodeTypeRef = this.dbHandler.getRef(StringConcatenations.Prefix, barcode);
@@ -61,30 +60,25 @@ export default class ScannerScreen extends Component {
   }
 
   handleBarcodeFound(resultsAndParams){
-    let barcode = resultsAndParams.params;
-    let barcodeTypeRef = this.dbHandler.getRef(StringConcatenations.Prefix, barcode);
-    let barcodeTypeCallbacksAndParams = new CallbacksAndParams(
-      barcode,
-      this.navigateUserAndResultsToDetailScreen,
-      this.alertErrorRetrievingData);
-    let barcodeTypeResults = this.dbHandler.getData(barcodeTypeRef, barcodeTypeCallbacksAndParams);
-  }
-
-  navigateUserAndResultsToDetailScreen(resultsAndParams){
+    let currBarcode = resultsAndParams.params;
     let results = resultsAndParams.results;
-    const { barcodeData, barcodeType, uuid } = results.data();
 
-    // Update num scans
+    // Increment num scans
     const incrementAmount = 1;
     const fieldName = "numScans";
-    const currBarcode = new Barcode(barcodeType, barcodeData, uuid);
-    this.dbHandler.incrementValue(StringConcatenations.Prefix, fieldName, incrementAmount, currBarcode);
-    let scansPerChocolateRef = this.dbHandler.getRef("ScansPerChocolate", currBarcode);
-    scansPerChocolateRef.set({
+    this.dbHandler.incrementValue(
+      StringConcatenations.Prefix, 
+      fieldName, 
+      incrementAmount, 
+      currBarcode);
+
+    // Update the scan meta data 
+    let scansPerDatetimeRef = this.dbHandler.getRef("ScansPerDatetime");
+    scansPerDatetimeRef.set({
       time: new Date(),
       user: this.dbHandler.currUser.uid,
-      barcodeData: barcodeData,
-      barcodeType: barcodeType
+      barcodeData: currBarcode.data,
+      barcodeType: currBarcode.type
     },{ merge : true });
 
     this.props.navigation.navigate("DetailScreen", { results: results.data() });
