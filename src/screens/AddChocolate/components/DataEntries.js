@@ -21,13 +21,14 @@ export default class DataEntries extends Component {
       barcodeData : this.props.barcode.data,
       uuid : uuidv4(),
     };
-    this.requiredInputFields = ["imageDownloadUrl", "confectionName"];
+    this.requiredInputFields = ["imageDownloadUrl", "confectionName", "producerName"];
   }
 
   updateInput(input){
     this.inputValues[input['field']] = input['value'];
   }
   
+  // Checks that all required fields are filled in and that the chocolate wasn't added before user hit submit
   checkIfShouldSubmit(inputValues){
     if(!this.isValidInput(inputValues)){
       alert("There are required fields that are missing");
@@ -156,8 +157,8 @@ export default class DataEntries extends Component {
             dialogType={"typing"}
           />
           <Entry 
-            id={"brand"}
-            displayName={"Brand"} 
+            id={"producerName"}
+            displayName={"Producer Name"} 
             updateInput={this.updateInput} 
             dialogType={"typing"}        
           />

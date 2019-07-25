@@ -13,7 +13,10 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const algoliasearch = require('algoliasearch');
 const env = functions.config();
+
 admin.initializeApp();
+
+const db = admin.firestore();
 const client = algoliasearch(env.algolia.appid, env.algolia.apikey);
 const index = client.initIndex('dev_molinillo');
 
@@ -21,6 +24,8 @@ const index = client.initIndex('dev_molinillo');
 ////////////////////////
 // Firebase Functions //
 ////////////////////////
+
+////// Algolia barcode Listeners ///////
 
 //Upc_a
 exports.index_Upc_a = functions.firestore
@@ -335,4 +340,30 @@ exports.unindex_Code93 = functions.firestore
   .onDelete(document => {
     const objectID = document.data().uuid;
     return index.deleteObject(objectID);
+  });
+
+
+////// Detail Screen Listeners //////
+
+// StarRatingsPerUser
+exports.index_StarRatingsCountListener = functions.firestore
+  .document('StarRatingsPerUser/{starId}')
+  .onCreate(document => {
+    const data = document.data();
+    const path = "BarcodeType_" + data.barcodeType + "/" + data.barcodeData.toString();
+
+    return db
+      .doc(path)
+      .update({numStarRatings: admin.firestore.FieldValue.increment(1)});
+  });
+
+exports.unindex_StarRatingsCountListener = functions.firestore
+  .document('StarRatingsPerUser/{starId}')
+  .onDelete(document => {
+    const data = document.data();
+    const path = "BarcodeType_" + data.barcodeType + "/" + data.barcodeData.toString();
+
+    return db
+      .doc(path)
+      .update({numStarRatings:  admin.firestore.FieldValue.increment(-1)});
   });

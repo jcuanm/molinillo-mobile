@@ -1,7 +1,7 @@
 import {  StringConcatenations, Warnings } from '../helpers/Constants';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
-import CallbacksAndParams from './CallbacksAndParams';
+const uuidv4 = require('uuid/v4');
 
 export default class DbHandler{
     constructor(){
@@ -137,14 +137,9 @@ export default class DbHandler{
         return handleFailureCallback({ params: callbackParams});
     }
 
-    getRef(root, barcode = null){
+    getRef(root, barcode = null, barcodeUuid = null){
         var ref;
         switch(root){
-            case 'users':
-                ref = this.dbRef
-                    .collection(root)
-                    .doc(this.currUser.uid);
-                break;
             case StringConcatenations.Prefix:
                 ref = this.dbRef
                     .collection(root + barcode.type)
@@ -160,15 +155,20 @@ export default class DbHandler{
                     .collection(root)
                     .doc(this.currUser.uid);
                 break;
-            case 'ScansPerDatetime':
+            case 'Scans':
                 ref = this.dbRef
                     .collection(root)
-                    .doc((new Date()).toString());
+                    .doc(uuidv4());
                 break;
-            case 'SearchClicksPerDatetime':
+            case 'SearchClicks':
                 ref = this.dbRef
                     .collection(root)
-                    .doc((new Date()).toString());
+                    .doc(uuidv4());
+                break;
+            case 'StarRatingsPerUser':
+                ref = this.dbRef
+                    .collection(root)
+                    .doc(this.currUser.uid + "_" + barcodeUuid);
                 break;
             default:
                 ref = null; 
