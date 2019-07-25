@@ -6,7 +6,6 @@ import {
     TouchableOpacity 
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
-import { StringConcatenations } from './Constants';
 import DbHandler from './DbHandler';
 import Barcode from './Barcode';
 
@@ -54,19 +53,10 @@ export default class CustomListItem extends Component {
         const { barcodeType, barcodeData } = results;
         const currBarcode = new Barcode(barcodeType, barcodeData);
 
-        // Increment number of clicks gained from user using the search feature
-        const incrementAmount = 1;
-        const fieldName = "numSearchClicks";
-        this.dbHandler.incrementValue(
-            StringConcatenations.Prefix, 
-            fieldName, 
-            incrementAmount, 
-            currBarcode);
-
         // Update the search click meta data 
-        let scansPerDatetimeRef = this.dbHandler.getRef("SearchClicksPerDatetime");
-        scansPerDatetimeRef.set({
-            time: new Date(),
+        let scansRef = this.dbHandler.getRef("SearchClicks");
+        scansRef.set({
+            created_ts: new Date(),
             user: this.dbHandler.currUser.uid,
             barcodeData: currBarcode.data,
             barcodeType: currBarcode.type

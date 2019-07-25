@@ -8,11 +8,11 @@ import {
 export default class Detail extends Component {
 	render() {
 		return (
-      <View style={{width: Dimensions.get('window').width, height: 50, backgroundColor: 'steelblue'}}>
-        <Text>
-          {this.props.title}
-        </Text>
-      </View>
+			<View>
+				<Text style={{fontSize:20, color:'rgba(0, 0, 0, .4)', textAlign:"right"}}> {this.props.producerName} </Text>
+				<Text style={{fontSize:23, fontWeight:'bold'}}> {this.props.confectionName} </Text>
+				<Text style={{fontSize:23, fontWeight:'bold'}}> {this.props.confectionName} </Text>
+			</View>
 		);
 	}
 }

@@ -35,7 +35,7 @@ export default class DataEntries extends Component {
 
     render(){
         const {
-            brand,
+            producerName,
             cacaoVariety,
             confectionName,
             countryOfOrigin,
@@ -60,10 +60,10 @@ export default class DataEntries extends Component {
                         currValue={confectionName}
                     />
                     <Entry 
-                        id={"brand"}
-                        displayName={"Brand"} 
+                        id={"producerName"}
+                        displayName={"Producer Name"} 
                         updateInput={this.updateInput}
-                        currValue={brand} 
+                        currValue={producerName} 
                     />
                     <Entry 
                         id={"type"}

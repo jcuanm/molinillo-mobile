@@ -18,6 +18,7 @@ export default class ScannerScreen extends Component {
     this.dbHandler = new DbHandler();
     this.state = {
       currBarcodeData: null,
+      handleBarcodeScanned: this.handleBarcodeScanned, 
       hasCameraPermission: null,
     }
 
@@ -25,7 +26,6 @@ export default class ScannerScreen extends Component {
     this.handleBarcodeFound = this.handleBarcodeFound.bind(this); 
     this.handleBarcodeNotFound = this.handleBarcodeNotFound.bind(this); 
     this.alertErrorRetrievingData = this.alertErrorRetrievingData.bind(this); 
-    this.delay = this.delay.bind(this);
   }
 
   static navigationOptions = ({ navigation }) => ({
@@ -45,11 +45,6 @@ export default class ScannerScreen extends Component {
   }
 
   handleBarcodeScanned = async expoBarcode => {
-    let delayTimeinMilliseconds = 500;
-    await this.delay(delayTimeinMilliseconds);
-    if (this.state.currBarcodeData == expoBarcode.data) return;
-    this.setState({ currBarcodeData: expoBarcode.data }); // Move this setState to the very bottom of the function
-
     let barcode = new Barcode(expoBarcode.type, expoBarcode.data);
     let barcodeTypeRef = this.dbHandler.getRef(StringConcatenations.Prefix, barcode);
     let barcodeTypeCallbacksAndParams = new CallbacksAndParams(
@@ -57,25 +52,17 @@ export default class ScannerScreen extends Component {
       this.handleBarcodeFound,
       this.handleBarcodeNotFound);
     let barcodeTypeResults = this.dbHandler.getData(barcodeTypeRef, barcodeTypeCallbacksAndParams);  
+    this.setState({ handleBarcodeScanned: undefined });
   }
 
   handleBarcodeFound(resultsAndParams){
     let currBarcode = resultsAndParams.params;
     let results = resultsAndParams.results;
 
-    // Increment num scans
-    const incrementAmount = 1;
-    const fieldName = "numScans";
-    this.dbHandler.incrementValue(
-      StringConcatenations.Prefix, 
-      fieldName, 
-      incrementAmount, 
-      currBarcode);
-
     // Update the scan meta data 
-    let scansPerDatetimeRef = this.dbHandler.getRef("ScansPerDatetime");
-    scansPerDatetimeRef.set({
-      time: new Date(),
+    let scansRef = this.dbHandler.getRef("Scans");
+    scansRef.set({
+      created_ts: new Date(),
       user: this.dbHandler.currUser.uid,
       barcodeData: currBarcode.data,
       barcodeType: currBarcode.type
@@ -95,19 +82,13 @@ export default class ScannerScreen extends Component {
       Warnings.FailedToFindChocolate,
       Warnings.HelpFindChocolate,
       [
-        {text: 'No thanks', style: 'cancel'},
+        {text: 'No thanks', style: 'cancel', onPress: () => this.setState({ handleBarcodeScanned: this.handleBarcodeScanned })},
         {text: 'Add Chocolate', onPress: () => 
           this.props.navigation.navigate("AddChocolateScreen", { barcode : barcode })
         },
       ],
       { cancelable: false }
     );
-  }
-
-  delay(time) {
-    return new Promise(function(resolve, reject) {
-      setTimeout(() => resolve(), time);
-    });
   }
 
   render() {
@@ -121,7 +102,7 @@ export default class ScannerScreen extends Component {
     return (
       <View style={{ flex: 1 }}>
         <BarCodeScanner
-          onBarCodeScanned={this.handleBarcodeScanned}
+          onBarCodeScanned={this.state.handleBarcodeScanned}
           barCodeTypes={[
             BarCodeScanner.Constants.BarCodeType.upc_a,
             BarCodeScanner.Constants.BarCodeType.upc_e,
