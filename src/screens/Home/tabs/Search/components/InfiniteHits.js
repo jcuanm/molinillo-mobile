@@ -47,6 +47,7 @@ function renderItem(item, navigate){
       title={item.confectionName}
       shouldUserEditItem={false}
       subtitle={item.objectID}
+      parentScreen={"Search"}
     />
   );
 }

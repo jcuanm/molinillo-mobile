@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { 
+    Image,
     View, 
     Text, 
     TouchableOpacity,
@@ -24,7 +25,10 @@ export default class ProfileScreen extends Component {
         },
         headerLeft: (
             <TouchableOpacity style={styles.headerButton} >
-                <Ionicons name="md-checkmark-circle" size={32} color="purple" />
+                <Image 
+                    style={{height:40, width:40}}
+                    source={require('../../../../../assets/images/logo.png')}
+                />
             </TouchableOpacity>
         ),
     }

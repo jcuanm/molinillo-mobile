@@ -37,8 +37,8 @@ export default class RootNavigator extends Component{
   /* Handles the images for the load screen */
   async _cacheResourcesAsync(){
     const images = [
-      require('../../assets/images/splash.png'),
-      require('../../assets/images/icon.png'),
+      require('../../assets/images/logo.png'),
+      require('../../assets/images/logo.png'),
     ];
 
     const cacheImages = images.map((image) => {

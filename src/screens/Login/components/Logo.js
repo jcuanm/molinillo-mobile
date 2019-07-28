@@ -14,7 +14,7 @@ export default class Logo extends Component {
           style={LogoStyles.image}
           source={require('../../../../assets/images/logo.png')}
 				/>
-        <Text style={LogoStyles.logoText}>Welcome to My app.</Text>	
+        <Text style={LogoStyles.logoText}>Molinillo</Text>	
   		</View>
 		);
 	}

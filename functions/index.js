@@ -354,7 +354,31 @@ exports.index_StarRatingsCountListener = functions.firestore
 
     return db
       .doc(path)
-      .update({numStarRatings: admin.firestore.FieldValue.increment(1)});
+      .update({
+        numStarRatings: admin.firestore.FieldValue.increment(1),
+        sumRatings: admin.firestore.FieldValue.increment(data.rating)
+      });
+  });
+
+exports.update_StarRatingsCountListener = functions.firestore
+  .document('StarRatingsPerUser/{starId}')
+  .onUpdate((change, context) => {
+    const previousDocument = change.before;
+    const currentDocument = change.after;
+    if(!previousDocument || !currentDocument){
+      return;
+    }
+
+    const prevData = previousDocument.data();
+    const currData = currentDocument.data();
+    const path = "BarcodeType_" + currData.barcodeType + "/" + currData.barcodeData.toString();
+
+    let increment = currData.rating - prevData.rating;
+    return db
+      .doc(path)
+      .update({
+        sumRatings: admin.firestore.FieldValue.increment(increment)
+      });
   });
 
 exports.unindex_StarRatingsCountListener = functions.firestore
@@ -365,5 +389,8 @@ exports.unindex_StarRatingsCountListener = functions.firestore
 
     return db
       .doc(path)
-      .update({numStarRatings:  admin.firestore.FieldValue.increment(-1)});
+      .update({
+        numStarRatings: admin.firestore.FieldValue.increment(-1),
+        sumRatings: admin.firestore.FieldValue.increment(-data.rating)
+      });
   });

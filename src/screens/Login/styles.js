@@ -3,10 +3,6 @@ import { Colors } from '../../helpers/Constants';
 
 export const ForgotPasswordStyles = StyleSheet.create({
   forgotPasswordTextCont : {
-  	flexGrow: 1,
-    alignItems:'flex-end',
-    justifyContent :'center',
-    paddingVertical:16,
     flexDirection:'row'
   },
   forgotPasswordText: {
@@ -16,7 +12,6 @@ export const ForgotPasswordStyles = StyleSheet.create({
   forgotPasswordButton: {
   	color:'#ffffff',
   	fontSize:16,
-  	fontWeight:'500'
   }
 });
 
@@ -38,9 +33,9 @@ export const LoginFormStyles = StyleSheet.create({
   button: {
     width:300,
     backgroundColor:'#1c313a',
-     borderRadius: 25,
-      marginVertical: 10,
-      paddingVertical: 13
+    borderRadius: 25,
+    marginVertical: 10,
+    paddingVertical: 13,
   },
   buttonText: {
     fontSize:16,
@@ -66,13 +61,13 @@ export const LogoStyles = StyleSheet.create({
     alignItems: 'center'
   },
   image : {
-    width:40, 
-    height: 70
+    width:80, 
+    height: 140
   },
   logoText : {
   	marginVertical: 15,
-  	fontSize:18,
-  	color:'rgba(255, 255, 255, 0.7)'
+  	fontSize:40,
+  	color:'white'
   }
 });
 
@@ -81,7 +76,7 @@ export const SignupStyles = StyleSheet.create({
   	flexGrow: 1,
     alignItems:'flex-end',
     justifyContent :'center',
-    paddingVertical:16,
+    paddingBottom:32,
     flexDirection:'row'
   },
   text: {
@@ -90,7 +85,6 @@ export const SignupStyles = StyleSheet.create({
   },
   button: {
   	color:'#ffffff',
-  	fontSize:16,
-  	fontWeight:'500'
+  	fontSize:16
   },
 });

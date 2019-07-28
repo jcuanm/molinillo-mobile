@@ -27,7 +27,7 @@ export default class MyChocolatesScreen extends Component {
         let myChocolatesCallbacksAndParams = new CallbacksAndParams(
             {}, 
             function(resultsAndParams){ return resultsAndParams.results; },
-            function(){ console.log('Error getting myChocolates document'); });
+            function(){ console.log('No chocolates in MyChocolates'); });
 
         let myChocolatesResults = this.dbHandler.getData(myChocolatesRef, myChocolatesCallbacksAndParams);
         this.setState({ isLoading: true });
@@ -50,6 +50,7 @@ export default class MyChocolatesScreen extends Component {
             })
             // User has no chocolates in myChocolates
             .catch( _ => {
+                console.log("Javier")
                 this.setState({ isLoading: false });
             });
     }
@@ -77,7 +78,7 @@ export default class MyChocolatesScreen extends Component {
         if(isLoading){
             return <Text>Loading...</Text>
         }
-        else {
+        else if(myChocolates !== undefined && myChocolates.length > 0){
             return(
                 <View>
                     <FlatList
@@ -88,6 +89,9 @@ export default class MyChocolatesScreen extends Component {
                     />
                 </View>
             );
+        }
+        else{
+            return <Text>No Chocolates</Text>
         } 
     }
 
@@ -100,6 +104,7 @@ export default class MyChocolatesScreen extends Component {
                     title={item.confectionName}
                     subtitle={"hello"}
                     shouldUserEditItem={true}
+                    parentScreen={"MyChocolates"}
                 />
             );
         }

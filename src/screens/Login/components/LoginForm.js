@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
   View,
   TextInput,
-  Button
+  Button,
+  Platform
 } from 'react-native';
 import DbHandler from '../../../helpers/DbHandler';
 import { LoginFormStyles } from '../styles'; 
@@ -40,7 +41,8 @@ export default class LoginForm extends Component {
         />  
 
         <Button 
-          title="Login" 
+          title="Login"
+          color={Platform.OS === 'ios' ? 'white' : 'rgba(255, 255,255,0.2)'} 
           onPress={() => this.dbHandler.loginUser(this.state.email, this.state.password)} 
         />
   		</View>

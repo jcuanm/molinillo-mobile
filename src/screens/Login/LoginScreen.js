@@ -12,8 +12,8 @@ export default class LoginScreen extends Component {
 			<View style={LoginScreenStyles.container}>
 				<Logo/>
 				<LoginForm/>
-				<Signup navigate={this.props.navigation.navigate}/>
         		<ForgotPassword navigate={this.props.navigation.navigate}/>
+				<Signup navigate={this.props.navigation.navigate}/>
 			</View>	
 		);
 	}

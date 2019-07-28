@@ -30,7 +30,7 @@ export default class DbHandler{
             .then(() => {})
             .catch( error => { 
                 console.log(error);
-                alert("We couldn't log you in! There was a connection error.");
+                alert(error);
             });  
     }
 

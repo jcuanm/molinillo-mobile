@@ -12,7 +12,7 @@ export default class Signup extends Component {
       <View style={SignupStyles.textContent}>
         <Text style={SignupStyles.text}>Don't have an account yet?</Text>
         <TouchableOpacity onPress={() => this.props.navigate("SignupScreen")}>
-          <Text style={SignupStyles.button}> Signup </Text>
+          <Text style={SignupStyles.button}> Sign up </Text>
         </TouchableOpacity>
       </View>
 		);
