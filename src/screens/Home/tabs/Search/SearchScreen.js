@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { 
+  Image, 
+  TouchableOpacity, 
+  View } 
+from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import ActionButton from 'react-native-action-button';
 import { AlgoliaSearchConfig } from '../../../../../assets/Config';
@@ -43,7 +47,10 @@ export default class SearchScreen extends Component {
     },
     headerLeft: (
       <TouchableOpacity style={styles.headerButton} >
-        <Ionicons name="md-checkmark-circle" size={32} color="purple" />
+        <Image 
+          style={{height:40, width:40}}
+          source={require('../../../../../assets/images/logo.png')}
+        />
       </TouchableOpacity>
     ),
   });

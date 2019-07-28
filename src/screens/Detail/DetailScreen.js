@@ -31,6 +31,8 @@ export default class DetailScreen extends Component {
 		this.navigateOnSuccessfulDelete = this.navigateOnSuccessfulDelete.bind(this); 
 		this.updateIsFlagged = this.updateIsFlagged.bind(this); 
 		this.updateNumStarRatings = this.updateNumStarRatings.bind(this); 
+		this.updateUserRating = this.updateUserRating.bind(this); 
+
 
 		this.state = {
 			isFlagged : false,
@@ -46,6 +48,7 @@ export default class DetailScreen extends Component {
 	initializeScreen(){
 		this.checkItemIsFlagged();
 		this.getNumStarRatings();
+		this.getUserRating();
 	}
 
 	checkItemIsFlagged(){
@@ -74,7 +77,7 @@ export default class DetailScreen extends Component {
 		this.setState({ isFlagged : isFlagged });
 	}
 
-	getNumStarRatings(rating=null){
+	getNumStarRatings(){
 		const { barcodeType, barcodeData } = this.results;
 		let currBarcode = new Barcode(barcodeType, barcodeData);
 		let barcodeTypeRef = this.dbHandler.getRef(StringConcatenations.Prefix, currBarcode);
@@ -90,12 +93,31 @@ export default class DetailScreen extends Component {
 		let results = resultsAndParams.results.data();
 		
 		if(results.numStarRatings){
-			this.setState({  numStarRatings : results.numStarRatings });
+			this.setState({  
+				numStarRatings : results.numStarRatings,
+				sumRatings: results.sumRatings
+			});
 		}
 	}
 
+	getUserRating(){
+		const { uuid } = this.results;
+		let barcodeTypeRef = this.dbHandler.getRef("StarRatingsPerUser", {}, uuid);
+		let barcodeTypeCallbacksAndParams = new CallbacksAndParams(
+			{}, 
+			this.updateUserRating, 
+			function(){}
+		);
+		this.dbHandler.getData(barcodeTypeRef, barcodeTypeCallbacksAndParams);
+	}
+
+	updateUserRating(resultsAndParams){
+		let results = resultsAndParams.results.data();
+		this.setState({rating : results.rating });
+	}
+
 	static navigationOptions = ({ navigation }) => ({
-		title: "Item Details",
+		title: "Chocolate Details",
 		headerStyle: {
 			backgroundColor: Colors.Primary,
 		},
@@ -225,36 +247,88 @@ export default class DetailScreen extends Component {
 					<View style={{
 						width: Dimensions.get('window').width / 2,
 						height: 100,
-						backgroundColor:"white"
+						backgroundColor:"white",
+						borderBottomColor: Colors.Primary,
+						borderBottomWidth: .5,
+						justifyContent:"center",
 					}}>
-						<Text style={{paddingLeft: 15, fontSize:20, color:'rgba(0, 0, 0, .4)'}}> {producerName} </Text>
-						<Text style={{paddingLeft: 15, fontSize:23, fontWeight:'bold'}}> {confectionName} </Text>
+						<Text style={{paddingLeft: 25, fontSize:18, fontWeight:'bold'}}> {producerName} </Text>
+						<Text style={{paddingLeft: 25, fontSize:18}}> {confectionName} </Text>
+						<Text style={{paddingLeft: 30, fontSize:14}}> 
+							from <Text style={{fontStyle:'normal'}}>Mexico</Text>
+						</Text>
 					</View>
 
 					<View style={{
 						width: Dimensions.get('window').width / 2,
 						height: 100,
 						backgroundColor:"white",
-						justifyContent: 'center'
+						justifyContent: 'center',
+						borderBottomColor: Colors.Primary,
+						borderBottomWidth: .5
 					}}>	
 						<Text style={{textAlign:"center", fontSize: 30, fontWeight: 'bold'}}> 
-							<Ionicons name="md-star" size={30} color="gold" /> 4.5
+							<Ionicons name="md-star" size={30} color="gold" />   
+							{(this.state.sumRatings / this.state.numStarRatings) ? this.state.sumRatings / this.state.numStarRatings : " "}
 						</Text>
 
-						<Text style={{textAlign:"center", color:'rgba(0, 0, 0, .4)'}}>{this.state.numStarRatings} Ratings</Text>
+						<Text style={{fontSize:12, textAlign:"center", color:'rgba(0, 0, 0, .4)'}}>
+							{this.state.numStarRatings} <Text style={{fontStyle:"italic", }}>ratings</Text>
+						</Text>
 					</View>
 				</View>
 
-				<View style={{paddingLeft:15, paddingRight:15}}>
+				<View style={{padding:15, paddingLeft:110, paddingRight:110, borderBottomColor: Colors.Primary, borderBottomWidth: .5}}>
 					<StarRating
+						starSize={20}
 						disabled={false}
 						maxStars={this.maxStars}
 						rating={this.state.rating}
 						selectedStar={rating => this.onStarRatingPress(rating, currBarcode, uuid)}
 						fullStarColor={"gold"}
 					/>
+					<Text style={{fontSize:12, paddingTop:5, color:'rgba(0, 0, 0, .4)', textAlign:'center'}}>Tap to rate</Text>
 				</View>
-			  </View>
+
+				<View style={{
+					flexDirection: "row"
+				}}>
+					<View style={{
+						width: Dimensions.get('window').width / 2,
+						height: 100,
+						backgroundColor:"white",
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}>
+						<View >
+							<Image 
+								style={{height:40, width:40}}
+								source={require('../../../assets/images/cacao_icon.png')}
+							/>
+						</View>
+						<Text style={{fontSize:14}}> Cacao </Text>
+					</View>
+
+					<View style={{
+						width: Dimensions.get('window').width / 2,
+						height: 100,
+						backgroundColor:"white",
+						justifyContent: 'center',
+					}}>	
+						<Text style={{textAlign:"center", fontSize: 30, fontWeight: 'bold'}}> 
+							75%
+						</Text>
+
+						<Text style={{fontSize:14, textAlign:"center"}}>Forastero</Text>
+					</View>
+				</View>
+
+				<View style={{paddingLeft:30, paddingRight:25}}>
+					<Text style={{fontSize:14, paddingTop:5, color:'rgba(0, 0, 0, .4)', textDecorationLine:'underline'}}>Comments (15)</Text>
+				</View>
+
+				
+			</View>
 			// <View style={{flex:1}}>
 			// 	<Image 
             //         style={{flex:1, width: Dimensions.get('window').width, height: 200}}

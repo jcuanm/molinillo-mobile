@@ -20,6 +20,7 @@ export const dialogOptionsDatasets = {
         { key: 'Criollo' }, 
         { key: 'Forastero' }, 
         { key: 'Trinitario' }, 
+        { key: 'Other' }
     ],
 
     "countryOfOrigin" : [

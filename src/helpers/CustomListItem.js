@@ -18,6 +18,7 @@ export default class CustomListItem extends Component {
     render(){
         const { 
             navigate, 
+            parentScreen,
             results, 
             title, 
             shouldUserEditItem,
@@ -34,7 +35,7 @@ export default class CustomListItem extends Component {
                             shouldUserEditItem : shouldUserEditItem,
                         });
                 
-                    this.updateSearchClickMetaData(results);
+                    this.updateSearchClickMetaData(results, parentScreen);
                 }}
             >
                 <Image 
@@ -49,7 +50,7 @@ export default class CustomListItem extends Component {
         );
     }
 
-    updateSearchClickMetaData(results){
+    updateSearchClickMetaData(results, parentScreen){
         const { barcodeType, barcodeData } = results;
         const currBarcode = new Barcode(barcodeType, barcodeData);
 
@@ -58,6 +59,7 @@ export default class CustomListItem extends Component {
         scansRef.set({
             created_ts: new Date(),
             user: this.dbHandler.currUser.uid,
+            parentScreen: parentScreen,
             barcodeData: currBarcode.data,
             barcodeType: currBarcode.type
         },{ merge : true });

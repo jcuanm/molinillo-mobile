@@ -12,7 +12,7 @@ export default class Logo extends Component {
 			<View style={styles.container}>
 				<Image  style={{width:40, height: 70}}
           			source={require('../../../../assets/images/logo.png')}/>
-        <Text style={styles.logoText}>Welcome to My app.</Text>	
+        <Text style={styles.logoText}>Molinillo</Text>	
   		</View>
 		);
 	}
@@ -27,6 +27,6 @@ const styles = StyleSheet.create({
   logoText : {
   	marginVertical: 15,
   	fontSize:18,
-  	color:'rgba(255, 255, 255, 0.7)'
+  	color:'white'
   }
 });
