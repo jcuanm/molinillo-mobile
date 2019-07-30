@@ -27,28 +27,26 @@ export default class DbHandler{
         firebase
             .auth()
             .signInWithEmailAndPassword(email, password)
-            .then(() => {})
             .catch( error => { 
                 console.log(error);
                 alert(error);
             });  
     }
 
-    signupUser(email, password, passwordConfirm){
+    signupUser({ email, displayName, password, passwordConfirm }){
         if(password !== passwordConfirm){
             alert(Warnings.PasswordsDontMatch);
             return;
         }
 
-        // Limited to email and password with this implementation
-        // Add other user data using createUser() method
         firebase
             .auth()
             .createUserWithEmailAndPassword(email, password)
-            .then()
+            .then( userMetaData => {
+                userMetaData.user.updateProfile({ displayName : displayName });
+            })
             .catch(error => { 
-                console.log(error);
-                alert("Sorry! We couldn't sign you up. There was a connection error."); 
+                alert(error); 
             });
     }
 
