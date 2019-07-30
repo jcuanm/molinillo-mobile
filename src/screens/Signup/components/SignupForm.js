@@ -13,6 +13,7 @@ export default class SignupForm extends Component {
     this.dbHandler = new DbHandler();
     this.state = {
       email: "",
+      displayName: "",
       password: "",
       passwordConfirm: "",
     }
@@ -28,7 +29,13 @@ export default class SignupForm extends Component {
           placeholderTextColor = "#ffffff"
           selectionColor="#fff"
           keyboardType="email-address"
-          onSubmitEditing={()=> this.password.focus()}
+        />
+        <TextInput style={styles.inputBox} 
+          underlineColorAndroid='rgba(0,0,0,0)' 
+          onChangeText={(text) => { this.setState({ displayName: text }) }}
+          placeholder="Display Name"
+          placeholderTextColor = "#ffffff"
+          selectionColor="#fff"
         />
         <TextInput 
           style={styles.inputBox} 
@@ -51,7 +58,12 @@ export default class SignupForm extends Component {
         <Button 
           style={styles.button} 
           title="Signup" 
-          onPress={() => this.dbHandler.signupUser(this.state.email, this.state.password, this.state.passwordConfirm)} 
+          onPress={() => this.dbHandler.signupUser({
+              email : this.state.email, 
+              displayName : this.state.displayName,
+              password : this.state.password, 
+              passwordConfirm : this.state.passwordConfirm
+            })} 
         />
   		</View>
 		);
@@ -64,7 +76,6 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     alignItems: 'center'
   },
-
   inputBox: {
     width:300,
     backgroundColor:'rgba(255, 255,255,0.2)',
@@ -77,9 +88,9 @@ const styles = StyleSheet.create({
   button: {
     width:300,
     backgroundColor:'#1c313a',
-     borderRadius: 25,
-      marginVertical: 10,
-      paddingVertical: 13
+    borderRadius: 25,
+    marginVertical: 10,
+    paddingVertical: 13
   },
   buttonText: {
     fontSize:16,

@@ -4,6 +4,7 @@ import {
 	Button,
 	Dimensions,
 	Image,
+	ScrollView,
 	Text,
 	TouchableOpacity, 
 	View, 
@@ -236,156 +237,99 @@ export default class DetailScreen extends Component {
 		const currBarcode = new Barcode(barcodeType, barcodeData);
 		
 		return (
-			<View style={{flex: 1, flexWrap: 'wrap' }}>
-				<Image 
-					style={{width: Dimensions.get('window').width, height:Dimensions.get('window').height/3}}
-					source={{ uri : imageDownloadUrl }}
-                />
-				<View style={{
-					flexDirection: "row"
-				}}>
-					<View style={{
-						width: Dimensions.get('window').width / 2,
-						height: 100,
-						backgroundColor:"white",
-						borderBottomColor: Colors.Primary,
-						borderBottomWidth: .5,
-						justifyContent:"center",
-					}}>
-						<Text style={{paddingLeft: 25, fontSize:18, fontWeight:'bold'}}> {producerName} </Text>
-						<Text style={{paddingLeft: 25, fontSize:18}}> {confectionName} </Text>
-						<Text style={{paddingLeft: 30, fontSize:14}}> 
-							from <Text style={{fontStyle:'normal'}}>Mexico</Text>
-						</Text>
-					</View>
-
-					<View style={{
-						width: Dimensions.get('window').width / 2,
-						height: 100,
-						backgroundColor:"white",
-						justifyContent: 'center',
-						borderBottomColor: Colors.Primary,
-						borderBottomWidth: .5
-					}}>	
-						<Text style={{textAlign:"center", fontSize: 30, fontWeight: 'bold'}}> 
-							<Ionicons name="md-star" size={30} color="gold" />   
-							{(this.state.sumRatings / this.state.numStarRatings) ? this.state.sumRatings / this.state.numStarRatings : " "}
-						</Text>
-
-						<Text style={{fontSize:12, textAlign:"center", color:'rgba(0, 0, 0, .4)'}}>
-							{this.state.numStarRatings} <Text style={{fontStyle:"italic", }}>ratings</Text>
-						</Text>
-					</View>
-				</View>
-
-				<View style={{padding:15, paddingLeft:110, paddingRight:110, borderBottomColor: Colors.Primary, borderBottomWidth: .5}}>
-					<StarRating
-						starSize={20}
-						disabled={false}
-						maxStars={this.maxStars}
-						rating={this.state.rating}
-						selectedStar={rating => this.onStarRatingPress(rating, currBarcode, uuid)}
-						fullStarColor={"gold"}
+			<ScrollView>
+				<View style={{flex: 1, flexWrap: 'wrap' }}>
+					<Image 
+						style={{width: Dimensions.get('window').width, height:Dimensions.get('window').height/3}}
+						source={{ uri : imageDownloadUrl }}
 					/>
-					<Text style={{fontSize:12, paddingTop:5, color:'rgba(0, 0, 0, .4)', textAlign:'center'}}>Tap to rate</Text>
-				</View>
-
-				<View style={{
-					flexDirection: "row"
-				}}>
 					<View style={{
-						width: Dimensions.get('window').width / 2,
-						height: 100,
-						backgroundColor:"white",
-						justifyContent: 'center',
-						alignItems: 'center',
+						flexDirection: "row"
 					}}>
-						<View >
-							<Image 
-								style={{height:40, width:40}}
-								source={require('../../../assets/images/cacao_icon.png')}
-							/>
+						<View style={{
+							width: Dimensions.get('window').width / 2,
+							height: 100,
+							backgroundColor:"white",
+							borderBottomColor: Colors.Primary,
+							borderBottomWidth: .5,
+							justifyContent:"center",
+						}}>
+							<Text style={{paddingLeft: 25, fontSize:18, fontWeight:'bold'}}> {producerName} </Text>
+							<Text style={{paddingLeft: 25, fontSize:18}}> {confectionName} </Text>
+							<Text style={{paddingLeft: 30, fontSize:14}}> 
+								from <Text style={{fontStyle:'normal'}}>Mexico</Text>
+							</Text>
 						</View>
-						<Text style={{fontSize:14}}> Cacao </Text>
+
+						<View style={{
+							width: Dimensions.get('window').width / 2,
+							height: 100,
+							backgroundColor:"white",
+							justifyContent: 'center',
+							borderBottomColor: Colors.Primary,
+							borderBottomWidth: .5
+						}}>	
+							<Text style={{textAlign:"center", fontSize: 30, fontWeight: 'bold'}}> 
+								<Ionicons name="md-star" size={30} color="gold" />   
+								{(this.state.sumRatings / this.state.numStarRatings) ? this.state.sumRatings / this.state.numStarRatings : " "}
+							</Text>
+
+							<Text style={{fontSize:12, textAlign:"center", color:'rgba(0, 0, 0, .4)'}}>
+								{this.state.numStarRatings} <Text style={{fontStyle:"italic", }}>ratings</Text>
+							</Text>
+						</View>
+					</View>
+
+					<View style={{padding:15, paddingLeft:110, paddingRight:110, borderBottomColor: Colors.Primary, borderBottomWidth: .5}}>
+						<StarRating
+							starSize={20}
+							disabled={false}
+							maxStars={this.maxStars}
+							rating={this.state.rating}
+							selectedStar={rating => this.onStarRatingPress(rating, currBarcode, uuid)}
+							fullStarColor={"gold"}
+						/>
+						<Text style={{fontSize:12, paddingTop:5, color:'rgba(0, 0, 0, .4)', textAlign:'center'}}>Tap to rate</Text>
 					</View>
 
 					<View style={{
-						width: Dimensions.get('window').width / 2,
-						height: 100,
-						backgroundColor:"white",
-						justifyContent: 'center',
-					}}>	
-						<Text style={{textAlign:"center", fontSize: 30, fontWeight: 'bold'}}> 
-							75%
-						</Text>
+						flexDirection: "row"
+					}}>
+						<View style={{
+							width: Dimensions.get('window').width / 2,
+							height: 100,
+							backgroundColor:"white",
+							justifyContent: 'center',
+							alignItems: 'center',
+						}}>
+							<View >
+								<Image 
+									style={{height:40, width:40}}
+									source={require('../../../assets/images/cacao_icon.png')}
+								/>
+							</View>
+							<Text style={{fontSize:14}}> Cacao </Text>
+						</View>
 
-						<Text style={{fontSize:14, textAlign:"center"}}>Forastero</Text>
+						<View style={{
+							width: Dimensions.get('window').width / 2,
+							height: 100,
+							backgroundColor:"white",
+							justifyContent: 'center',
+						}}>	
+							<Text style={{textAlign:"center", fontSize: 30, fontWeight: 'bold'}}> 
+								75%
+							</Text>
+
+							<Text style={{fontSize:14, textAlign:"center"}}>Forastero</Text>
+						</View>
 					</View>
+
+					<TouchableOpacity style={{paddingLeft:30, paddingRight:25}} onPress={() => console.log("Comments")}>
+						<Text style={{fontSize:14, paddingTop:5, color:'rgba(0, 0, 0, .4)', textDecorationLine:'underline'}}>View comments (15)</Text>
+					</TouchableOpacity>
 				</View>
-
-				<View style={{paddingLeft:30, paddingRight:25}}>
-					<Text style={{fontSize:14, paddingTop:5, color:'rgba(0, 0, 0, .4)', textDecorationLine:'underline'}}>Comments (15)</Text>
-				</View>
-
-				
-			</View>
-			// <View style={{flex:1}}>
-			// 	<Image 
-            //         style={{flex:1, width: Dimensions.get('window').width, height: 200}}
-            //         source={{ uri : imageDownloadUrl }}
-            //     />
-
-			// 	<View style={{flex:1, paddingLeft:5, paddingRight:5, width: Dimensions.get('window').width, height: 50, backgroundColor: 'white'}}>
-			// 		<View style={{flex:1}}>
-			// 			<Text style={{fontSize:20, color:'rgba(0, 0, 0, .4)'}}> {this.props.producerName} </Text>
-			// 			<Text style={{fontSize:23, fontWeight:'bold'}}> {this.props.confectionName} </Text>
-			// 			<Text style={{fontSize:23, fontWeight:'bold'}}> {this.props.confectionName} </Text>
-			// 		</View>
-					
-			// 		<View>
-
-			// 		</View>
-			// 	</View>
-
-			// 	{/* <Detail 
-			// 		style={{flex:1, paddingLeft:5, paddingRight:5, width: Dimensions.get('window').width, height: 50, backgroundColor: 'white'}}
-			// 		producerName={producerName} 
-			// 		confectionName={confectionName}
-			// 	/> */}
-			// 	{/* <Detail title={producerName} />
-			// 	<Detail title={type} /> */}
-			// 	<Ionicons 
-			// 		name="md-flag" 
-			// 		size={32} 
-			// 		color={this.state.isFlagged ? "red" : "grey"} 
-			// 		onPress={() => this.promptFlagItem(currBarcode) }
-			// 	/>
-			// 	<StarRating
-			// 		disabled={false}
-			// 		maxStars={this.maxStars}
-			// 		rating={this.state.numStarRatings}
-			// 		selectedStar={rating => this.onStarRatingPress(rating)}
-			// 		fullStarColor={"gold"}
-			// 	/>
-
-			// 	{ shouldUserEditItem ? 
-			// 		<View>
-			// 			<Button 
-			// 				title="Delete"
-			// 				onPress={() => this.promptDeleteItem() } 
-			// 				styles={styles.button}
-			// 			/> 
-						
-			// 			<Button 
-			// 				title="Edit Chocolate"
-			// 				onPress={() => navigation.navigate(
-			// 					"EditChocolateScreen", 
-			// 					{ barcode: currBarcode, entries: this.results })} 
-			// 				styles={styles.button}
-			// 			/>
-			// 		</View> 
-			// 	: null }
-			// </View>
+			</ScrollView>
 		);
 	}
 }

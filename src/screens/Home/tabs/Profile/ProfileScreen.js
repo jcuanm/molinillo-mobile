@@ -38,7 +38,7 @@ export default class ProfileScreen extends Component {
             <View style={styles.container}>
                 <View style={{ marginBottom: 35, width: Dimensions.get('window').width, height: 100, backgroundColor: 'steelblue'}}>
                     <Text>
-                        Welcome {firebase.auth().currentUser.email}
+                        Welcome {firebase.auth().currentUser.displayName}
                     </Text>
                 </View>
 

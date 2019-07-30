@@ -10,9 +10,9 @@ export default class Signin extends Component {
 	render() {
 		return(
       <View style={styles.textContent}>
-        <Text style={styles.text}>Blah blah</Text>
+        <Text style={styles.text}></Text>
         <TouchableOpacity >
-          <Text style={styles.button}> Sign in </Text>
+          <Text style={styles.button}></Text>
         </TouchableOpacity>
       </View>
 		);
