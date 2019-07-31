@@ -135,7 +135,7 @@ export default class DbHandler{
         return handleFailureCallback({ params: callbackParams});
     }
 
-    getRef(root, barcode = null, barcodeUuid = null){
+    getRef(root, barcode=null, barcodeUuid=null, commentUuid=null){
         var ref;
         switch(root){
             case StringConcatenations.Prefix:
@@ -167,6 +167,13 @@ export default class DbHandler{
                 ref = this.dbRef
                     .collection(root)
                     .doc(this.currUser.uid + "_" + barcodeUuid);
+                break;
+            case 'Comments':
+                ref = this.dbRef
+                    .collection(root)
+                    .doc(barcodeUuid)
+                    .collection("ratings")
+                    .doc(commentUuid)
                 break;
             default:
                 ref = null; 

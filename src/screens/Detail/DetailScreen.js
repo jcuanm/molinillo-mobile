@@ -3,13 +3,13 @@ import {
 	Alert,
 	Button,
 	Dimensions,
+	FlatList,
 	Image,
 	ScrollView,
 	Text,
 	TouchableOpacity, 
 	View, 
 } from 'react-native';
-import './components/Detail';
 import styles from '../../styles';
 import { Ionicons } from '@expo/vector-icons';
 import DbHandler from '../../helpers/DbHandler';
@@ -22,6 +22,10 @@ import {
 	StringConcatenations, 
 	Warnings 
 } from '../../helpers/Constants';
+import DialogInput from 'react-native-dialog-input';
+import Comment from './components/Comment';
+const uuidv4 = require('uuid/v4');
+
 
 export default class DetailScreen extends Component {
 	constructor(props) {
@@ -36,9 +40,11 @@ export default class DetailScreen extends Component {
 
 
 		this.state = {
+			isDialogVisible: false,
 			isFlagged : false,
 			numStarRatings : 0,
-			rating: 0
+			rating: 0,
+			comments: []
 		};
 	}
 
@@ -218,7 +224,10 @@ export default class DetailScreen extends Component {
 		let starRatingsPerUserRef = this.dbHandler.getRef("StarRatingsPerUser", barcode=null, barcodeUuid=uuid);
 		starRatingsPerUserRef.set(data, { merge : true });
 	
-		this.setState({ rating: rating });
+		this.setState({ 
+			rating: rating,
+			isDialogVisible: true
+		});
 	}
 
 	render() {
@@ -290,6 +299,14 @@ export default class DetailScreen extends Component {
 							fullStarColor={"gold"}
 						/>
 						<Text style={{fontSize:12, paddingTop:5, color:'rgba(0, 0, 0, .4)', textAlign:'center'}}>Tap to rate</Text>
+						<DialogInput isDialogVisible={this.state.isDialogVisible}
+							title={"What did you think about this chocolate?"}
+							submitInput={ inputText => {
+								this.submitComment(inputText); 
+								this.toggleDialogBox(); 
+							}}
+							closeDialog={ () => {this.toggleDialogBox()}}>
+						</DialogInput>
 					</View>
 
 					<View style={{
@@ -325,11 +342,63 @@ export default class DetailScreen extends Component {
 						</View>
 					</View>
 
-					<TouchableOpacity style={{paddingLeft:30, paddingRight:25}} onPress={() => console.log("Comments")}>
-						<Text style={{fontSize:14, paddingTop:5, color:'rgba(0, 0, 0, .4)', textDecorationLine:'underline'}}>View comments (15)</Text>
+					<TouchableOpacity style={{paddingLeft:15}} onPress={() => this.getComments()}>
+						<Text style={{fontSize:14, paddingTop:5, paddingBottom:5, color:'rgba(0, 0, 0, .4)', textDecorationLine:'underline'}}>View comments (15)</Text>
 					</TouchableOpacity>
+
+					{this.state.comments.length > 0 ? this.renderComments() : null}
+
 				</View>
 			</ScrollView>
+		);
+	}
+
+	submitComment(inputText){
+		if(inputText){
+			let commentUuid = uuidv4();
+			let commentRef = this.dbHandler.getRef(
+				"Comments", 
+				barcode=null,
+				barcodeUuid=this.results.uuid,
+				commentUuid=commentUuid);
+			
+			const data = {
+				comment: inputText,
+				commentUuid: commentUuid,
+				created_ts: new Date(),
+				displayName: this.dbHandler.currUser.displayName,
+				rating: this.state.rating,
+				userid: this.dbHandler.currUser.uid
+			}
+			
+			commentRef.set(data);
+		}
+	}
+
+	toggleDialogBox(){ 
+		this.setState({ isDialogVisible: !this.state.isDialogVisible }); 
+	}
+
+	getComments(){
+		console.log("Get Comments");
+	}
+
+	renderComments(){
+		return(
+			<View>
+				<FlatList
+					data={this.state.comments}
+					scrollEnabled={true}
+					renderItem={({item, index}) => this.renderComment()}
+					keyExtractor={(item, index) => index.toString()}
+				/>
+			</View>
+		);
+	}
+
+	renderComment(){
+		return(
+			<Comment />
 		);
 	}
 }
