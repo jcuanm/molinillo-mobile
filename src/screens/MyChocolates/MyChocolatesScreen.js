@@ -50,7 +50,6 @@ export default class MyChocolatesScreen extends Component {
             })
             // User has no chocolates in myChocolates
             .catch( _ => {
-                console.log("Javier")
                 this.setState({ isLoading: false });
             });
     }

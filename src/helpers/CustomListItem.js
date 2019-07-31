@@ -27,6 +27,7 @@ export default class CustomListItem extends Component {
 
         return(
             <TouchableOpacity
+                style={{paddingBottom: 10}}
                 onPress={ () => { 
                     navigate(
                         "DetailScreen",
