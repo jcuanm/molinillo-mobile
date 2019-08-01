@@ -11,6 +11,7 @@ import {
 	View, 
 } from 'react-native';
 import styles from '../../styles';
+import * as firebase from 'firebase';
 import { Ionicons } from '@expo/vector-icons';
 import DbHandler from '../../helpers/DbHandler';
 import Detail from './components/Detail';
@@ -299,7 +300,8 @@ export default class DetailScreen extends Component {
 							fullStarColor={"gold"}
 						/>
 						<Text style={{fontSize:12, paddingTop:5, color:'rgba(0, 0, 0, .4)', textAlign:'center'}}>Tap to rate</Text>
-						<DialogInput isDialogVisible={this.state.isDialogVisible}
+						<DialogInput 
+							isDialogVisible={this.state.isDialogVisible}
 							title={"What did you think about this chocolate?"}
 							submitInput={ inputText => {
 								this.submitComment(inputText); 
@@ -379,8 +381,22 @@ export default class DetailScreen extends Component {
 		this.setState({ isDialogVisible: !this.state.isDialogVisible }); 
 	}
 
-	getComments(){
-		console.log("Get Comments");
+	async getComments(){
+		let comments = []
+
+		await firebase
+			.firestore()
+			.collection("Comments")
+			.doc(this.results.uuid)
+			.collection("ratings")
+			.get()
+			.then( snapshot => {
+				snapshot.docs.forEach(doc =>{
+					comments.push(doc.data());
+				});
+			});
+	
+		this.setState({ comments : comments });
 	}
 
 	renderComments(){
@@ -389,16 +405,18 @@ export default class DetailScreen extends Component {
 				<FlatList
 					data={this.state.comments}
 					scrollEnabled={true}
-					renderItem={({item, index}) => this.renderComment()}
+					renderItem={({item, index}) => this.renderComment(item)}
 					keyExtractor={(item, index) => index.toString()}
 				/>
 			</View>
 		);
 	}
 
-	renderComment(){
+	renderComment(item){
 		return(
-			<Comment />
+			<Comment 
+				item={item}
+			/>
 		);
 	}
 }

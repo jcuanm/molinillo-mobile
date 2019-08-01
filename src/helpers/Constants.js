@@ -14,6 +14,21 @@ export const Colors = {
     Primary: "#4B006E"
 }
 
+export const Months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+]
+
 export const dialogOptionsDatasets = {
     "cacaoVariety" : [
         { key: '*Cacao not mentioned' }, 
