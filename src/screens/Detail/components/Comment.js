@@ -9,7 +9,7 @@ import {
 import { ListItem } from 'react-native-elements';
 import DbHandler from '../../../helpers/DbHandler';
 import Barcode from '../../../helpers/Barcode';
-import { Colors } from '../../../helpers/Constants';
+import { Colors, Months } from '../../../helpers/Constants';
 
 export default class Comment extends Component {
     constructor(props){
@@ -18,6 +18,13 @@ export default class Comment extends Component {
     }
 
     render(){
+        const { comment, created_ts, displayName } = this.props.item;
+        let date_created = created_ts.toDate();
+        let date_created_string_format = 
+            Months[date_created.getMonth()] + " " +
+            date_created.getDate() + ', ' + 
+            date_created.getFullYear();
+
         return(
             <View 
                 style={{
@@ -28,11 +35,10 @@ export default class Comment extends Component {
             }>
                 <View style={{paddingLeft: 15}}>
                     <Text style={{fontWeight:'bold', paddingBottom: 3}}>
-                        {this.dbHandler.currUser.displayName} 
-                        <Text style={{fontSize: 12, fontWeight:'normal', fontStyle:'italic', color:'rgba(0, 0, 0, .4)'}}> March 20, 1996</Text>
+                        {displayName} <Text style={{fontSize: 12, fontWeight:'normal', fontStyle:'italic', color:'rgba(0, 0, 0, .4)'}}> {date_created_string_format} </Text>
                     </Text>
                     <Text style={{fontSize:12}}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc eu ligula sit amet erat faucibus mollis. Integer quis nibh tincidunt, semper justo non, euismod sapien. In hac habitasse platea dictumst. Pellentesque sollicitudin diam nec ante imperdiet mollis. Sed ante turpis, mattis aliquet tortor ac, commodo congue eros. Maecenas sodales dui.
+                        {comment}
                     </Text>
                 </View>
             </View>
