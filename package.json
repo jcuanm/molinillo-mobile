@@ -20,6 +20,7 @@
     "react-native-action-button": "^2.8.5",
     "react-native-dialog-input": "^1.0.7",
     "react-native-elements": "^0.19.1",
+    "react-native-flags": "^1.0.0",
     "react-native-modal": "^11.1.0",
     "react-native-paper": "^2.2.8",
     "react-native-star-rating": "^1.1.0",

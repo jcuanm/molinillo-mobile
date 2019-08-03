@@ -163,16 +163,34 @@ export default class DataEntries extends Component {
             dialogType={"typing"}        
           />
           <Entry 
-            id={"type"}
-            displayName={"Type"} 
+            id={"confectionDescription"}
+            displayName={"Confection Description"} 
+            updateInput={this.updateInput} 
+            dialogType={"typing"}        
+          />
+          <Entry 
+            id={"vendorUrl"}
+            displayName={"Vendor Website"} 
             updateInput={this.updateInput}
-            dialogType={"options"} 
+            dialogType={"typing"} 
+          />
+          <Entry 
+            id={"vendorAddress"}
+            displayName={"Vendor Address"} 
+            updateInput={this.updateInput}
+            dialogType={"typing"} 
           />
           <Entry 
             id={"cacaoVariety"} 
             displayName={"Cacao Variety"}
             updateInput={this.updateInput} 
             dialogType={"options"} 
+          />
+          <Entry 
+            id={"cacaoPercentage"}
+            displayName={"Cacao Percentage"} 
+            updateInput={this.updateInput}
+            dialogType={"typing"} 
           />
           <Entry 
             id={"countryOfOrigin"}
