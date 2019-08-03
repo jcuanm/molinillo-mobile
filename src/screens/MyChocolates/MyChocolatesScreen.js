@@ -102,7 +102,6 @@ export default class MyChocolatesScreen extends Component {
                     results={item}
                     title={item.confectionName}
                     subtitle={"hello"}
-                    shouldUserEditItem={true}
                     parentScreen={"MyChocolates"}
                 />
             );

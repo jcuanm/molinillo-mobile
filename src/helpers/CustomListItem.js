@@ -21,7 +21,6 @@ export default class CustomListItem extends Component {
             parentScreen,
             results, 
             title, 
-            shouldUserEditItem,
             subtitle,
         } = this.props;
 
@@ -32,8 +31,7 @@ export default class CustomListItem extends Component {
                     navigate(
                         "DetailScreen",
                         { 
-                            results : results, 
-                            shouldUserEditItem : shouldUserEditItem,
+                            results : results
                         });
                 
                     this.updateSearchClickMetaData(results, parentScreen);

@@ -76,7 +76,7 @@ export default class DataEntries extends Component {
     
     navigate(
       "DetailScreen", 
-      { results : inputValues, shouldUserEditItem : true }
+      { results : inputValues }
     );
   }
 

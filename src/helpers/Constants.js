@@ -29,7 +29,7 @@ export const Months = [
     "December"
 ]
 
-export const countryCodeMappings = {
+export const CountryCodeMappings = {
     "AFGHANISTAN": "AF",
     "ÅLAND ISLANDS": "AX",
     "ALBANIA": "AL",
