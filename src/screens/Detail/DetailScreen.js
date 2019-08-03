@@ -36,7 +36,7 @@ export default class DetailScreen extends Component {
 		this.results = this.props.navigation.getParam('results', {});
 		this.navigateOnSuccessfulDelete = this.navigateOnSuccessfulDelete.bind(this); 
 		this.updateIsFlagged = this.updateIsFlagged.bind(this); 
-		this.updateNumStarRatings = this.updateNumStarRatings.bind(this); 
+		this.updateMetrics = this.updateMetrics.bind(this); 
 		this.updateUserRating = this.updateUserRating.bind(this); 
 
 
@@ -45,7 +45,8 @@ export default class DetailScreen extends Component {
 			isFlagged : false,
 			numStarRatings : 0,
 			rating: 0,
-			comments: []
+			comments: [],
+			numComments: 0
 		};
 	}
 
@@ -55,7 +56,7 @@ export default class DetailScreen extends Component {
 
 	initializeScreen(){
 		this.checkItemIsFlagged();
-		this.getNumStarRatings();
+		this.getMetrics();
 		this.getUserRating();
 	}
 
@@ -85,25 +86,26 @@ export default class DetailScreen extends Component {
 		this.setState({ isFlagged : isFlagged });
 	}
 
-	getNumStarRatings(){
+	getMetrics(){
 		const { barcodeType, barcodeData } = this.results;
 		let currBarcode = new Barcode(barcodeType, barcodeData);
 		let barcodeTypeRef = this.dbHandler.getRef(StringConcatenations.Prefix, currBarcode);
 		let barcodeTypeCallbacksAndParams = new CallbacksAndParams(
 			{}, 
-			this.updateNumStarRatings, 
+			this.updateMetrics, 
 			function(){}
 		);
 		this.dbHandler.getData(barcodeTypeRef, barcodeTypeCallbacksAndParams);
 	}
 
-	updateNumStarRatings(resultsAndParams){
+	updateMetrics(resultsAndParams){
 		let results = resultsAndParams.results.data();
 		
 		if(results.numStarRatings){
 			this.setState({  
 				numStarRatings : results.numStarRatings,
-				sumRatings: results.sumRatings
+				sumRatings: results.sumRatings,
+				numComments: results.numComments
 			});
 		}
 	}
@@ -345,7 +347,7 @@ export default class DetailScreen extends Component {
 					</View>
 
 					<TouchableOpacity style={{paddingLeft:15}} onPress={() => this.getComments()}>
-						<Text style={{fontSize:14, paddingTop:5, paddingBottom:5, color:'rgba(0, 0, 0, .4)', textDecorationLine:'underline'}}>View comments (15)</Text>
+						<Text style={{fontSize:14, paddingTop:5, paddingBottom:5, color:'rgba(0, 0, 0, .4)', textDecorationLine:'underline'}}>View comments ({this.state.numComments})</Text>
 					</TouchableOpacity>
 
 					{this.state.comments.length > 0 ? this.renderComments() : null}
@@ -357,6 +359,7 @@ export default class DetailScreen extends Component {
 
 	submitComment(inputText){
 		if(inputText){
+			const { barcodeType, barcodeData } = this.results;
 			let commentUuid = uuidv4();
 			let commentRef = this.dbHandler.getRef(
 				"Comments", 
@@ -373,7 +376,16 @@ export default class DetailScreen extends Component {
 				userid: this.dbHandler.currUser.uid
 			}
 			
-			commentRef.set(data);
+			commentRef
+				.set(data)
+				.then( _ => {
+					let currBarcode = new Barcode(barcodeType, barcodeData);
+					this.dbHandler.incrementValue(
+						StringConcatenations.Prefix, 
+						"numComments", 
+						1, 
+						currBarcode);
+				});
 		}
 	}
 
