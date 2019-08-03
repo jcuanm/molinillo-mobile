@@ -45,7 +45,6 @@ function renderItem(item, navigate){
       navigate={navigate}
       results={item}
       title={item.confectionName}
-      shouldUserEditItem={false}
       subtitle={item.objectID}
       parentScreen={"Search"}
     />
