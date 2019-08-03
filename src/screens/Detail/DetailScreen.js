@@ -5,6 +5,7 @@ import {
 	Dimensions,
 	FlatList,
 	Image,
+	Linking,
 	ScrollView,
 	Text,
 	TouchableOpacity, 
@@ -12,12 +13,13 @@ import {
 } from 'react-native';
 import styles from '../../styles';
 import * as firebase from 'firebase';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, Entypo } from '@expo/vector-icons';
 import DbHandler from '../../helpers/DbHandler';
 import Detail from './components/Detail';
 import Barcode from '../../helpers/Barcode';
 import CallbacksAndParams from '../../helpers/CallbacksAndParams';
 import StarRating from 'react-native-star-rating';
+import Flag from 'react-native-flags';
 import { 
 	Colors, 
 	StringConcatenations, 
@@ -241,7 +243,6 @@ export default class DetailScreen extends Component {
 			producerName, 
 			confectionName,
 			imageDownloadUrl, 
-			type,
 			uuid
 		} = this.results;
 
@@ -255,41 +256,39 @@ export default class DetailScreen extends Component {
 						style={{width: Dimensions.get('window').width, height:Dimensions.get('window').height/3}}
 						source={{ uri : imageDownloadUrl }}
 					/>
+
 					<View style={{
-						flexDirection: "row"
+						flexDirection: "row",
+						height: 100,
+						backgroundColor:"white"
 					}}>
 						<View style={{
 							width: Dimensions.get('window').width / 2,
-							height: 100,
-							backgroundColor:"white",
-							borderBottomColor: Colors.Primary,
-							borderBottomWidth: .5,
 							justifyContent:"center",
 						}}>
 							<Text style={{paddingLeft: 25, fontSize:18, fontWeight:'bold'}}> {producerName} </Text>
 							<Text style={{paddingLeft: 25, fontSize:18}}> {confectionName} </Text>
-							<Text style={{paddingLeft: 30, fontSize:14}}> 
-								from <Text style={{fontStyle:'normal'}}>Mexico</Text>
-							</Text>
 						</View>
 
 						<View style={{
 							width: Dimensions.get('window').width / 2,
-							height: 100,
-							backgroundColor:"white",
 							justifyContent: 'center',
-							borderBottomColor: Colors.Primary,
-							borderBottomWidth: .5
 						}}>	
 							<Text style={{textAlign:"center", fontSize: 30, fontWeight: 'bold'}}> 
 								<Ionicons name="md-star" size={30} color="gold" />   
-								{(this.state.sumRatings / this.state.numStarRatings) ? this.state.sumRatings / this.state.numStarRatings : " "}
+								{(this.state.sumRatings / this.state.numStarRatings) ? (this.state.sumRatings / this.state.numStarRatings).toFixed(1) : " "}
 							</Text>
 
 							<Text style={{fontSize:12, textAlign:"center", color:'rgba(0, 0, 0, .4)'}}>
 								{this.state.numStarRatings} <Text style={{fontStyle:"italic", }}>ratings</Text>
 							</Text>
 						</View>
+					</View>
+
+					<View style={{ fontSize: 12, paddingLeft: 30, paddingRight: 25, paddingBottom:10}}>
+						<Text>
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque neque mi, cursus eget porta ut, auctor non risus. Nunc condimentum, mauris ac rhoncus hendrerit, mauris lectus fermentum tortor, eget mollis lectus ex in ligula. Aliquam vulputate, orci sed tincidunt faucibus, sapien nunc vehicula urna, in finibus tortor enim sed libero.
+						</Text>
 					</View>
 
 					<View style={{padding:15, paddingLeft:110, paddingRight:110, borderBottomColor: Colors.Primary, borderBottomWidth: .5}}>
@@ -309,17 +308,21 @@ export default class DetailScreen extends Component {
 								this.submitComment(inputText); 
 								this.toggleDialogBox(); 
 							}}
+							cancelText={"No thanks"}
 							closeDialog={ () => {this.toggleDialogBox()}}>
 						</DialogInput>
 					</View>
 
 					<View style={{
-						flexDirection: "row"
+						flexDirection: "row",
+						borderBottomColor: Colors.Primary, 
+						borderBottomWidth: .5,
+						height: 100,
+						backgroundColor:"white",
 					}}>
 						<View style={{
 							width: Dimensions.get('window').width / 2,
-							height: 100,
-							backgroundColor:"white",
+							
 							justifyContent: 'center',
 							alignItems: 'center',
 						}}>
@@ -334,8 +337,6 @@ export default class DetailScreen extends Component {
 
 						<View style={{
 							width: Dimensions.get('window').width / 2,
-							height: 100,
-							backgroundColor:"white",
 							justifyContent: 'center',
 						}}>	
 							<Text style={{textAlign:"center", fontSize: 30, fontWeight: 'bold'}}> 
@@ -346,6 +347,100 @@ export default class DetailScreen extends Component {
 						</View>
 					</View>
 
+					<View style={{
+						flexDirection: "row",
+						borderBottomColor: Colors.Primary, 
+						borderBottomWidth: .5,
+						height: 100,
+						backgroundColor:"white",
+					}}>
+						<View style={{
+							width: Dimensions.get('window').width / 2,
+							justifyContent: 'center',
+							alignItems: 'center',
+						}}>
+							<Flag
+								type="shiny"
+								size={32}
+								code="MX"
+							/>
+							
+							<Text style={{textAlign:"center", fontSize:14, paddingLeft: 10, paddingRight: 10}}> Origin </Text>
+						</View>
+
+						<View style={{
+							width: Dimensions.get('window').width / 2,
+							justifyContent: 'center',
+							alignItems: "center"
+						}}>	
+							<Text style={{textAlign:"center", fontSize: 30, fontWeight: 'bold'}}> 
+								Mexico
+							</Text>
+						</View>
+					</View>
+
+					<View style={{
+						flexDirection: "row",
+						borderBottomColor: Colors.Primary, 
+						borderBottomWidth: .5,
+					}}>
+						<View style={{
+							width: Dimensions.get('window').width / 2,
+							height: 100,
+							backgroundColor:"white",
+							justifyContent: 'center',
+							alignItems: 'center',
+						}}>
+							<Entypo 
+								size={40}
+								name={"shop"}
+							/>
+							
+							<Text style={{textAlign:"center", fontSize:14, paddingLeft: 10, paddingRight: 10}}> Vendor Address </Text>
+						</View>
+
+						<View style={{
+							width: Dimensions.get('window').width / 2,
+							height: 100,
+							backgroundColor:"white",
+							justifyContent: 'center',
+							alignItems: "center"
+						}}>	
+							<Text style={{fontSize:14, textAlign:"center"}}>11 Seckel St. Apt. 2, Cambridge, Ma 02141</Text>
+						</View>
+					</View>
+
+					<View style={{
+						flexDirection: "row"
+					}}>
+						<View style={{
+							width: Dimensions.get('window').width / 2,
+							height: 100,
+							backgroundColor:"white",
+							justifyContent: 'center',
+							alignItems: 'center',
+						}}>
+							<Ionicons
+								size={40}
+								name={"md-link"}
+							/>
+							
+							<Text style={{textAlign:"center", fontSize:14, paddingLeft: 10, paddingRight: 10}}> Vendor Website </Text>
+						</View>
+
+						<View style={{
+							width: Dimensions.get('window').width / 2,
+							height: 100,
+							backgroundColor:"white",
+							justifyContent: 'center',
+							alignItems: "center"
+						}}>	
+							<TouchableOpacity onPress={() => this.openWebPage("https://www.facebook.com")}>
+								<Text style={{fontSize:14, textAlign:"center", color: Colors.Primary, fontWeight:"bold"}}>www.facebook.com</Text>
+							</TouchableOpacity>
+						</View>
+					</View>
+
 					<TouchableOpacity style={{paddingLeft:15}} onPress={() => this.getComments()}>
 						<Text style={{fontSize:14, paddingTop:5, paddingBottom:5, color:'rgba(0, 0, 0, .4)', textDecorationLine:'underline'}}>View comments ({this.state.numComments})</Text>
 					</TouchableOpacity>
@@ -353,6 +448,7 @@ export default class DetailScreen extends Component {
 					{this.state.comments.length > 0 ? this.renderComments() : null}
 
 				</View>
+
 			</ScrollView>
 		);
 	}
@@ -430,5 +526,15 @@ export default class DetailScreen extends Component {
 				item={item}
 			/>
 		);
+	}
+
+	openWebPage(url){
+		Linking
+			.canOpenURL(url)
+			.then(supported =>{
+				if(supported){
+					Linking.openURL(url);
+				}
+			});
 	}
 }
