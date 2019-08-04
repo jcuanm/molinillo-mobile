@@ -37,13 +37,28 @@ export default class UserRating extends Component {
                     width: Dimensions.get('window').width / 2,
                     justifyContent: 'center',
                 }}>	
-                    <Text style={{textAlign:"center", fontSize: 30, fontWeight: 'bold'}}> 
-                        {percentage}%
-                    </Text>
+                    
+                    { percentage ? this.renderPercentageFound(percentage) : this.renderPercentageNotFound()}
 
                     <Text style={{fontSize:14, textAlign:"center"}}>{type}</Text>
                 </View>
             </View>
 		);
-	}
+    }
+    
+    renderPercentageFound(percentage){
+        return(
+            <Text style={{textAlign:"center", fontSize: 30, fontWeight: 'bold'}}> 
+                {percentage}%
+            </Text>
+        );
+    }
+
+    renderPercentageNotFound(){
+        return(
+            <Text style={{textAlign:"center", fontSize: 14}}> 
+                Unknown
+            </Text>
+        );
+    }
 }
