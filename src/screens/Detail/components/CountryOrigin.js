@@ -38,11 +38,7 @@ export default class CountryOrigin extends Component {
                     justifyContent: 'center',
                     alignItems: "center"
                 }}>	
-                    <Flag
-                        type="shiny"
-                        size={32}
-                        code={CountryCodeMappings[country]}
-                    />
+                    { country ? this.renderCountryOfOriginFound(country) : this.renderCountryOfOriginNotFound() }
 
                     <Text style={{textAlign:"center", fontSize: 14 }}> 
                         {country}
@@ -50,5 +46,23 @@ export default class CountryOrigin extends Component {
                 </View>
             </View>
 		);
-	}
+    }
+    
+    renderCountryOfOriginFound(country){
+        return(
+            <Flag
+                type="shiny"
+                size={32}
+                code={CountryCodeMappings[country]}
+            />
+        );
+    }
+
+    renderCountryOfOriginNotFound(){
+        return(
+            <Text style={{textAlign:"center", fontSize: 14}}> 
+                Unknown
+            </Text>
+        );
+    }
 }

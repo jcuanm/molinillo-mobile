@@ -39,9 +39,9 @@ export default class VendorAddress extends Component {
                     justifyContent: 'center',
                     alignItems: "center"
                 }}>	
-                    <Text style={{fontSize:14, textAlign:"center"}}>{address}</Text>
+                    <Text style={{fontSize:14, textAlign:"center"}}>{address ? address : "Unknown" }</Text>
                 </View>
             </View>
 		);
-	}
+    }
 }

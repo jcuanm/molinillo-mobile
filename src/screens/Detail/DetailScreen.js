@@ -244,9 +244,15 @@ export default class DetailScreen extends Component {
 		const { 
 			barcodeData,
 			barcodeType, 
+			cacaoPercentage,
+			cacaoVariety,
+			confectionDescription,
+			countryOfOrigin,
 			producerName, 
 			confectionName,
 			imageDownloadUrl, 
+			vendorAddress,
+			vendorUrl,
 			uuid
 		} = this.results;
 
@@ -267,9 +273,15 @@ export default class DetailScreen extends Component {
 						numStarRatings={this.state.numStarRatings}
 					/>
 
-					<Description 
-						text={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque neque mi, cursus eget porta ut, auctor non risus. Nunc condimentum, mauris ac rhoncus hendrerit, mauris lectus fermentum tortor, eget mollis lectus ex in ligula. Aliquam vulputate, orci sed tincidunt faucibus, sapien nunc vehicula urna, in finibus tortor enim sed libero."}
-					/>
+					{
+						confectionDescription ? 
+							<Description 
+								text={confectionDescription}
+							/> 
+						: 
+							null
+					}
+					
 
 					<UserRating 
 						maxStars={this.maxStars}
@@ -283,20 +295,20 @@ export default class DetailScreen extends Component {
 					/>
 
 					<CacaoStats 
-						percentage={75}
-						type={"Forastero"}
+						percentage={cacaoPercentage}
+						type={cacaoVariety}
 					/>
 
 					<CountryOrigin 
-						country={"MEXICO"} 
+						country={countryOfOrigin} 
 					/>
 
 					<VendorAddress 
-						address={"11 Seckel St. Apt. 2, Cambridge, Ma 02141"}
+						address={vendorAddress}
 					/>
 
 					<VendorWebsite 
-						url={"https://www.facebook.com"}
+						url={vendorUrl}
 						openWebpage={this.openWebpage}
 					/>
 
@@ -387,12 +399,17 @@ export default class DetailScreen extends Component {
 	}
 
 	openWebpage(url){
-		Linking
-			.canOpenURL(url)
-			.then(supported =>{
-				if(supported){
-					Linking.openURL(url);
-				}
-			});
+		if(url){
+			Linking
+				.canOpenURL(url)
+				.then(supported =>{
+					if(supported){
+						Linking.openURL(url);
+					}
+				})
+				.catch(error => {
+					console.log(error);
+				});
+		}
 	}
 }

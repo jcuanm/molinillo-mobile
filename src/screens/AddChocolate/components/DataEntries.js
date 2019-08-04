@@ -1,6 +1,10 @@
 const uuidv4 = require('uuid/v4');
 import React, { Component } from 'react';
-import { View, Button } from 'react-native';
+import { 
+  View, 
+  Button, 
+  ScrollView
+} from 'react-native';
 import { StringConcatenations, Warnings } from '../../../helpers/Constants';
 import CallbacksAndParams from '../../../helpers/CallbacksAndParams';
 import Entry from './Entry';
@@ -143,7 +147,7 @@ export default class DataEntries extends Component {
   render(){
     return(
       <View style={styles.container}>
-        <View style={{flex: 1, flexDirection: 'column'}}>
+        <ScrollView style={{flex: 1, flexDirection: 'column'}}>
           <ImageArea 
             id={"image"} 
             displayName={"Add Image"}
@@ -198,7 +202,7 @@ export default class DataEntries extends Component {
             updateInput={this.updateInput} 
             dialogType={"options"} 
           />
-        </View>
+        </ScrollView>
         <Button
           title="Submit"
           onPress={() => this.checkIfShouldSubmit(this.inputValues)}
