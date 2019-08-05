@@ -50,17 +50,26 @@ export default class CustomListItem extends Component {
     }
 
     updateSearchClickMetaData(results, parentScreen){
-        const { barcodeType, barcodeData } = results;
+        const { barcodeType, barcodeData, uuid } = results;
         const currBarcode = new Barcode(barcodeType, barcodeData);
 
-        // Update the search click meta data 
-        let scansRef = this.dbHandler.getRef("SearchClicks");
-        scansRef.set({
+        let data = {
             created_ts: new Date(),
             user: this.dbHandler.currUser.uid,
             parentScreen: parentScreen,
             barcodeData: currBarcode.data,
-            barcodeType: currBarcode.type
-        },{ merge : true });
+            barcodeType: currBarcode.type,
+            uuid: uuid
+        }
+
+        // Checking if the chocolate has a barcode
+        if(barcodeType !== "None" && barcodeData !== "None"){
+            data["barcodeType"] = barcodeType;
+            data["barcodeData"] = barcodeData;
+        }
+
+        // Update the search click meta data 
+        let scansRef = this.dbHandler.getRef("SearchClicks");
+        scansRef.set(data, { merge : true });
     }
 }

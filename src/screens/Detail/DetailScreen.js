@@ -38,8 +38,6 @@ export default class DetailScreen extends Component {
 		this.dbHandler = new DbHandler();
 		this.maxStars = 5;
 		this.results = this.props.navigation.getParam('results', {});
-		this.navigateOnSuccessfulDelete = this.navigateOnSuccessfulDelete.bind(this); 
-		this.updateIsFlagged = this.updateIsFlagged.bind(this); 
 		this.updateMetrics = this.updateMetrics.bind(this); 
 		this.updateUserRating = this.updateUserRating.bind(this); 
 		this.onStarRatingPress = this.onStarRatingPress.bind(this); 
@@ -62,41 +60,14 @@ export default class DetailScreen extends Component {
 	}
 
 	initializeScreen(){
-		this.checkItemIsFlagged();
 		this.getMetrics();
 		this.getUserRating();
 	}
 
-	checkItemIsFlagged(){
-		const { barcodeType, barcodeData } = this.results;
-		let currBarcode = new Barcode(barcodeType, barcodeData);
-		let flagsPerUserRef = this.dbHandler.getRef("FlagsPerUser");
-		let checkItemIsFlaggedCallbacksAndParams = new CallbacksAndParams(
-			currBarcode, 
-			this.updateIsFlagged, 
-			function(){}
-		);
-		this.dbHandler.getData(flagsPerUserRef, checkItemIsFlaggedCallbacksAndParams);
-	}
-
-	updateIsFlagged(resultsAndParams){
-		let currBarcode = resultsAndParams.params;
-		let results = resultsAndParams.results.data();
-		let isFlagged = false;
-
-		if(currBarcode.data in results){
-			if(results[currBarcode.data] == currBarcode.type){
-				isFlagged = true;
-			}
-		}
-		
-		this.setState({ isFlagged : isFlagged });
-	}
-
 	getMetrics(){
-		const { barcodeType, barcodeData } = this.results;
+		const { barcodeType, barcodeData, uuid } = this.results;
 		let currBarcode = new Barcode(barcodeType, barcodeData);
-		let barcodeTypeRef = this.dbHandler.getRef(StringConcatenations.Prefix, currBarcode);
+		let barcodeTypeRef = this.dbHandler.getRef(StringConcatenations.Prefix, currBarcode, uuid);
 		let barcodeTypeCallbacksAndParams = new CallbacksAndParams(
 			{}, 
 			this.updateMetrics, 
@@ -107,25 +78,32 @@ export default class DetailScreen extends Component {
 
 	updateMetrics(resultsAndParams){
 		let results = resultsAndParams.results.data();
-		
+		let data = {};
+
 		if(results.numStarRatings){
-			this.setState({  
-				numStarRatings : results.numStarRatings,
-				sumRatings: results.sumRatings,
-				numComments: results.numComments
-			});
+			data["numStarRatings"] = results.numStarRatings;
+		}
+		if(results.sumRatings){
+			data["sumRatings"] = results.sumRatings;
+		}
+		if(results.numComments){
+			data["numComments"] = results.numComments;
+		}
+
+		if(Object.entries(data).length > 0){
+			this.setState(data);
 		}
 	}
 
 	getUserRating(){
 		const { uuid } = this.results;
-		let barcodeTypeRef = this.dbHandler.getRef("StarRatingsPerUser", {}, uuid);
-		let barcodeTypeCallbacksAndParams = new CallbacksAndParams(
+		let starRatingsPerUserRef = this.dbHandler.getRef("StarRatingsPerUser", {}, uuid);
+		let starRatingsPerUserCallbacksAndParams = new CallbacksAndParams(
 			{}, 
 			this.updateUserRating, 
 			function(){}
 		);
-		this.dbHandler.getData(barcodeTypeRef, barcodeTypeCallbacksAndParams);
+		this.dbHandler.getData(starRatingsPerUserRef, starRatingsPerUserCallbacksAndParams);
 	}
 
 	updateUserRating(resultsAndParams){
@@ -147,79 +125,6 @@ export default class DetailScreen extends Component {
 			</TouchableOpacity>
 		),		
 	})
-
-	promptDeleteItem(){
-		Alert.alert(
-			Warnings.ConfirmDeletion,
-			"",
-    		[
-				{ text: 'Delete', onPress: () => this.deleteItem() },
-				{ text: 'Cancel', style: 'cancel' }
-      		],
-      		{ cancelable: false }
-    	);
-	}
-
-	deleteItem(){
-		const { barcodeType, barcodeData } = this.results;
-		let barcodeToDelete = new Barcode(barcodeType, barcodeData);
-		let detailRef = this.dbHandler.getRef(StringConcatenations.Prefix, barcodeToDelete);
-
-		let deleteItemCallbackAndParams = new CallbacksAndParams(
-			barcodeToDelete, 
-			this.navigateOnSuccessfulDelete, 
-			function(){}
-		);
-
-		this.dbHandler.deleteItem(detailRef, deleteItemCallbackAndParams);
-	}
-
-	navigateOnSuccessfulDelete(){
-		this.props.navigation.popToTop();
-	}
-
-	promptFlagItem(currBarcode){
-		if(this.state.isFlagged){
-			this.unflagItem(currBarcode);
-		}
-		else{
-			Alert.alert(
-				"Are you sure you want to flag this item for innappropriate content?",
-				"",
-				[
-					{ text: 'Flag', onPress: () => this.flagItem(currBarcode) },
-					{ text: 'Cancel', style: 'cancel' }
-				],
-				{ cancelable: false }
-			);
-		}
-	}
-
-	unflagItem(currBarcode){
-		const fieldName = "numFlags";
-		const decrementAmount = -1;
-		this.dbHandler.incrementValue(
-			StringConcatenations.Prefix, 
-			fieldName, 
-			decrementAmount, 
-			currBarcode);
-
-		let flagsPerUserRef = this.dbHandler.getRef("FlagsPerUser");
-		this.dbHandler.deleteFieldFromDocument(flagsPerUserRef, currBarcode);
-		this.setState({ isFlagged : false });
-	}
-
-	flagItem(currBarcode){
-		const fieldName = "numFlags";
-		const incrementAmount = 1;
-		this.dbHandler.setData('FlagsPerUser', { [currBarcode.data] : currBarcode.type });
-		this.dbHandler.incrementValue(
-			StringConcatenations.Prefix, 
-			fieldName, 
-			incrementAmount, 
-			currBarcode);
-		this.setState({ isFlagged : true });
-	}
 
 	onStarRatingPress(rating, currBarcode, uuid){
 		const data = {
@@ -282,7 +187,6 @@ export default class DetailScreen extends Component {
 							null
 					}
 					
-
 					<UserRating 
 						maxStars={this.maxStars}
 						rating={this.state.rating}
@@ -325,12 +229,12 @@ export default class DetailScreen extends Component {
 
 	submitComment(inputText){
 		if(inputText){
-			const { barcodeType, barcodeData } = this.results;
+			const { barcodeType, barcodeData, uuid } = this.results;
 			let commentUuid = uuidv4();
 			let commentRef = this.dbHandler.getRef(
 				"Comments", 
 				barcode=null,
-				barcodeUuid=this.results.uuid,
+				barcodeUuid=uuid,
 				commentUuid=commentUuid);
 			
 			const data = {
@@ -345,12 +249,13 @@ export default class DetailScreen extends Component {
 			commentRef
 				.set(data)
 				.then( _ => {
-					let currBarcode = new Barcode(barcodeType, barcodeData);
+					let currBarcode = new Barcode(barcodeType, barcodeData, uuid);
 					this.dbHandler.incrementValue(
 						StringConcatenations.Prefix, 
 						"numComments", 
 						1, 
-						currBarcode);
+						currBarcode,
+						uuid);
 				});
 		}
 	}
