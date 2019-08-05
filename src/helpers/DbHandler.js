@@ -100,8 +100,8 @@ export default class DbHandler{
 		}
     }
     
-    incrementValue(rootName, fieldname, amount, barcode=null){
-        let ref = this.getRef(rootName, barcode);
+    incrementValue(rootName, fieldname, amount, barcode=null, uuid=null){
+        let ref = this.getRef(rootName, barcode, uuid);
         let increment = firebase.firestore.FieldValue.increment(amount);
         try{
             ref.update({ [fieldname] : increment });
@@ -139,9 +139,16 @@ export default class DbHandler{
         var ref;
         switch(root){
             case StringConcatenations.Prefix:
-                ref = this.dbRef
-                    .collection(root + barcode.type)
-                    .doc(barcode.data.toString());
+                if(barcode.type !== "None" && barcode.data !== "None"){
+                    ref = this.dbRef
+                        .collection(root + barcode.type)
+                        .doc(barcode.data.toString());
+                }
+                else{
+                    ref = this.dbRef
+                        .collection(root + "NoBarcode")
+                        .doc(barcodeUuid);
+                }
                 break;
             case 'MyChocolates':
                 ref = this.dbRef

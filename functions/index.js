@@ -342,6 +342,41 @@ exports.unindex_Code93 = functions.firestore
     return index.deleteObject(objectID);
   });
 
+// No Barcode
+exports.index_NoBarcode = functions.firestore
+  .document('BarcodeType_NoBarcode/{barcodeUuid}')
+  .onCreate(document => {
+    const data = document.data();
+    const objectID = data.uuid;
+    return index.addObject({
+      objectID: objectID,
+      ...data
+    });
+  });
+
+exports.update_NoBarcode = functions.firestore
+  .document('BarcodeType_NoBarcode/{barcodeUuid}')
+  .onUpdate((change, context) => {
+    const previousDocument = change.before;
+    const currentDocument = change.after;
+    if(!previousDocument || !currentDocument){
+      return;
+    }
+    const data = currentDocument.data();
+    const objectID = data.uuid;
+    return index.partialUpdateObject({
+      objectID: objectID,
+      ...data
+    });
+  });
+
+exports.unindex_NoBarcode = functions.firestore
+  .document('BarcodeType_NoBarcode/{barcodeUuid}')
+  .onDelete(document => {
+    const objectID = document.data().uuid;
+    return index.deleteObject(objectID);
+  });
+
 
 ////// Detail Screen Listeners //////
 
@@ -350,7 +385,13 @@ exports.index_StarRatingsCountListener = functions.firestore
   .document('StarRatingsPerUser/{starId}')
   .onCreate(document => {
     const data = document.data();
-    const path = "BarcodeType_" + data.barcodeType + "/" + data.barcodeData.toString();
+
+    if(data.barcodeType !== "None" && data.barcodeData !== "None"){
+      var path = "BarcodeType_" + data.barcodeType + "/" + data.barcodeData.toString();
+    }
+    else{
+      var path = "BarcodeType_NoBarcode" + "/" + data.chocolateUuid;
+    }
 
     return db
       .doc(path)
@@ -371,9 +412,16 @@ exports.update_StarRatingsCountListener = functions.firestore
 
     const prevData = previousDocument.data();
     const currData = currentDocument.data();
-    const path = "BarcodeType_" + currData.barcodeType + "/" + currData.barcodeData.toString();
+
+    if(currData.barcodeType !== "None" && currData.barcodeData !== "None"){
+      var path = "BarcodeType_" + currData.barcodeType + "/" + currData.barcodeData.toString();
+    }
+    else{
+      var path = "BarcodeType_NoBarcode" + "/" + currData.chocolateUuid;
+    }
 
     let increment = currData.rating - prevData.rating;
+
     return db
       .doc(path)
       .update({
@@ -385,8 +433,14 @@ exports.unindex_StarRatingsCountListener = functions.firestore
   .document('StarRatingsPerUser/{starId}')
   .onDelete(document => {
     const data = document.data();
-    const path = "BarcodeType_" + data.barcodeType + "/" + data.barcodeData.toString();
 
+    if(data.barcodeType !== "None" && data.barcodeData !== "None"){
+      var path = "BarcodeType_" + data.barcodeType + "/" + data.barcodeData.toString();
+    }
+    else{
+      var path = "BarcodeType_NoBarcode" + "/" + data.chocolateUuid;
+    }
+    
     return db
       .doc(path)
       .update({
