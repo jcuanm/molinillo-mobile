@@ -20,8 +20,8 @@ firebase.initializeApp({
 
 var db = firebase.firestore();
 
-const keyFilename="./molinillo-4e7c5-firebase-adminsdk-s30dx-216a7f53f7.json"; //replace this with api key file
-const projectId = "molinillo-4e7c5" //replace with your project id
+const keyFilename="***"; 
+const projectId = "***" 
 const bucketName = `${projectId}.appspot.com`;
 
 const gcs = new Storage({
