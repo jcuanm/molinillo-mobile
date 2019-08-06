@@ -31,7 +31,7 @@ export default class Barcode{
       case 8:
         barcodeType = "Codabar";
         break;
-      case 512:
+      case 4:
         barcodeType = "Code93";
         break;
       default:
