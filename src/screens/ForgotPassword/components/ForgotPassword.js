@@ -10,9 +10,10 @@ export default class ForgotPassword extends Component {
 	render() {
 		return(
       <View style={styles.forgotPasswordTextContainer}>
-        <Text style={styles.forgotPasswordText}>{this.props.forgotPasswordText}</Text>
         <TouchableOpacity>
-          <Text style={styles.forgotPasswordButton}>{this.props.resetPasswordButtonText}</Text>
+          <Text style={styles.forgotPasswordText}>
+            <Text style={styles.forgotPasswordButton}></Text>
+          </Text>
         </TouchableOpacity>
       </View>
 		);
@@ -25,7 +26,8 @@ const styles = StyleSheet.create({
     alignItems:'flex-end',
     justifyContent :'center',
     paddingVertical:16,
-    flexDirection:'row'
+    flexDirection:'row',
+    paddingRight:3
   },
   forgotPasswordText: {
   	color:'rgba(255,255,255,0.6)',

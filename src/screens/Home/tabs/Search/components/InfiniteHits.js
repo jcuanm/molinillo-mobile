@@ -44,8 +44,6 @@ function renderItem(item, navigate){
     <CustomListItem 
       navigate={navigate}
       results={item}
-      title={item.confectionName}
-      subtitle={item.objectID}
       parentScreen={"Search"}
     />
   );

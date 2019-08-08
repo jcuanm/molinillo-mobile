@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import { 
     Dimensions,
     Image,
-    Text, 
-    TouchableOpacity 
+    Text,
+    TouchableOpacity,
+    View
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
+import { Ionicons } from '@expo/vector-icons';
 import DbHandler from './DbHandler';
 import Barcode from './Barcode';
 
@@ -13,16 +15,25 @@ export default class CustomListItem extends Component {
     constructor(props){
         super(props);
         this.dbHandler = new DbHandler();
+        this.maxStars = 5;
     }
 
     render(){
         const { 
             navigate, 
             parentScreen,
-            results, 
-            title, 
-            subtitle,
+            results
         } = this.props;
+
+        const{ 
+            confectionName, 
+            producerName,
+            imageDownloadUrl,
+            numStarRatings,
+            sumRatings
+        } = results;
+
+        console.log("Results:", results);
 
         return(
             <TouchableOpacity
@@ -39,11 +50,24 @@ export default class CustomListItem extends Component {
             >
                 <Image 
                     style={{width: Dimensions.get('window').width, height: 200}}
-                    source={{ uri : results.imageDownloadUrl }}
+                    source={{ uri : imageDownloadUrl }}
                 />
                 <ListItem
-                    title={<Text>{ title }</Text>}
-                    // subtitle={<Text>{ subtitle }</Text>}
+                    title={<Text style={{fontWeight:"bold"}}>{ producerName }</Text>}
+                    subtitle={
+                        <View>
+                            <Text>{ confectionName }</Text>
+                            { 
+                                sumRatings && numStarRatings ? 
+                                    <Text style={{fontSize: 12, fontWeight: 'bold'}}> 
+                                        <Ionicons name="md-star" size={15} color="gold" />   
+                                        {(sumRatings / numStarRatings) ? (sumRatings / numStarRatings).toFixed(1) : " "}
+                                    </Text>
+                                :
+                                    null
+                            }
+                        </View>
+                    }
                 />
             </TouchableOpacity>
         );

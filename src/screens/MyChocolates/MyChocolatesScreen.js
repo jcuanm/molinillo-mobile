@@ -100,8 +100,6 @@ export default class MyChocolatesScreen extends Component {
                 <CustomListItem 
                     navigate={this.props.navigation.navigate}
                     results={item}
-                    title={item.confectionName}
-                    subtitle={"hello"}
                     parentScreen={"MyChocolates"}
                 />
             );
