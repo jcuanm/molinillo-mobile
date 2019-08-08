@@ -6,10 +6,10 @@ npm-debug.*
 *.key
 *.mobileprovision
 *.DS_Store
+src/scripts/
 
 assets/Config.js
 
 appsync-info.json
 project-info.json
-
 

@@ -10,7 +10,7 @@ export default class Logo extends Component {
 	render(){
 		return(
 			<View style={styles.container}>
-				<Image  style={{width:40, height: 70}}
+				<Image  style={{width:80, height: 140}}
           			source={require('../../../../assets/images/logo.png')}/>
           		<Text style={styles.logoText}>Molinillo</Text>	
   			</View>
@@ -27,6 +27,6 @@ const styles = StyleSheet.create({
   logoText : {
   	marginVertical: 15,
   	fontSize:36,
-  	color:'white'
+	color:'white',
   }
 });

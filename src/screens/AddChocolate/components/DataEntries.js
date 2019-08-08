@@ -85,7 +85,7 @@ export default class DataEntries extends Component {
   }
 
   denySubmission(callbacksAndParams){
-    alert("Sorry, someone beat you to this chocolate!");
+    alert("Someone beat you to this chocolate");
     this.props.navigate("SearchScreen");
   }
 

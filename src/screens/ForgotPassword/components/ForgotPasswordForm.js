@@ -3,7 +3,8 @@ import {
   StyleSheet,
   View,
   TextInput,
-  Button
+  Button,
+  Platform
 } from 'react-native';
 import * as firebase from 'firebase';
 
@@ -19,8 +20,7 @@ export default class ForgotPasswordForm extends Component {
     firebase.auth().sendPasswordResetEmail(this.state.email)
       .then(() => {
           this.props.navigate();
-          console.log(this.props);
-          alert("Password reset email has been sent.");
+          alert("An email allowing you to reset your password has been sent.");
       }, (error) => {
           alert(error.message);
       });
@@ -39,7 +39,12 @@ export default class ForgotPasswordForm extends Component {
           keyboardType="email-address"
         />
         
-        <Button style={styles.button} title="Reset Password" onPress={this.onResetPasswordPress} />
+        <Button 
+          style={styles.button} 
+          color={Platform.OS === 'ios' ? 'white' : 'rgba(255, 255,255,0.2)'} 
+          title="Reset Password" 
+          onPress={this.onResetPasswordPress} 
+        />
   		</View>
 		);
 	}
@@ -63,10 +68,9 @@ const styles = StyleSheet.create({
   },
   button: {
     width:300,
-    backgroundColor:'#1c313a',
-     borderRadius: 25,
-      marginVertical: 10,
-      paddingVertical: 13
+    borderRadius: 25,
+    marginVertical: 10,
+    paddingVertical: 13
   },
   buttonText: {
     fontSize:16,

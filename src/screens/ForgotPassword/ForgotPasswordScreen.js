@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { Colors } from '../../helpers/Constants';
 import Logo from './components/Logo';
 import ForgotPassword from './components/ForgotPassword';
 import ForgotPasswordForm from './components/ForgotPasswordForm';
@@ -11,10 +12,7 @@ export default class ForgotPasswordScreen extends Component{
 			<View style={styles.container}>
 				<Logo/>
 				<ForgotPasswordForm navigate={this.props.navigation.popToTop} />
-        <ForgotPassword 
-          forgotPasswordText={"Forgot Password"}
-          resetPasswordButtonText={"Reset Password"}
-        />
+        <ForgotPassword />
 			</View>	
 		);
 	}
@@ -22,7 +20,7 @@ export default class ForgotPasswordScreen extends Component{
 
 const styles = StyleSheet.create({
   container : {
-    backgroundColor:'#455a64',
+    backgroundColor: Colors.Primary,
     flex: 1,
     alignItems:'center',
     justifyContent :'center'
