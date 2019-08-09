@@ -180,8 +180,13 @@ export default class DbHandler{
                     .collection(root)
                     .doc(barcodeUuid)
                     .collection("ratings")
-                    .doc(commentUuid)
+                    .doc(commentUuid);
                 break;
+            case 'Feedback':
+                ref = this.dbRef
+                    .collection(root)
+                    .doc(uuidv4());
+                break
             default:
                 ref = null; 
         }
