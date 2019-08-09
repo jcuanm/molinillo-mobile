@@ -6,12 +6,14 @@ import {
     Dimensions,
  } from 'react-native';
  import DialogInput from 'react-native-dialog-input';
+ import DbHandler from '../../../../../helpers/DbHandler';
  import { Colors } from '../../../../../helpers/Constants';
  
 export default class Feedback extends Component {
     constructor(props) {
     	super(props);
 
+        this.dbHandler = new DbHandler();
 		this.state = {
 			isDialogVisible: false,
 		};
@@ -45,6 +47,16 @@ export default class Feedback extends Component {
     }
 
     submitFeedback(inputText){
-        console.log("Submit");
+        const data = {
+            user_id: this.dbHandler.currUser.uid,
+            email: this.dbHandler.currUser.email,
+            username: this.dbHandler.currUser.displayName,
+            created_ts: new Date(),
+            feedback: inputText
+        };
+        
+        let feedbackRef = this.dbHandler.getRef("Feedback");
+
+        feedbackRef.set(data);
     }
 }
