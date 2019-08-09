@@ -90,7 +90,7 @@ export default class MyChocolatesScreen extends Component {
             );
         }
         else{
-            return <Text>No Chocolates</Text>
+            return <View></View>
         } 
     }
 

@@ -11,7 +11,8 @@ export const StringConcatenations = {
 }
 
 export const Colors = {
-    Primary: "#4B006E"
+    Primary: "#4B006E",
+    Secondary: "white"
 }
 
 export const Months = [

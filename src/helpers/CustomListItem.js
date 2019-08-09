@@ -33,8 +33,6 @@ export default class CustomListItem extends Component {
             sumRatings
         } = results;
 
-        console.log("Results:", results);
-
         return(
             <TouchableOpacity
                 style={{paddingBottom: 10}}

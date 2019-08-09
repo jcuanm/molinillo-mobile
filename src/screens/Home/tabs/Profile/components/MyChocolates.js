@@ -7,10 +7,10 @@ import {
  } from 'react-native';
  import { Colors } from '../../../../../helpers/Constants';
  
-export default class Option extends Component {
+export default class MyChocolates extends Component {
     render(){
         return(
-            <TouchableOpacity onPress={() => this.props.navigationFunc(this.props.navigateScreen)}>
+            <TouchableOpacity onPress={() => this.props.navigationFunc("MyChocolatesScreen")}>
                 <View style={{justifyContent:'center', width: Dimensions.get('window').width, height: 50, backgroundColor: Colors.Primary }}>
                     <Text style={{fontWeight:'bold', color:"white", paddingLeft:15}}>{this.props.title}</Text> 
                 </View>
