@@ -5,7 +5,7 @@ export default styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: 'rgb(255,255,240)',
+        backgroundColor: 'white',
     },
     headerButton: {
         height: 44,

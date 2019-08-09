@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { 
+    Button,
     Image,
     View, 
     Text, 
@@ -36,13 +37,21 @@ export default class ProfileScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={{ marginBottom: 35, width: Dimensions.get('window').width, height: 100, backgroundColor: 'steelblue'}}>
-                    <Text>
-                        Welcome {firebase.auth().currentUser.displayName}
+                <View style={{ justifyContent:"center", width: Dimensions.get('window').width, height: 100, backgroundColor: Colors.Secondary}}>
+                    <Text style={{fontSize:18, textAlign:"center"}}>
+                        Welcome, {firebase.auth().currentUser.displayName}
                     </Text>
                 </View>
 
                 <ProfileOptions navigationFunc={this.props.navigation.navigate}/>
+
+                <View style={{padding:40}}>
+                    <Button
+                        title="Logout"
+                        onPress={() => { firebase.auth().signOut(); } } 
+                        color="red"
+                    />  
+                </View>
                 
                 <ActionButton
                     buttonColor={Colors.Primary}
