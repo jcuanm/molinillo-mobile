@@ -41,9 +41,9 @@ export default class DataEntries extends Component {
 
     const { barcode } = this.props;
     
-    let barcodeTypeRef = this.dbHandler.getRef(StringConcatenations.Prefix, barcode);
+    let barcodeTypeRef = this.dbHandler.getRef("Possible" + StringConcatenations.Prefix, barcode);
     const params = {
-      barcodeTypeRef : barcodeTypeRef,
+      possibleBarcodeTypeRef : barcodeTypeRef,
       inputValues : inputValues,
     }
 
@@ -67,21 +67,15 @@ export default class DataEntries extends Component {
   }
 
   async submitInput(callbacksAndParams){
-    const { barcode, navigate } = this.props;
-    let barcodeTypeRef = callbacksAndParams.params.barcodeTypeRef;
+    const { navigate } = this.props;
+    let possibleBarcodeTypeRef = callbacksAndParams.params.possibleBarcodeTypeRef;
     let inputValues = callbacksAndParams.params.inputValues;
 
-    await this.uploadImage(inputValues["imageDownloadUrl"]);
+    await this.uploadImage(inputValues["imageDownloadUrl"], "Possible_");
 
-    let myChocolatesRef = this.dbHandler.getRef('MyChocolates');
-
-    barcodeTypeRef.set(inputValues);
-    myChocolatesRef.set( { [barcode.data] : barcode.type }, { merge : true });
+    possibleBarcodeTypeRef.set(inputValues);
     
-    navigate(
-      "DetailScreen", 
-      { results : inputValues }
-    );
+    navigate("SearchScreen");
   }
 
   denySubmission(callbacksAndParams){
@@ -91,10 +85,10 @@ export default class DataEntries extends Component {
 
   // This function was copied from the following link:
   // https://github.com/expo/expo/issues/2402
-  async uploadImage(uri){
+  async uploadImage(uri, verificationId){
     const blob = await this.getBlob(uri);
     const { barcode } = this.props;
-    let filename = barcode.type + "/" + barcode.data;
+    let filename = verificationId + barcode.type + "/" + barcode.data;
     let ref = firebase
       .storage()
       .ref()
