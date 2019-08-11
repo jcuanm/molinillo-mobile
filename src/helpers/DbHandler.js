@@ -150,6 +150,11 @@ export default class DbHandler{
                         .doc(barcodeUuid);
                 }
                 break;
+            case 'Possible' + StringConcatenations.Prefix:
+                ref = this.dbRef
+                    .collection(root + barcode.type)
+                    .doc(barcode.data.toString());
+                break;
             case 'MyChocolates':
                 ref = this.dbRef
                     .collection(root)
@@ -186,7 +191,7 @@ export default class DbHandler{
                 ref = this.dbRef
                     .collection(root)
                     .doc(uuidv4());
-                break
+                break;
             default:
                 ref = null; 
         }
