@@ -77,7 +77,7 @@ export default class CustomListItem extends Component {
 
         let data = {
             created_ts: new Date(),
-            user: this.dbHandler.currUser.uid,
+            userId: this.dbHandler.currUser.uid,
             parentScreen: parentScreen,
             barcodeData: currBarcode.data,
             barcodeType: currBarcode.type,
