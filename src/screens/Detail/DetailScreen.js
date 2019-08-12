@@ -184,7 +184,7 @@ export default class DetailScreen extends Component {
 					<Header 
 						sumRatings={sumRatings}
 						numStarRatings={numStarRatings}
-						uuid={uuid}
+						results={this.results}
 					/>
 
 					<ChocolateName
