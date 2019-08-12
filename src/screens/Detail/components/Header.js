@@ -24,7 +24,7 @@ export default class Header extends Component {
     }
 
     checkMyChocolates(){
-		let myChocolatesRef = this.dbHandler.getRef("MyChocolates", null, this.props.uuid);
+		let myChocolatesRef = this.dbHandler.getRef("MyChocolates", null, this.props.results.uuid);
 		let myChocolatesCallbacksAndParams = new CallbacksAndParams(
 			{}, 
 			this.updateIsInMyChocolates, 
@@ -81,10 +81,21 @@ export default class Header extends Component {
     }
     
     handleInMyChocolates(){
+        const {
+            barcodeData,
+			barcodeType, 
+            uuid,
+            confectionName,
+            producerName,
+            imageDownloadUrl
+        } = this.props.results;
+
+        const { numStarRatings, sumRatings } = this.props;
+
         let myChocolatesRef = this.dbHandler.getRef(
             "MyChocolates", 
             null, 
-            this.props.uuid);
+            uuid);
 
         if(this.state.isInMyChocolates){
             myChocolatesRef
@@ -98,7 +109,14 @@ export default class Header extends Component {
             const data = {
                 created_ts: new Date(),
                 userId: this.dbHandler.currUser.uid,
-                chocolateUuid: this.props.uuid
+                barcodeData: barcodeData,
+                barcodeType: barcodeType,
+                uuid: uuid,
+                confectionName: confectionName, 
+                producerName: producerName,
+                imageDownloadUrl: imageDownloadUrl,
+                numStarRatings: numStarRatings,
+                sumRatings: sumRatings
             }
             
             myChocolatesRef
