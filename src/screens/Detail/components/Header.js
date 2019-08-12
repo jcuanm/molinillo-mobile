@@ -5,16 +5,40 @@ import {
 	Text
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-
+import CallbacksAndParams from '../../../helpers/CallbacksAndParams';
+import DbHandler from '../../../helpers/DbHandler';
 
 export default class Header extends Component {
+    constructor(props) {
+        super(props);
+        this.dbHandler = new DbHandler();
+        this.updateIsInMyChocolates = this.updateIsInMyChocolates.bind(this); 
+
+		this.state = {
+			isInMyChocolates : false,
+		};
+    }
+    
+    componentWillMount(){
+        this.checkMyChocolates();
+    }
+
+    checkMyChocolates(){
+		let myChocolatesRef = this.dbHandler.getRef("MyChocolates", null, this.props.uuid);
+		let myChocolatesCallbacksAndParams = new CallbacksAndParams(
+			{}, 
+			this.updateIsInMyChocolates, 
+			function(){}
+		);
+		this.dbHandler.getData(myChocolatesRef, myChocolatesCallbacksAndParams);
+    }
+    
+    updateIsInMyChocolates(){
+        this.setState({isInMyChocolates: true})
+    }
+
 	render() {
-        const {
-            producerName,
-            confectionName,
-            numStarRatings,
-            sumRatings
-        } = this.props;
+        const { numStarRatings, sumRatings } = this.props;
 		return (
 			<View style={{
                 flexDirection: "row",
@@ -24,9 +48,15 @@ export default class Header extends Component {
                 <View style={{
                     width: Dimensions.get('window').width / 2,
                     justifyContent:"center",
+                    paddingLeft: 25, 
+                    fontSize:18
                 }}>
-                    <Text style={{paddingLeft: 25, fontSize:18, fontWeight:'bold'}}> {producerName} </Text>
-                    <Text style={{paddingLeft: 25, fontSize:18}}> {confectionName} </Text>
+                    <Ionicons
+                        name="md-heart"
+                        size={30}
+                        color={this.state.isInMyChocolates ? "red" : "grey"}
+                        onPress={() => this.handleInMyChocolates()}
+                    />
                 </View>
 
                 <View style={{
@@ -34,7 +64,11 @@ export default class Header extends Component {
                     justifyContent: 'center',
                 }}>	
                     <Text style={{textAlign:"center", fontSize: 30, fontWeight: 'bold'}}> 
-                        <Ionicons name="md-star" size={30} color="gold" />   
+                        <Ionicons 
+                            name="md-star" 
+                            size={30} 
+                            color="gold" 
+                        />   
                         {(sumRatings / numStarRatings) ? (sumRatings / numStarRatings).toFixed(1) : " "}
                     </Text>
 
@@ -44,5 +78,35 @@ export default class Header extends Component {
                 </View>
             </View>
 		);
-	}
+    }
+    
+    handleInMyChocolates(){
+        let myChocolatesRef = this.dbHandler.getRef(
+            "MyChocolates", 
+            null, 
+            this.props.uuid);
+
+        if(this.state.isInMyChocolates){
+            myChocolatesRef
+                .delete()
+                .then( _ => {
+                    alert("Removed from my chocolates");
+                    this.setState({isInMyChocolates: false});
+                })
+        }
+        else{
+            const data = {
+                created_ts: new Date(),
+                userId: this.dbHandler.currUser.uid,
+                chocolateUuid: this.props.uuid
+            }
+            
+            myChocolatesRef
+                .set(data)
+                .then( _ => {
+                    alert("Added to my chocolates");
+                    this.setState({isInMyChocolates: true});
+                });
+        }
+    }
 }

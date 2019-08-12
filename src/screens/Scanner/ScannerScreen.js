@@ -63,7 +63,7 @@ export default class ScannerScreen extends Component {
     let scansRef = this.dbHandler.getRef("Scans");
     scansRef.set({
       created_ts: new Date(),
-      user: this.dbHandler.currUser.uid,
+      userId: this.dbHandler.currUser.uid,
       barcodeData: currBarcode.data,
       barcodeType: currBarcode.type
     },{ merge : true });

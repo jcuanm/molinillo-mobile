@@ -21,6 +21,7 @@ import CacaoStats from './components/CacaoStats';
 import CountryOrigin from './components/CountryOrigin';
 import VendorAddress from './components/VendorAddress';
 import VendorWebsite from './components/VendorWebsite';
+import ChocolateName from './components/ChocolateName';
 import Barcode from '../../helpers/Barcode';
 import CallbacksAndParams from '../../helpers/CallbacksAndParams';
 import { 
@@ -47,7 +48,7 @@ export default class DetailScreen extends Component {
 
 		this.state = {
 			isDialogVisible: false,
-			isFlagged : false,
+			sumRatings: 0,
 			numStarRatings : 0,
 			rating: 0,
 			comments: [],
@@ -133,7 +134,7 @@ export default class DetailScreen extends Component {
 			barcodeData: currBarcode.data,
 			barcodeType: currBarcode.type,
 			rating: rating,
-			userid: this.dbHandler.currUser.uid
+			userId: this.dbHandler.currUser.uid
 		};
 
 		let starRatingsPerUserRef = this.dbHandler.getRef("StarRatingsPerUser", barcode=null, barcodeUuid=uuid);
@@ -161,6 +162,15 @@ export default class DetailScreen extends Component {
 			uuid
 		} = this.results;
 
+		const {
+			isDialogVisible,
+			numStarRatings,
+			rating,
+			comments,
+			numComments,
+			sumRatings
+		} = this.state;
+
 		const currBarcode = new Barcode(barcodeType, barcodeData);
 		
 		return (
@@ -172,10 +182,14 @@ export default class DetailScreen extends Component {
 					/>
 
 					<Header 
+						sumRatings={sumRatings}
+						numStarRatings={numStarRatings}
+						uuid={uuid}
+					/>
+
+					<ChocolateName
 						producerName={producerName}
 						confectionName={confectionName}
-						sumRatings={this.state.sumRatings}
-						numStarRatings={this.state.numStarRatings}
 					/>
 
 					{
@@ -189,11 +203,11 @@ export default class DetailScreen extends Component {
 					
 					<UserRating 
 						maxStars={this.maxStars}
-						rating={this.state.rating}
+						rating={rating}
 						currBarcode={currBarcode}
 						onStarRatingPress={this.onStarRatingPress}
 						uuid={uuid}
-						isDialogVisible={this.state.isDialogVisible}
+						isDialogVisible={isDialogVisible}
 						submitComment={this.submitComment}
 						toggleDialogBox={this.toggleDialogBox}
 					/>
@@ -217,10 +231,18 @@ export default class DetailScreen extends Component {
 					/>
 
 					<TouchableOpacity style={{paddingLeft:15}} onPress={() => this.getComments()}>
-						<Text style={{fontSize:14, paddingTop:5, paddingBottom:5, color:'rgba(0, 0, 0, .4)', textDecorationLine:'underline'}}>View comments ({this.state.numComments})</Text>
+						<Text style={{
+							fontSize:14, 
+							paddingTop:5, 
+							paddingBottom:5, 
+							color:'rgba(0, 0, 0, .4)', 
+							textDecorationLine:'underline'}}
+						>
+							View comments ({numComments})
+						</Text>
 					</TouchableOpacity>
 
-					{this.state.comments.length > 0 ? this.renderComments() : null}
+					{comments.length > 0 ? this.renderComments() : null}
 
 				</View>
 			</ScrollView>

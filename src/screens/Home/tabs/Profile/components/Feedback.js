@@ -48,7 +48,7 @@ export default class Feedback extends Component {
 
     submitFeedback(inputText){
         const data = {
-            user_id: this.dbHandler.currUser.uid,
+            userId: this.dbHandler.currUser.uid,
             email: this.dbHandler.currUser.email,
             username: this.dbHandler.currUser.displayName,
             created_ts: new Date(),

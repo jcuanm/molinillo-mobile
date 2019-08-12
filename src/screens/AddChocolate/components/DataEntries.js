@@ -10,6 +10,7 @@ import CallbacksAndParams from '../../../helpers/CallbacksAndParams';
 import Entry from './Entry';
 import ImageArea from './ImageArea';
 import DbHandler from '../../../helpers/DbHandler';
+import { Colors } from '../../../helpers/Constants';
 import styles from '../../../styles';
 import * as firebase from 'firebase';
 
@@ -197,11 +198,14 @@ export default class DataEntries extends Component {
             dialogType={"options"} 
           />
         </ScrollView>
-        <Button
-          title="Submit"
-          onPress={() => this.checkIfShouldSubmit(this.inputValues)}
-          styles={styles.button}
-        />
+
+        <View style={{padding: 10}}>
+          <Button
+            title="Submit"
+            onPress={() => this.checkIfShouldSubmit(this.inputValues)}
+            color={Colors.Primary}
+          />
+        </View>
       </View>
     );
   }

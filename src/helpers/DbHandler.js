@@ -72,33 +72,6 @@ export default class DbHandler{
         let ref = this.getRef(rootName);
         ref.set(inputData);
     }
-
-    deleteItem(dbRef, callbacksAndParams){
-        return dbRef
-            .delete()
-            .then( _ => {
-                let myChocolatesRef = this.getRef("MyChocolates");
-                let barcodeToDelete = callbacksAndParams.params;
-                this.deleteFieldFromDocument(myChocolatesRef, barcodeToDelete);
-                this.executeSuccessCallback(callbacksAndParams.handleSuccessCallback, callbacksAndParams.params);
-                this.deleteImageFromWeb(barcodeToDelete);
-            })
-            .catch(error => {
-                console.log(error);
-                alert("Error deleting item"); 
-            });
-    }
-
-    deleteFieldFromDocument(dbRef, barcodeToDelete){
-		try{
-			dbRef.update({
-				[barcodeToDelete.data] : firebase.firestore.FieldValue.delete(),
-			});
-		}
-		catch{
-			console.log("Could not delete field in document from myChocolates collection: ", barcodeToDelete);
-		}
-    }
     
     incrementValue(rootName, fieldname, amount, barcode=null, uuid=null){
         let ref = this.getRef(rootName, barcode, uuid);
@@ -110,21 +83,6 @@ export default class DbHandler{
             console.log(error);
             console.log("Could not update field!");
         }  
-    }
-
-    deleteImageFromWeb(barcodeToDelete){
-        let pathToImage = barcodeToDelete.type + "/" + barcodeToDelete.data;
-        let imageStorageRef = firebase
-            .storage()
-            .ref()
-            .child(pathToImage);
-        
-        imageStorageRef
-            .delete()
-            .then()
-            .catch( error => {
-                console.log("Error deleting image from storage: ", error);
-            });
     }
 
     executeSuccessCallback(handleSuccessCallback, callbackParams){
@@ -158,12 +116,7 @@ export default class DbHandler{
             case 'MyChocolates':
                 ref = this.dbRef
                     .collection(root)
-                    .doc(this.currUser.uid);
-                break;
-            case 'FlagsPerUser':
-                ref = this.dbRef
-                    .collection(root)
-                    .doc(this.currUser.uid);
+                    .doc(this.currUser.uid + "_" + barcodeUuid);
                 break;
             case 'Scans':
                 ref = this.dbRef
