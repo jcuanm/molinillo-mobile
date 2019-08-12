@@ -4,12 +4,15 @@ import DbHandler from '../../helpers/DbHandler';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import CustomListItem from "../../helpers/CustomListItem";
-import { Colors } from '../../helpers/Constants';
+import Barcode from '../../helpers/Barcode';
+import CallbacksAndParams from '../../helpers/CallbacksAndParams';
+import { Colors, StringConcatenations } from '../../helpers/Constants';
 
 export default class MyChocolatesScreen extends Component {
     constructor(props) {
         super(props);
         this.dbHandler = new DbHandler();
+        this.pushToMyChocolates = this.pushToMyChocolates.bind(this); 
 
         this.state = {
             myChocolates: []
@@ -23,20 +26,46 @@ export default class MyChocolatesScreen extends Component {
     getMyChocolates(){
         let myChocolatesRef = firebase.firestore().collection("MyChocolates");
         let query = myChocolatesRef.where("userId", "==", this.dbHandler.currUser.uid);
-        let myChocolates = [];
 
         query 
             .get()
             .then(results => {
-                results.forEach(function(doc){
-                    myChocolates.push({key : doc.data()});
-                })
+                let myChocolates = [];
+                results.forEach(doc => {
+                    const {
+                        barcodeType, 
+                        barcodeData, 
+                        uuid
+                    } = doc.data();
 
-                this.setState({myChocolates : myChocolates});
+                    let currBarcode = new Barcode(barcodeType, barcodeData);
+                    let barcodeTypeRef = this.dbHandler.getRef(
+                        StringConcatenations.Prefix, 
+                        currBarcode,
+                        uuid);
+                    let barcodeTypeCallbacksAndParams = new CallbacksAndParams(
+                        myChocolates,
+                        this.pushToMyChocolates,
+                        function(){ console.log("Could not find chocolate"); }
+                    );
+                    
+                    this.dbHandler.getData(barcodeTypeRef, barcodeTypeCallbacksAndParams);
+                });
             })
             .catch(error => {
                 console.log(error);
             });
+    }
+
+    pushToMyChocolates(resultsAndParams){
+        let myChocolates = resultsAndParams.params;
+        let results = resultsAndParams.results.data();
+
+        myChocolates.push({key : results});
+
+        this.setState({
+            myChocolates: myChocolates
+        });
     }
 
     static navigationOptions = ({ navigation }) => ({
