@@ -5,7 +5,7 @@ import {
   Text, 
   TouchableOpacity,
   View, 
- } from 'react-native';
+} from 'react-native';
 import { ImagePicker, Permissions } from 'expo';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
@@ -21,7 +21,10 @@ export default class ImageArea extends Component {
     await Permissions.askAsync(Permissions.CAMERA);
     await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
-    let result = await ImagePicker.launchCameraAsync();
+    let result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [6, 3],
+    });
 
     if (!result.cancelled) { 
       const input = {

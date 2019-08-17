@@ -121,8 +121,12 @@ export default class DetailScreen extends Component {
 			color: 'white'
 		},
 		headerLeft: (
-			<TouchableOpacity style={styles.headerButton}>
-				<Ionicons name="md-arrow-back" size={25} onPress={() => navigation.popToTop()} color="white" />
+			<TouchableOpacity onPress={() => navigation.popToTop()} style={styles.headerButton}>
+				<Ionicons 
+					name="md-arrow-back" 
+					size={25} 
+					color="white" 
+				/>
 			</TouchableOpacity>
 		),		
 	})

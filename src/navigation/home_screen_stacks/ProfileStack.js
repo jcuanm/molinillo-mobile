@@ -7,6 +7,7 @@ import EditChocolateScreen from '../../screens/EditChocolate/EditChocolateScreen
 import MyChocolatesScreen from '../../screens/MyChocolates/MyChocolatesScreen';
 import RatingsScreen from '../../screens/Ratings/RatingsScreen';
 import AboutScreen from '../../screens/About/AboutScreen';
+import ContactScreen from '../../screens/Contact/ContactScreen';
 
 export default createStackNavigator({
     ProfileScreen,
@@ -16,5 +17,6 @@ export default createStackNavigator({
     AddChocolateScreen,
     EditChocolateScreen,
     RatingsScreen,
-    AboutScreen
+    AboutScreen,
+    ContactScreen
 });

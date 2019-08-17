@@ -14,27 +14,31 @@ import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../../../helpers/Constants';
 import * as firebase from 'firebase';
 
+
 export default class ProfileScreen extends Component {
 
-    static navigationOptions = {
+    static navigationOptions = ({ navigation }) => ({
         title: "Profile",
         headerStyle: {
             backgroundColor: Colors.Primary,
         },
         headerTitleStyle: {
-        color: 'white'
+            color: 'white'
         },
         headerLeft: (
-            <TouchableOpacity style={styles.headerButton} >
+            <TouchableOpacity
+                onPress={() => navigation.navigate("SearchScreen")} 
+                style={styles.headerButton} 
+            >
                 <Image 
                     style={{height:40, width:40}}
                     source={require('../../../../../assets/images/logo.png')}
                 />
             </TouchableOpacity>
         ),
-    }
+    })
     
-    render() {
+    render(){
         return (
             <View style={styles.container}>
                 <View style={{ justifyContent:"center", width: Dimensions.get('window').width, height: 100, backgroundColor: Colors.Secondary}}>

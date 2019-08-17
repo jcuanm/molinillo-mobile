@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { 
+    Alert,
     View, 
     Text, 
     TouchableOpacity,
@@ -57,6 +58,28 @@ export default class Feedback extends Component {
         
         let feedbackRef = this.dbHandler.getRef("Feedback");
 
-        feedbackRef.set(data);
+        feedbackRef
+            .set(data)
+            .then(_ =>{
+                Alert.alert(
+                    "Thanks for your feedback!",
+                    "",
+                    [
+                        {text: 'Ok'}
+                    ],
+                    { cancelable: false }
+                );
+            })
+            .catch(error => {
+                Alert.alert(
+                    "Error sending feedback!",
+                    "",
+                    [
+                        {text: 'Ok'}
+                    ],
+                    { cancelable: false }
+                );
+                console.log(error);
+            });
     }
 }

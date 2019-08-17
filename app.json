@@ -22,7 +22,10 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Once given permission to access the user's camera, this app allows the user to scan barcodes."
+      }
     },
     "description": "",
     "githubUrl": "https://github.com/jcuanm/molinillo-mobile"

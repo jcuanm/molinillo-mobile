@@ -110,7 +110,6 @@ export default class ScannerScreen extends Component {
             BarCodeScanner.Constants.BarCodeType.ean13,
             BarCodeScanner.Constants.BarCodeType.code39,
             BarCodeScanner.Constants.BarCodeType.code128,
-            BarCodeScanner.Constants.BarCodeType.interleaved2of5,
             BarCodeScanner.Constants.BarCodeType.itf14,
             BarCodeScanner.Constants.BarCodeType.codabar,
             BarCodeScanner.Constants.BarCodeType.code93,

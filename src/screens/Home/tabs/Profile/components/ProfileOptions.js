@@ -3,6 +3,8 @@ import { View } from 'react-native';
 import Feedback from './Feedback';
 import MyChocolates from './MyChocolates';
 import About from './About';
+import PrivacyPolicy from './PrivacyPolicy';
+import Contact from './Contact';
 
 
 export default class ProfileOptions extends Component {
@@ -10,15 +12,21 @@ export default class ProfileOptions extends Component {
         return(
             <View style={{flex: 1, flexDirection: 'column'}}>
                 <Feedback 
-                    title={"Send feedback"} 
-                    navigationFunc={this.props.navigationFunc} 
+                    title={"Send Feedback"} 
                 />
                 <MyChocolates 
-                    title={"My chocolates"} 
+                    title={"My Chocolates"} 
                     navigationFunc={this.props.navigationFunc} 
                 />
                 <About
-                    title={"Our story"} 
+                    title={"Our Story"} 
+                    navigationFunc={this.props.navigationFunc} 
+                />
+                <PrivacyPolicy
+                    title={"Privacy Policy"} 
+                />
+                <Contact 
+                    title={"Contact Us"} 
                     navigationFunc={this.props.navigationFunc} 
                 />
             </View>

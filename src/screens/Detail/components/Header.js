@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+    Alert,
 	View,
 	Dimensions,
 	Text
@@ -96,7 +97,14 @@ export default class Header extends Component {
             myChocolatesRef
                 .delete()
                 .then( _ => {
-                    alert("Removed from my chocolates");
+                    Alert.alert(
+                        "Removed from my chocolates",
+                        "",
+                        [
+                            {text: 'Ok'}
+                        ],
+                        { cancelable: false }
+                    );
                     this.setState({isInMyChocolates: false});
                 })
         }
@@ -112,7 +120,14 @@ export default class Header extends Component {
             myChocolatesRef
                 .set(data)
                 .then( _ => {
-                    alert("Added to my chocolates");
+                    Alert.alert(
+                        "Added to my chocolates",
+                        "",
+                        [
+                            {text: 'Ok'}
+                        ],
+                        { cancelable: false }
+                    );
                     this.setState({isInMyChocolates: true});
                 });
         }

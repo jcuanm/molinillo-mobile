@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native';
 import Logo from './components/Logo';
 import LoginForm from './components/LoginForm';
 import Signup from './components/Signup';
@@ -9,12 +9,17 @@ import { LoginScreenStyles } from './styles';
 export default class LoginScreen extends Component {
 	render() {
 		return(
-			<View style={LoginScreenStyles.container}>
+			<KeyboardAvoidingView 
+				style={LoginScreenStyles.container}
+				behavior="position" 
+				contentContainerStyle={{ alignItems: 'center' }}
+				enabled
+			>
 				<Logo/>
 				<LoginForm/>
         		<ForgotPassword navigate={this.props.navigation.navigate}/>
 				<Signup navigate={this.props.navigation.navigate}/>
-			</View>	
+			</KeyboardAvoidingView>
 		);
 	}
 }
