@@ -10,19 +10,6 @@ export default class DbHandler{
         this.executeSuccessCallback = this.executeSuccessCallback.bind(this); 
     }
 
-    // For testing purposes
-    addData(){
-        this.dbRef
-            .collection('BarcodeType_Upc_a')
-            .doc('036000291452')
-            .set( { barcodeType : 'Upc_a' , barcodeData : '036000291452', confectionName : 'Javier'});
-        
-        this.dbRef
-            .collection('BarcodeType_Code128')
-            .doc(']C1Wikipedia')
-            .set( { barcodeType : 'Code128' , barcodeData : ']C1Wikipedia', confectionName : 'wiki'});
-    }
-
     loginUser(email, password){
         firebase
             .auth()

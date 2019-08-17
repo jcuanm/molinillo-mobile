@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native';
 import Logo from './components/Logo';
 import SignupForm from './components/SignupForm';
 import Signin from './components/Signin';
@@ -12,11 +12,16 @@ export default class SignupScreen extends Component {
 
 	render() {
 		return(
-			<View style={SignupScreenStyles.container}>
+			<KeyboardAvoidingView 
+				style={SignupScreenStyles.container}
+				behavior="position" 
+				contentContainerStyle={{ alignItems: 'center' }}
+				enabled
+			>
 				<Logo/>
 				<SignupForm/>
 				<Signin/>
-			</View>	
+			</KeyboardAvoidingView>	
 		);
 	}
 }

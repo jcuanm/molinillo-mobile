@@ -2,9 +2,13 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
+  Linking,
   TextInput,
-  Button
+  Text,
+  Button,
+  Platform
 } from 'react-native';
+import { PrivacyPolicyUrl } from '../../../helpers/Constants';
 import DbHandler from '../../../helpers/DbHandler';
 
 export default class SignupForm extends Component {
@@ -16,7 +20,7 @@ export default class SignupForm extends Component {
       displayName: "",
       password: "",
       passwordConfirm: "",
-    }
+    };
   }
 
 	render(){
@@ -57,7 +61,8 @@ export default class SignupForm extends Component {
         
         <Button 
           style={styles.button} 
-          title="Signup" 
+          title="Signup"
+          color={Platform.OS === 'ios' ? 'white' : 'rgba(255, 255,255,0.2)'}  
           onPress={() => this.dbHandler.signupUser({
               email : this.state.email, 
               displayName : this.state.displayName,
@@ -65,8 +70,27 @@ export default class SignupForm extends Component {
               passwordConfirm : this.state.passwordConfirm
             })} 
         />
+
+        <Text onPress={() => this.openWebpage(PrivacyPolicyUrl)} style={{color:'rgba(255, 255, 255, .7)', textAlign: "center", padding:10}}>  
+          By pressing Signup, you agree to our <Text style={{fontWeight:"bold", color:'rgba(255, 255, 255, 1)'}}>privacy policy</Text>
+        </Text>
   		</View>
 		);
+  }
+  
+  openWebpage(url){
+		if(url){
+			Linking
+				.canOpenURL(url)
+				.then(supported =>{
+					if(supported){
+						Linking.openURL(url);
+					}
+				})
+				.catch(error => {
+					console.log(error);
+				});
+		}
 	}
 }
 

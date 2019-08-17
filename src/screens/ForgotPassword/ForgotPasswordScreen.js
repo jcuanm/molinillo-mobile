@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { Colors } from '../../helpers/Constants';
 import Logo from './components/Logo';
 import ForgotPassword from './components/ForgotPassword';
@@ -9,11 +9,16 @@ export default class ForgotPasswordScreen extends Component{
   
 	render() {
 		return(
-			<View style={styles.container}>
+      <KeyboardAvoidingView 
+        style={styles.container}
+				behavior="position" 
+				contentContainerStyle={{ alignItems: 'center' }}
+				enabled
+			>
 				<Logo/>
 				<ForgotPasswordForm navigate={this.props.navigation.popToTop} />
         <ForgotPassword />
-			</View>	
+			</KeyboardAvoidingView>	
 		);
 	}
 }

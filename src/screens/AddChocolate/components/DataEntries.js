@@ -1,6 +1,7 @@
 const uuidv4 = require('uuid/v4');
 import React, { Component } from 'react';
 import { 
+  Alert,
   View, 
   Button, 
   ScrollView
@@ -77,6 +78,15 @@ export default class DataEntries extends Component {
     possibleBarcodeTypeRef.set(inputValues);
     
     navigate("SearchScreen");
+
+    Alert.alert(
+      "Thanks for adding your chocolate!",
+      "",
+      [
+          {text: 'Ok'}
+      ],
+      { cancelable: false }
+    );
   }
 
   denySubmission(callbacksAndParams){

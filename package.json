@@ -22,6 +22,7 @@
     "react-native-action-button": "^2.8.5",
     "react-native-dialog-input": "^1.0.7",
     "react-native-elements": "^0.19.1",
+    "react-native-email": "^1.0.2",
     "react-native-flags": "^1.0.0",
     "react-native-modal": "^11.1.0",
     "react-native-paper": "^2.2.8",

@@ -6,6 +6,8 @@ export const Warnings = {
     PasswordsDontMatch : "Passwords do not match", 
 }
 
+export const PrivacyPolicyUrl = "https://app.termly.io/document/privacy-policy/21cb7adf-4c06-44f1-8af7-7e523f004ef7";
+
 export const StringConcatenations = {
     Prefix: "BarcodeType_",
 }
