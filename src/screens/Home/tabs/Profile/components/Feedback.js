@@ -48,6 +48,10 @@ export default class Feedback extends Component {
     }
 
     submitFeedback(inputText){
+        if(!inputText){
+            return;
+        }
+
         const data = {
             userId: this.dbHandler.currUser.uid,
             email: this.dbHandler.currUser.email,
@@ -71,7 +75,6 @@ export default class Feedback extends Component {
                 );
             })
             .catch(error => {
-                console.log("Womp Womp");
                 Alert.alert(
                     "Error sending feedback!",
                     "",

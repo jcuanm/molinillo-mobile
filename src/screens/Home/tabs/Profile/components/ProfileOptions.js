@@ -22,12 +22,12 @@ export default class ProfileOptions extends Component {
                     title={"Our Story"} 
                     navigationFunc={this.props.navigationFunc} 
                 />
-                <PrivacyPolicy
-                    title={"Privacy Policy"} 
-                />
                 <Contact 
                     title={"Contact Us"} 
                     navigationFunc={this.props.navigationFunc} 
+                />
+                <PrivacyPolicy
+                    title={"Privacy Policy"} 
                 />
             </View>
         );

@@ -152,7 +152,10 @@ export default class DataEntries extends Component {
   render(){
     return(
       <View style={styles.container}>
-        <ScrollView style={{flex: 1, flexDirection: 'column'}}>
+        <ScrollView 
+          style={{flex: 1, flexDirection: 'column'}} 
+          keyboardShouldPersistTaps={'handled'}
+        >
           <ImageArea 
             id={"image"} 
             displayName={"Add Image"}
