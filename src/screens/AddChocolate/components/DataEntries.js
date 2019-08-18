@@ -83,7 +83,7 @@ export default class DataEntries extends Component {
       "Thanks for adding your chocolate!",
       "",
       [
-          {text: 'Ok'}
+        {text: 'OK'}
       ],
       { cancelable: false }
     );

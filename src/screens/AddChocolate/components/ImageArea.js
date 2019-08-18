@@ -23,7 +23,7 @@ export default class ImageArea extends Component {
 
     let result = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
-      aspect: [6, 3],
+      aspect: [6, 5],
     });
 
     if (!result.cancelled) { 
@@ -40,7 +40,7 @@ export default class ImageArea extends Component {
   renderBlankImage(){
     return(
       <TouchableOpacity onPress={()=>{ this.getPicture(); }}>
-        <View style={{ justifyContent: 'center', alignItems: 'center', width: Dimensions.get('window').width, height: 150, backgroundColor: 'rgb(255,255,240)'}}>
+        <View style={{ justifyContent: 'center', alignItems: 'center', width: Dimensions.get('window').width, height: 150, backgroundColor: 'rgba(0,0,0,.3)'}}>
           <Text style={{ fontSize: 25 }}>
             <Ionicons size={25} name="md-add" color="grey"/>
             {" " + this.props.displayName}

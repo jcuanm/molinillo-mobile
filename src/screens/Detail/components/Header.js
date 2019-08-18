@@ -101,7 +101,7 @@ export default class Header extends Component {
                         "Removed from my chocolates",
                         "",
                         [
-                            {text: 'Ok'}
+                            {text: 'OK'}
                         ],
                         { cancelable: false }
                     );
@@ -124,7 +124,7 @@ export default class Header extends Component {
                         "Added to my chocolates",
                         "",
                         [
-                            {text: 'Ok'}
+                            {text: 'OK'}
                         ],
                         { cancelable: false }
                     );
