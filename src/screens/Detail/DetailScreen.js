@@ -178,7 +178,7 @@ export default class DetailScreen extends Component {
 		const currBarcode = new Barcode(barcodeType, barcodeData);
 		
 		return(
-			<ScrollView>
+			<ScrollView keyboardShouldPersistTaps={'handled'}>
 				<View style={{flex: 1, flexWrap: 'wrap' }}>
 					<Image 
 						style={{width: Dimensions.get('window').width, height:Dimensions.get('window').height/3}}
@@ -200,9 +200,7 @@ export default class DetailScreen extends Component {
 
 					{
 						confectionDescription ? 
-							<Description 
-								text={confectionDescription}
-							/> 
+							<Description text={confectionDescription} /> 
 						: 
 							null
 					}
@@ -312,7 +310,10 @@ export default class DetailScreen extends Component {
 					comments.push(doc.data());
 				});
 			});
-	
+		
+		// Sort comments in descending order based on time uploaded
+		comments.sort(function(a,b){return b.created_ts.seconds - a.created_ts.seconds});
+
 		this.setState({ comments : comments });
 	}
 
