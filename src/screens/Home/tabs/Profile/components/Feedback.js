@@ -60,22 +60,23 @@ export default class Feedback extends Component {
 
         feedbackRef
             .set(data)
-            .then(_ =>{
+            .then( _ => {
                 Alert.alert(
                     "Thanks for your feedback!",
                     "",
                     [
-                        {text: 'Ok'}
+                        {text: 'OK'}
                     ],
                     { cancelable: false }
                 );
             })
             .catch(error => {
+                console.log("Womp Womp");
                 Alert.alert(
                     "Error sending feedback!",
                     "",
                     [
-                        {text: 'Ok'}
+                        {text: 'OK'}
                     ],
                     { cancelable: false }
                 );

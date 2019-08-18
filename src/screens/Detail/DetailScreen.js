@@ -177,7 +177,7 @@ export default class DetailScreen extends Component {
 
 		const currBarcode = new Barcode(barcodeType, barcodeData);
 		
-		return (
+		return(
 			<ScrollView>
 				<View style={{flex: 1, flexWrap: 'wrap' }}>
 					<Image 
@@ -284,6 +284,12 @@ export default class DetailScreen extends Component {
 						1, 
 						currBarcode,
 						uuid);
+
+					this.setState({numComments : this.state.numComments + 1});
+				})
+				.catch(error => {
+					alert("Unable to submit comment");
+					console.log(error);
 				});
 		}
 	}
