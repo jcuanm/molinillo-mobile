@@ -18,7 +18,7 @@ admin.initializeApp();
 
 const db = admin.firestore();
 const client = algoliasearch(env.algolia.appid, env.algolia.apikey);
-const index = client.initIndex('dev_molinillo');
+const index = client.initIndex('prod_molinillo');
 
 
 ////////////////////////
