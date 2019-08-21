@@ -97,10 +97,10 @@ export default class ScannerScreen extends Component {
   render() {
     const { hasCameraPermission } = this.state;
     if (hasCameraPermission === null) {
-      return <Text>Requesting for camera permission</Text>;
+      return <Text style={{fontWeight:'bold', textAlign:'center'}}>Requesting for camera permission</Text>;
     }
     if (hasCameraPermission === false) {
-      return <Text>No access to camera</Text>;
+      return <Text style={{fontWeight:'bold', textAlign:'center'}}>No access to camera</Text>;
     }
     return (
       <View 
