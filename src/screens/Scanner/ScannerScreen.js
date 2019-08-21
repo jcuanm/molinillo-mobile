@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import { 
+  Dimensions,
   StyleSheet, 
   Text, 
   View,
   Alert
 } from 'react-native';
 import { StringConcatenations, Warnings } from '../../helpers/Constants';
-import { BarCodeScanner, Permissions } from 'expo';
+import { Header } from 'react-navigation';
+import * as Permissions from 'expo-permissions';
+import { BarCodeScanner } from 'expo-barcode-scanner';
 import DbHandler from '../../helpers/DbHandler';
 import CallbacksAndParams from '../../helpers/CallbacksAndParams';
 import Barcode from '../../helpers/Barcode';
@@ -100,7 +103,12 @@ export default class ScannerScreen extends Component {
       return <Text>No access to camera</Text>;
     }
     return (
-      <View style={{ flex: 1 }}>
+      <View 
+        style={{ 
+          width: Dimensions.get('window').width,
+          height: Dimensions.get('window').height - Header.HEIGHT,
+        }}
+      >
         <BarCodeScanner
           onBarCodeScanned={this.state.handleBarcodeScanned}
           barCodeTypes={[
@@ -116,8 +124,8 @@ export default class ScannerScreen extends Component {
           ]}
           navigationFunc={this.props.navigation.navigate}
           type={this.state.type}
-          style={ [StyleSheet.absoluteFill, styles.container ]}
-        >
+          style={StyleSheet.absoluteFill}
+        />
 
           <View style={styles.layerTop} />
           <View style={styles.layerCenter}>
@@ -128,7 +136,6 @@ export default class ScannerScreen extends Component {
           <View style={styles.layerBottom} >
             <Text style={{ color: 'white', fontSize: 25 }}> Scan the chocolate's barcode </Text>
           </View>
-        </BarCodeScanner>
       </View>
     );
   }
@@ -136,10 +143,6 @@ export default class ScannerScreen extends Component {
 
 const opacity = 'rgba(0, 0, 0, .6)';
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column'
-  },
   layerTop: {
     flex: 2,
     backgroundColor: opacity

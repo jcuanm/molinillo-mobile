@@ -3,11 +3,14 @@
     "name": "molinillo",
     "slug": "molinillo",
     "privacy": "public",
-    "sdkVersion": "31.0.0",
+    "sdkVersion": "34.0.0",
     "platforms": [
       "ios",
       "android"
     ],
+    "packagerOpts": {
+      "nonPersistent": true
+    },
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
@@ -21,7 +24,11 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "android": {
+      "package": "com.molinillo.molinillomobile"
+    },
     "ios": {
+      "bundleIdentifier": "com.molinillo.molinillomobile",
       "supportsTablet": true,
       "infoPlist": {
         "NSCameraUsageDescription": "Once given permission to access the user's camera, this app allows the user to scan barcodes."

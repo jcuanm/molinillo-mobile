@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   View, 
 } from 'react-native';
-import { ImagePicker, Permissions } from 'expo';
+import * as Permissions from 'expo-permissions';
+import * as ImagePicker from 'expo-image-picker';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default class ImageArea extends Component {

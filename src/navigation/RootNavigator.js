@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { FirebaseConfig } from '../../assets/Config';
 import AuthNavigator from './AuthNavigator';
-import { Asset, AppLoading } from 'expo';
+import { Asset } from 'expo-asset';
+import { AppLoading } from "expo";
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 
@@ -20,9 +21,7 @@ export default class RootNavigator extends Component{
     firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
 
     // Initializing firestore
-    const firestore = firebase.firestore();
-    //const settings = {timestampsInSnapshots: true}; 
-    //firestore.settings(settings);
+    firebase.firestore();
   }
 
   onAuthStateChanged = (user) => {
