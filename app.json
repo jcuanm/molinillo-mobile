@@ -11,7 +11,7 @@
     "packagerOpts": {
       "nonPersistent": true
     },
-    "version": "1.0.0",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
     "splash": {
@@ -22,9 +22,10 @@
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
-      "**/*"
+      "assets/*"
     ],
     "android": {
+      "versionCode": 2,
       "package": "com.molinillo.molinillomobile"
     },
     "ios": {
