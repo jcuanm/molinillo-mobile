@@ -81,7 +81,7 @@ export default class DataEntries extends Component {
 
     Alert.alert(
       "Thanks for adding your chocolate!",
-      "",
+      "Our dedicated experts will now curate your post before publicly displaying it.",
       [
         {text: 'OK'}
       ],
@@ -90,7 +90,7 @@ export default class DataEntries extends Component {
   }
 
   denySubmission(callbacksAndParams){
-    alert("Someone beat you to this chocolate");
+    alert("We are already curating this confection.");
     this.props.navigate("SearchScreen");
   }
 

@@ -57,7 +57,7 @@ export default class UserRating extends Component {
     renderPercentageNotFound(){
         return(
             <Text style={{textAlign:"center", fontSize: 14}}> 
-                Unknown
+                Unknown %
             </Text>
         );
     }
