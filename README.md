@@ -49,3 +49,19 @@ export const AlgoliaSearchConfig = {
 10. Press either `a` or `i` to run either an Android or iPhone emulator respectively. Or you could download the Expo App from the app store and run the application on your own mobile device.
 
   * NOTES: An android emulator must be running already before you press `a`. If you're having issues with the ios emulator, try waiting for the emulator to finish loading up and then press `i` wen it is loaded.
+  
+
+# Deploying
+
+# Android
+Before deploying, make sure you increment the `versionCode` in `app.json`! In order to get the binary to upload to the Google Play store, run the following command:
+
+`expo build:android -t app-bundle`
+
+# iOS
+Before deploying, make sure you increment the `buildNumber` in `app.json`! In order to get the binary to upload to the iOS store, run the following command:
+
+`expo build:ios`
+
+# Instructions for both Android and iOS 
+Let Expo handle everything; don't manually create any keys of any kind.
