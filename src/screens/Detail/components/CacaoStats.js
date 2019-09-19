@@ -40,7 +40,6 @@ export default class UserRating extends Component {
                     
                     { percentage ? this.renderPercentageFound(percentage) : this.renderPercentageNotFound()}
 
-                    <Text style={{fontSize:14, textAlign:"center"}}>{type}</Text>
                 </View>
             </View>
 		);
