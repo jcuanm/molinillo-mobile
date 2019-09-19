@@ -15,13 +15,16 @@ export default class Header extends Component {
                 backgroundColor:"white"
             }}>
                 <View style={{
-                    width: Dimensions.get('window').width / 2,
+                    width: Dimensions.get('window').width,
                     justifyContent:"center",
-                    paddingLeft: 25, 
+                    paddingLeft: 30, 
+                    paddingRight: 25,
                     fontSize:18
                 }}>
-                    <Text style={{fontWeight:'bold'}}> {producerName} </Text>
-                    <Text> {confectionName} </Text>
+                    <Text> 
+                        <Text style={{fontWeight:'bold'}}>{producerName}</Text> {"\n"}
+                        {confectionName} 
+                    </Text>
                 </View>
             </View>
 		);

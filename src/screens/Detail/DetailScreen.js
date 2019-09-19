@@ -162,7 +162,7 @@ export default class DetailScreen extends Component {
 			confectionName,
 			imageDownloadUrl, 
 			vendorAddress,
-			vendorWebsite,
+			vendorUrl,
 			uuid
 		} = this.results;
 
@@ -230,7 +230,7 @@ export default class DetailScreen extends Component {
 					/>
 
 					<VendorWebsite 
-						url={vendorWebsite}
+						url={vendorUrl}
 						openWebpage={this.openWebpage}
 					/>
 
