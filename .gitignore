@@ -6,9 +6,10 @@ npm-debug.*
 *.key
 *.mobileprovision
 *.DS_Store
-src/scripts/
+src/scripts/upload_chocolates/molinillo-*.json
 
 assets/Config.js
+builds/
 
 appsync-info.json
 project-info.json
