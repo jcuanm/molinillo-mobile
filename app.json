@@ -30,7 +30,7 @@
     },
     "ios": {
       "bundleIdentifier": "com.molinillo.molinillomobile",
-      "buildNumber": "1",
+      "buildNumber": "2",
       "supportsTablet": true,
       "infoPlist": {
         "NSCameraUsageDescription": "Once given permission to access the user's camera, this app allows the user to scan barcodes."
