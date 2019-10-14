@@ -1,5 +1,5 @@
 # molinillo-mobile
-A React Native Expo project that allows the user to create an account, login/out, and scan barcodes to get information on an item. It uses Firestore's NoSQL database schema as the backend and Algolia to parse the Firestore database for searching capabilities.
+A React Native Expo project that allows the user to interact with ethical fine chocolate. It uses Firestore's NoSQL database schema as the backend and Algolia to parse the Firestore database for searching capabilities.
 
 # How to Run
 1. Clone this repo into the directory of your choosing 
