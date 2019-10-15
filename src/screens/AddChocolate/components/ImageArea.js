@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { 
-  Dimensions,
   Image,
   Text, 
   TouchableOpacity,
@@ -9,6 +8,7 @@ import {
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { ImageAreaStyles } from '../styles';
 
 export default class ImageArea extends Component {
   constructor(props){
@@ -41,8 +41,8 @@ export default class ImageArea extends Component {
   renderBlankImage(){
     return(
       <TouchableOpacity onPress={()=>{ this.getPicture(); }}>
-        <View style={{ justifyContent: 'center', alignItems: 'center', width: Dimensions.get('window').width, height: 150, backgroundColor: 'rgba(0,0,0,.3)'}}>
-          <Text style={{ fontSize: 25 }}>
+        <View style={ImageAreaStyles.blankImageContainer}>
+          <Text style={ImageAreaStyles.text}>
             <Ionicons size={25} name="md-add" color="grey"/>
             {" " + this.props.displayName}
           </Text> 
@@ -55,7 +55,7 @@ export default class ImageArea extends Component {
     return(
       <TouchableOpacity onPress={()=>{ this.getPicture(); }}>
         <Image 
-          style={{width: Dimensions.get('window').width, height: 250}}
+          style={ImageAreaStyles.image}
           source={{ uri: this.state.imageDownloadUrl }}
         />
       </TouchableOpacity>

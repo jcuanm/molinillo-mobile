@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { 
   FlatList,
   View, 
-  Text, 
-  TextInput,
+  Text,
   TouchableOpacity,
   Dimensions,
  } from 'react-native';
 import DialogInput from 'react-native-dialog-input';
 import Modal from 'react-native-modal';
 import { dialogOptionsDatasets } from '../../../helpers/Constants';
+import { EntryStyles } from '../styles';
 
 export default class Entry extends Component {
   constructor(props){
@@ -36,10 +36,10 @@ export default class Entry extends Component {
 
   render(){
     return(
-      <TouchableOpacity style={{borderBottomWidth: 0.5, borderBottomColor: "grey"}} onPress={()=>{this.toggleDialogBox()}}>
-        <View style={{justifyContent: 'center', width: Dimensions.get('window').width, height: 50, backgroundColor: 'white' }}>
-          <Text style={{textAlign: 'left', paddingLeft: 10}}>{this.props.displayName}</Text> 
-          <Text style={{textAlign: 'right', paddingRight: 10}}>{this.state.value}</Text>
+      <TouchableOpacity style={EntryStyles.border} onPress={()=>{this.toggleDialogBox()}}>
+        <View style={EntryStyles.container}>
+          <Text style={EntryStyles.displayName}> {this.props.displayName} </Text> 
+          <Text style={EntryStyles.value}> {this.state.value} </Text>
         </View>
 
         {this.getDialogBox()}
@@ -63,10 +63,10 @@ export default class Entry extends Component {
     return(
       <Modal 
         onBackdropPress={() => this.toggleDialogBox()}
-        style={{alignContent: 'center'}} 
+        style={EntryStyles.popupModal} 
         isVisible={this.state.isDialogVisible}
       >
-        <View style={{width: 300}}>
+        <View style={EntryStyles.popupFlatlistContainer}>
           <FlatList
             data={dialogOptionsDatasets[this.props.id]}
             renderItem={
@@ -76,9 +76,9 @@ export default class Entry extends Component {
                     this.sendInput(item.key); 
                     this.toggleDialogBox(); 
                   }} 
-                  style={{backgroundColor:'white', borderBottomWidth: 0.5, borderBottomColor: "grey"}}
+                  style={EntryStyles.popupEntriesBackground}
                 >
-                  <Text style={{textAlign:'center', fontSize: 20}}>{item.key}</Text>
+                  <Text style={EntryStyles.popupEntriesText}>{item.key}</Text>
                 </TouchableOpacity>
             }
           />

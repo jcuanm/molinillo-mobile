@@ -6,12 +6,12 @@ import { Colors } from '../../helpers/Constants';
 export default class AddChocolateScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: "Add Chocolate",
-    headerTintColor: 'white',
+    headerTintColor: Colors.Secondary,
     headerStyle: {
 			backgroundColor: Colors.Primary,
 		},
 		headerTitleStyle: {
-			color: 'white'
+			color: Colors.Secondary
 		},
   });
   
