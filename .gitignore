@@ -6,11 +6,15 @@ npm-debug.*
 *.key
 *.mobileprovision
 *.DS_Store
-src/scripts/upload_chocolates/molinillo-*.json
 
-assets/Config.js
-builds/
+# Contains secrets to be passed to Google Cloud
+src/scripts/upload_chocolates/molinillo-*.json 
+
+# Contains the most current Android and iOS builds
+builds/ 
 
 appsync-info.json
 project-info.json
 
+# Contains secrets
+.env* 
