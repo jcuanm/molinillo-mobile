@@ -7,15 +7,16 @@ import {
     Text
  } from 'react-native';
  import { Colors } from '../../helpers/Constants';
+ import { ContactScreenStyles } from './styles';
  
 export default class ContactScreen extends Component {
     static navigationOptions = {
-        headerTintColor: 'white',
+        headerTintColor: Colors.Secondary,
         headerStyle: {
             backgroundColor: Colors.Primary,
         },
         headerTitleStyle: {
-            color: 'white'
+            color: Colors.Secondary
         },
         title: "Contact Us",
     }
@@ -24,21 +25,15 @@ export default class ContactScreen extends Component {
         return(
             <ScrollView>
                 <View 
-                    style={{
-                        alignItems:'center', 
-                        justifyContent:'center',
-                        width: Dimensions.get('window').width, 
-                        height: Dimensions.get('window').height/3, 
-                        backgroundColor: Colors.Secondary,
-                    }}
+                    style={ContactScreenStyles.container}
                 >
                     <Image  
-                        style={{width:120, height: 180}}
+                        style={ContactScreenStyles.logo}
                         source={require('../../../assets/images/logo_white.png')}
                     />
                 </View>
-                <View style={{paddingRight:20, paddingLeft: 20}}>
-                    <Text style={{fontWeight:'bold'}}>Email:</Text>
+                <View style={ContactScreenStyles.text}>
+                    <Text style={ContactScreenStyles.entry}>Email:</Text>
                     <Text>
                         molinillomobile@gmail.com
                     </Text> 
