@@ -12,7 +12,7 @@ import Entry from './Entry';
 import ImageArea from './ImageArea';
 import DbHandler from '../../../helpers/DbHandler';
 import { Colors } from '../../../helpers/Constants';
-import styles from '../../../styles';
+import { DataEntriesStyles } from '../styles';
 import * as firebase from 'firebase';
 
 export default class DataEntries extends Component {
@@ -151,9 +151,9 @@ export default class DataEntries extends Component {
   
   render(){
     return(
-      <View style={styles.container}>
+      <View style={DataEntriesStyles.container}>
         <ScrollView 
-          style={{flex: 1, flexDirection: 'column'}} 
+          style={DataEntriesStyles.scrollView} 
           keyboardShouldPersistTaps={'handled'}
         >
           <ImageArea 

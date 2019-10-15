@@ -7,8 +7,8 @@ npm-debug.*
 *.mobileprovision
 *.DS_Store
 
-# Contains secrets to be passed to Google Cloud
-src/scripts/upload_chocolates/molinillo-*.json 
+# Contain secrets to be passed to Google Cloud
+src/scripts/upload_chocolates/key_files
 
 # Contains the most current Android and iOS builds
 builds/ 
