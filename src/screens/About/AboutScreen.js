@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
 import { 
-    Dimensions,
     Image,
     View, 
     ScrollView,
     Text
  } from 'react-native';
  import { Colors, OurStoryText } from '../../helpers/Constants';
+ import { AboutScreenStyles } from './styles';
  
 export default class AboutScreen extends Component {
     static navigationOptions = {
-        headerTintColor: 'white',
+        headerTintColor: Colors.Secondary,
         headerStyle: {
             backgroundColor: Colors.Primary,
         },
         headerTitleStyle: {
-            color: 'white'
+            color: Colors.Secondary
         },
         title: "Our Story",
     }
@@ -23,18 +23,18 @@ export default class AboutScreen extends Component {
     render(){
         return(
             <ScrollView>
-                <View style={{alignItems:'center', justifyContent:'center', width: Dimensions.get('window').width, height: Dimensions.get('window').height/3, backgroundColor: Colors.Secondary }}>
+                <View style={AboutScreenStyles.containerStyles}>
                     <Image  
-                        style={{width:120, height: 180}}
+                        style={AboutScreenStyles.logoStyles}
                         source={require('../../../assets/images/logo_white.png')}
                     />
                 </View>
-                <Text style={{paddingRight:20, paddingLeft: 20 }}>
+                <Text style={AboutScreenStyles.ourStoryTextStyles}>
                     {OurStoryText}
                     {"\n"}
                     {"\n"}
                 </Text> 
-                <Text style={{fontStyle:"italic", paddingRight:20, paddingLeft: 20}}>
+                <Text style={AboutScreenStyles.signatureTextStyles}>
                     – Javier Cuan-Martinez, Co-Founder
                 </Text>
             </ScrollView>
