@@ -1,28 +1,15 @@
 import React, { Component } from 'react';
-import {
-	View,
-	Dimensions,
-	Text
-} from 'react-native';
+import { View, Text } from 'react-native';
+import { ChocolateNameStyles } from '../styles';
 
-export default class Header extends Component {
+export default class ChocolateName extends Component {
 	render() {
         const { producerName, confectionName } = this.props;
 		return (
-			<View style={{
-                flexDirection: "row",
-                paddingBottom: 10,
-                backgroundColor:"white"
-            }}>
-                <View style={{
-                    width: Dimensions.get('window').width,
-                    justifyContent:"center",
-                    paddingLeft: 30, 
-                    paddingRight: 25,
-                    fontSize:18
-                }}>
+			<View style={ChocolateNameStyles.container}>
+                <View style={ChocolateNameStyles.chocolateNameBlock}>
                     <Text> 
-                        <Text style={{fontWeight:'bold'}}>{producerName}</Text> {"\n"}
+                        <Text style={ChocolateNameStyles.producerName}>{producerName}</Text>{"\n"}
                         {confectionName} 
                     </Text>
                 </View>

@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import {
     Alert,
 	View,
-	Dimensions,
 	Text
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import CallbacksAndParams from '../../../helpers/CallbacksAndParams';
 import DbHandler from '../../../helpers/DbHandler';
+import { HeaderStyles } from '../styles';
 
 export default class Header extends Component {
     constructor(props) {
@@ -41,17 +41,8 @@ export default class Header extends Component {
 	render() {
         const { numStarRatings, sumRatings } = this.props;
 		return (
-			<View style={{
-                flexDirection: "row",
-                height: 100,
-                backgroundColor:"white"
-            }}>
-                <View style={{
-                    width: Dimensions.get('window').width / 2,
-                    justifyContent:"center",
-                    paddingLeft: 25, 
-                    fontSize:18
-                }}>
+			<View style={HeaderStyles.container}>
+                <View style={HeaderStyles.heartIcon}>
                     <Ionicons
                         name="md-heart"
                         size={30}
@@ -60,11 +51,8 @@ export default class Header extends Component {
                     />
                 </View>
 
-                <View style={{
-                    width: Dimensions.get('window').width / 2,
-                    justifyContent: 'center',
-                }}>	
-                    <Text style={{textAlign:"center", fontSize: 30, fontWeight: 'bold'}}> 
+                <View style={HeaderStyles.ratingBlock}>	
+                    <Text style={HeaderStyles.starIcon}> 
                         <Ionicons 
                             name="md-star" 
                             size={30} 
@@ -73,8 +61,8 @@ export default class Header extends Component {
                         {(sumRatings / numStarRatings) ? (sumRatings / numStarRatings).toFixed(1) : " "}
                     </Text>
 
-                    <Text style={{fontSize:12, textAlign:"center", color:'rgba(0, 0, 0, .4)'}}>
-                        {numStarRatings} <Text style={{fontStyle:"italic", }}>ratings</Text>
+                    <Text style={HeaderStyles.numRatingsText}>
+                        {numStarRatings} <Text style={HeaderStyles.ratingsTitle}>ratings</Text>
                     </Text>
                 </View>
             </View>

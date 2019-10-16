@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { 
-	Alert,
-	Dimensions,
 	FlatList,
 	Image,
 	Linking,
@@ -10,7 +8,7 @@ import {
 	TouchableOpacity, 
 	View, 
 } from 'react-native';
-import styles from '../../styles';
+import { DetailScreenStyles } from './styles'
 import * as firebase from 'firebase';
 import { Ionicons } from '@expo/vector-icons';
 import DbHandler from '../../helpers/DbHandler';
@@ -24,11 +22,7 @@ import VendorWebsite from './components/VendorWebsite';
 import ChocolateName from './components/ChocolateName';
 import Barcode from '../../helpers/Barcode';
 import CallbacksAndParams from '../../helpers/CallbacksAndParams';
-import { 
-	Colors, 
-	StringConcatenations, 
-	Warnings 
-} from '../../helpers/Constants';
+import { Colors, StringConcatenations } from '../../helpers/Constants';
 import Comment from './components/Comment';
 const uuidv4 = require('uuid/v4');
 
@@ -118,14 +112,14 @@ export default class DetailScreen extends Component {
 			backgroundColor: Colors.Primary,
 		},
 		headerTitleStyle: {
-			color: 'white'
+			color: Colors.Secondary
 		},
 		headerLeft: (
-			<TouchableOpacity onPress={() => navigation.popToTop()} style={styles.headerButton}>
+			<TouchableOpacity onPress={() => navigation.popToTop()} style={DetailScreenStyles.headerButton}>
 				<Ionicons 
 					name="md-arrow-back" 
 					size={25} 
-					color="white" 
+					color={Colors.Secondary} 
 				/>
 			</TouchableOpacity>
 		),		
@@ -179,9 +173,9 @@ export default class DetailScreen extends Component {
 		
 		return(
 			<ScrollView keyboardShouldPersistTaps={'handled'}>
-				<View style={{flex: 1, flexWrap: 'wrap' }}>
+				<View style={DetailScreenStyles.container}>
 					<Image 
-						style={{width: Dimensions.get('window').width, height:Dimensions.get('window').height/3}}
+						style={DetailScreenStyles.image}
 						source={{ uri : imageDownloadUrl }}
 					/>
 
@@ -234,14 +228,8 @@ export default class DetailScreen extends Component {
 						openWebpage={this.openWebpage}
 					/>
 
-					<TouchableOpacity style={{paddingLeft:15}} onPress={() => this.getComments()}>
-						<Text style={{
-							fontSize:14, 
-							paddingTop:5, 
-							paddingBottom:5, 
-							color:'rgba(0, 0, 0, .4)', 
-							textDecorationLine:'underline'}}
-						>
+					<TouchableOpacity style={DetailScreenStyles.viewCommentsButtonContainer} onPress={() => this.getComments()}>
+						<Text style={DetailScreenStyles.viewCommentsButtonText} >
 							View comments ({numComments})
 						</Text>
 					</TouchableOpacity>
