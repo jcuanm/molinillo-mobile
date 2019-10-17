@@ -5,10 +5,9 @@ import {
     View, 
     Text, 
     TouchableOpacity,
-    Dimensions,
  } from 'react-native';
 import ActionButton from 'react-native-action-button';
-import styles from '../../../../styles';
+import { ProfileScreenStyles } from './styles';
 import ProfileOptions from './components/ProfileOptions';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../../../helpers/Constants';
@@ -23,15 +22,15 @@ export default class ProfileScreen extends Component {
             backgroundColor: Colors.Primary,
         },
         headerTitleStyle: {
-            color: 'white'
+            color: Colors.Secondary
         },
         headerLeft: (
             <TouchableOpacity
                 onPress={() => navigation.navigate("SearchScreen")} 
-                style={styles.headerButton} 
+                style={ProfileScreenStyles.headerButton} 
             >
                 <Image 
-                    style={{height:40, width:40}}
+                    style={ProfileScreenStyles.headerImage}
                     source={require('../../../../../assets/images/logo.png')}
                 />
             </TouchableOpacity>
@@ -40,16 +39,16 @@ export default class ProfileScreen extends Component {
     
     render(){
         return (
-            <View style={styles.container}>
-                <View style={{ justifyContent:"center", width: Dimensions.get('window').width, height: 100, backgroundColor: Colors.Secondary}}>
-                    <Text style={{fontSize:18, textAlign:"center"}}>
+            <View style={ProfileScreenStyles.container}>
+                <View style={ProfileScreenStyles.welcomeTextWrapper}>
+                    <Text style={ProfileScreenStyles.welcomeText}>
                         Welcome, {firebase.auth().currentUser.displayName}
                     </Text>
                 </View>
 
                 <ProfileOptions navigationFunc={this.props.navigation.navigate}/>
 
-                <View style={{padding:40}}>
+                <View style={ProfileScreenStyles.logoutButton}>
                     <Button
                         title="Logout"
                         onPress={() => { firebase.auth().signOut(); } } 
@@ -59,7 +58,7 @@ export default class ProfileScreen extends Component {
                 
                 <ActionButton
                     buttonColor={Colors.Primary}
-                    icon={<Ionicons name="md-camera" size={25} color="white" />}
+                    icon={<Ionicons name="md-camera" size={25} color={Colors.Secondary} />}
                     onPress={() => { this.props.navigation.navigate("ScannerScreen") }}
                 />
             </View>

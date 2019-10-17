@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
 import { 
-    Dimensions,
     TouchableOpacity,
     View, 
     Text
  } from 'react-native';
- import { Colors } from '../../../../../helpers/Constants';
+ import { ProfileNavTabStyles } from '../styles';
  
 export default class Contact extends Component {
     render(){
         return(
             <TouchableOpacity onPress={() => this.props.navigationFunc("ContactScreen")}>
-                <View style={{justifyContent:'center', width: Dimensions.get('window').width, height: 50, backgroundColor: Colors.Primary }}>
-                    <Text style={{fontWeight:'bold', color:"white", paddingLeft:15}}>{this.props.title}</Text> 
+                <View style={ProfileNavTabStyles.container}>
+                    <Text style={ProfileNavTabStyles.text}>{this.props.title}</Text> 
                 </View>
             </TouchableOpacity>   
         );

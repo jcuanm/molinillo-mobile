@@ -4,12 +4,11 @@ import {
     View, 
     Text, 
     TouchableOpacity,
-    Dimensions,
  } from 'react-native';
  import DialogInput from 'react-native-dialog-input';
  import DbHandler from '../../../../../helpers/DbHandler';
- import { Colors } from '../../../../../helpers/Constants';
- 
+ import { ProfileNavTabStyles } from '../styles';
+
 export default class Feedback extends Component {
     constructor(props) {
     	super(props);
@@ -25,8 +24,8 @@ export default class Feedback extends Component {
 
         return(
             <TouchableOpacity onPress={() => this.toggleDialogBox()}>
-                <View style={{justifyContent:'center', width: Dimensions.get('window').width, height: 50, backgroundColor: Colors.Primary }}>
-                    <Text style={{fontWeight:'bold', color:"white", paddingLeft:15}}>{this.props.title}</Text> 
+                <View style={ProfileNavTabStyles.container}>
+                    <Text style={ProfileNavTabStyles.text}>{this.props.title}</Text> 
                 </View>
 
                 <DialogInput 
