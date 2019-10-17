@@ -5,12 +5,12 @@ import MyChocolates from './MyChocolates';
 import About from './About';
 import PrivacyPolicy from './PrivacyPolicy';
 import Contact from './Contact';
-
+import { ProfileOptionsStyles } from '../styles';
 
 export default class ProfileOptions extends Component {
     render(){
         return(
-            <View style={{flex: 1, flexDirection: 'column'}}>
+            <View style={ProfileOptionsStyles.container}>
                 <Feedback 
                     title={"Send Feedback"} 
                 />
