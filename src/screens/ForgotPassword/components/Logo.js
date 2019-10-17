@@ -1,32 +1,21 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet,
   Text,
   View,
   Image 
 } from 'react-native';
+import { LogoStyles } from '../styles';
 
 export default class Logo extends Component {
 	render(){
 		return(
-			<View style={styles.container}>
-				<Image  style={{width:80, height: 140}}
-          			source={require('../../../../assets/images/logo.png')}/>
-          		<Text style={styles.logoText}>Molinillo</Text>	
+			<View style={LogoStyles.container}>
+				<Image  
+					style={LogoStyles.logoImage}
+          			source={require('../../../../assets/images/logo.png')}
+				/>
+          		<Text style={LogoStyles.logoText}>Molinillo</Text>	
   			</View>
-			)
+		);
 	}
 }
-
-const styles = StyleSheet.create({
-  container : {
-    flexGrow: 1,
-    justifyContent:'flex-end',
-    alignItems: 'center'
-  },
-  logoText : {
-  	marginVertical: 15,
-  	fontSize:36,
-	color:'white',
-  }
-});
