@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet,
   View,
   TextInput,
   Button,
   Platform
 } from 'react-native';
 import * as firebase from 'firebase';
+import { ForgotPasswordFormStyles } from '../styles';
+import { Colors } from '../../../helpers/Constants';
 
 export default class ForgotPasswordForm extends Component {
   constructor(props){
@@ -28,20 +29,20 @@ export default class ForgotPasswordForm extends Component {
 
 	render(){
 		return(
-			<View style={styles.container}>
+			<View style={ForgotPasswordFormStyles.container}>
         <TextInput 
-          style={styles.inputBox} 
+          style={ForgotPasswordFormStyles.inputBox} 
           underlineColorAndroid='rgba(0,0,0,0)' 
           onChangeText={(text) => { this.setState({ email: text }) }}
           placeholder="Email"
-          placeholderTextColor = "#ffffff"
+          placeholderTextColor = {Colors.Secondary}
           selectionColor="#fff"
           keyboardType="email-address"
         />
         
         <Button 
-          style={styles.button} 
-          color={Platform.OS === 'ios' ? 'white' : 'rgba(255, 255,255,0.2)'} 
+          style={ForgotPasswordFormStyles.button} 
+          color={Platform.OS === 'ios' ? Colors.Secondary : 'rgba(255, 255,255,0.2)'} 
           title="Reset Password" 
           onPress={this.onResetPasswordPress} 
         />
@@ -49,33 +50,3 @@ export default class ForgotPasswordForm extends Component {
 		);
 	}
 }
-
-const styles = StyleSheet.create({
-  container : {
-    flexGrow: 1,
-    justifyContent:'center',
-    alignItems: 'center'
-  },
-
-  inputBox: {
-    width:300,
-    backgroundColor:'rgba(255, 255,255,0.2)',
-    borderRadius: 25,
-    paddingHorizontal:16,
-    fontSize:16,
-    color:'#ffffff',
-    marginVertical: 10
-  },
-  button: {
-    width:300,
-    borderRadius: 25,
-    marginVertical: 10,
-    paddingVertical: 13
-  },
-  buttonText: {
-    fontSize:16,
-    fontWeight:'500',
-    color:'#ffffff',
-    textAlign:'center'
-  }
-});
