@@ -8,8 +8,10 @@ import {
   Button,
   Platform
 } from 'react-native';
-import { PrivacyPolicyUrl } from '../../../helpers/Constants';
+import { Colors, PrivacyPolicyUrl } from '../../../helpers/Constants';
 import DbHandler from '../../../helpers/DbHandler';
+import { SignupFormStyles } from '../styles';
+
 
 export default class SignupForm extends Component {
   constructor(props){
@@ -25,8 +27,8 @@ export default class SignupForm extends Component {
 
 	render(){
 		return(
-			<View style={styles.container}>
-        <TextInput style={styles.inputBox} 
+			<View style={SignupFormStyles.container}>
+        <TextInput style={SignupFormStyles.inputBox} 
           underlineColorAndroid='rgba(0,0,0,0)' 
           onChangeText={(text) => { this.setState({ email: text }) }}
           placeholder="Email"
@@ -34,7 +36,7 @@ export default class SignupForm extends Component {
           selectionColor="#fff"
           keyboardType="email-address"
         />
-        <TextInput style={styles.inputBox} 
+        <TextInput style={SignupFormStyles.inputBox} 
           underlineColorAndroid='rgba(0,0,0,0)' 
           onChangeText={(text) => { this.setState({ displayName: text }) }}
           placeholder="Display Name"
@@ -42,7 +44,7 @@ export default class SignupForm extends Component {
           selectionColor="#fff"
         />
         <TextInput 
-          style={styles.inputBox} 
+          style={SignupFormStyles.inputBox} 
           underlineColorAndroid='rgba(0,0,0,0)' 
           onChangeText={(text) => { this.setState({ password: text }) }}
           placeholder="Password"
@@ -50,7 +52,7 @@ export default class SignupForm extends Component {
           placeholderTextColor = "#ffffff"
         />  
         <TextInput 
-          style={styles.inputBox} 
+          style={SignupFormStyles.inputBox} 
           underlineColorAndroid='rgba(0,0,0,0)' 
           onChangeText={(text) => { this.setState({ passwordConfirm: text }) }}
           placeholder="Confirm Password"
@@ -60,9 +62,9 @@ export default class SignupForm extends Component {
         />  
         
         <Button 
-          style={styles.button} 
+          style={SignupFormStyles.button} 
           title="Signup"
-          color={Platform.OS === 'ios' ? 'white' : 'rgba(255, 255,255,0.2)'}  
+          color={Platform.OS === 'ios' ? Colors.Secondary : 'rgba(255, 255,255,0.2)'}  
           onPress={() => this.dbHandler.signupUser({
               email : this.state.email, 
               displayName : this.state.displayName,
@@ -71,8 +73,8 @@ export default class SignupForm extends Component {
             })} 
         />
 
-        <Text onPress={() => this.openWebpage(PrivacyPolicyUrl)} style={{color:'rgba(255, 255, 255, .7)', textAlign: "center", padding:10}}>  
-          By pressing Signup, you agree to our <Text style={{fontWeight:"bold", color:'rgba(255, 255, 255, 1)'}}>privacy policy</Text>
+        <Text onPress={() => this.openWebpage(PrivacyPolicyUrl)} style={SignupFormStyles.privacyPolicyText}>  
+          By pressing Signup, you agree to our <Text style={SignupFormStyles.privacyPolicyLink}>privacy policy</Text>
         </Text>
   		</View>
 		);
