@@ -5,14 +5,15 @@ import {
   View,
   TouchableOpacity
 } from 'react-native';
+import { LogoStyles } from '../styles';
 
 export default class Signin extends Component {
 	render() {
 		return(
-      <View style={styles.textContent}>
-        <Text style={styles.text}></Text>
+      <View style={LogoStyles.container}>
+        <Text style={LogoStyles.text}></Text>
         <TouchableOpacity >
-          <Text style={styles.button}></Text>
+          <Text style={LogoStyles.button}></Text>
         </TouchableOpacity>
       </View>
 		);

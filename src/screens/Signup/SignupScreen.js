@@ -15,7 +15,7 @@ export default class SignupScreen extends Component {
 			<KeyboardAvoidingView 
 				style={SignupScreenStyles.container}
 				behavior="position" 
-				contentContainerStyle={{ alignItems: 'center' }}
+				contentContainerStyle={SignupScreenStyles.contentContainerStyle}
 				enabled
 			>
 				<Logo/>
