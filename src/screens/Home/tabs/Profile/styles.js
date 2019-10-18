@@ -1,6 +1,5 @@
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import { Colors } from '../../../../helpers/Constants';
-import { Dimensions } from 'react-native';
 
 export const ProfileScreenStyles = StyleSheet.create({
     container: {

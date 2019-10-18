@@ -3,7 +3,7 @@ import { FlatList, ScrollView } from 'react-native';
 import DbHandler from '../../helpers/DbHandler';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
-import CustomListItem from "../../helpers/CustomListItem";
+import CustomListItem from "../../helpers/shared_components/CustomListItem";
 import Barcode from '../../helpers/Barcode';
 import CallbacksAndParams from '../../helpers/CallbacksAndParams';
 import { Colors, StringConcatenations } from '../../helpers/Constants';

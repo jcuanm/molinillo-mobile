@@ -4,7 +4,6 @@ import ScannerScreen from '../../screens/Scanner/ScannerScreen';
 import DetailScreen from '../../screens/Detail/DetailScreen';
 import AddChocolateScreen from '../../screens/AddChocolate/AddChocolateScreen';
 import MyChocolatesScreen from '../../screens/MyChocolates/MyChocolatesScreen';
-import RatingsScreen from '../../screens/Ratings/RatingsScreen';
 import AboutScreen from '../../screens/About/AboutScreen';
 import ContactScreen from '../../screens/Contact/ContactScreen';
 
@@ -14,7 +13,6 @@ export default createStackNavigator({
     MyChocolatesScreen,
     DetailScreen,
     AddChocolateScreen,
-    RatingsScreen,
     AboutScreen,
     ContactScreen
 });

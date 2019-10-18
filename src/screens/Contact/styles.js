@@ -1,5 +1,4 @@
-import { Dimensions } from 'react-native';
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import { Colors } from '../../helpers/Constants';
 
 export const ContactScreenStyles = StyleSheet.create({

@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
 import { 
-  Dimensions,
   StyleSheet, 
   Text, 
   View,
   Alert
 } from 'react-native';
 import { StringConcatenations, Warnings } from '../../helpers/Constants';
-import { Header } from 'react-navigation';
 import * as Permissions from 'expo-permissions';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import DbHandler from '../../helpers/DbHandler';
 import CallbacksAndParams from '../../helpers/CallbacksAndParams';
 import Barcode from '../../helpers/Barcode';
 import { Colors } from '../../helpers/Constants';
+import { ScannerScreenStyles } from './styles';
 
 export default class ScannerScreen extends Component {
   constructor(props) {
@@ -32,12 +31,12 @@ export default class ScannerScreen extends Component {
   }
 
   static navigationOptions = ({ navigation }) => ({
-    headerTintColor: 'white',
+    headerTintColor: Colors.Secondary,
     headerStyle: {
       backgroundColor: Colors.Primary,
     },
     headerTitleStyle: {
-      color: 'white'
+      color: Colors.Secondary
     },
     title: "Scanner",
   })
@@ -97,18 +96,13 @@ export default class ScannerScreen extends Component {
   render() {
     const { hasCameraPermission } = this.state;
     if (hasCameraPermission === null) {
-      return <Text style={{fontWeight:'bold', textAlign:'center'}}>Requesting for camera permission</Text>;
+      return <Text style={ScannerScreenStyles.permissionText}>Requesting for camera permission</Text>;
     }
     if (hasCameraPermission === false) {
-      return <Text style={{fontWeight:'bold', textAlign:'center'}}>No access to camera</Text>;
+      return <Text style={ScannerScreenStyles.permissionText}>No access to camera</Text>;
     }
     return (
-      <View 
-        style={{ 
-          width: Dimensions.get('window').width,
-          height: Dimensions.get('window').height - Header.HEIGHT,
-        }}
-      >
+      <View style={ScannerScreenStyles.container} >
         <BarCodeScanner
           onBarCodeScanned={this.state.handleBarcodeScanned}
           barCodeTypes={[
@@ -127,45 +121,17 @@ export default class ScannerScreen extends Component {
           style={StyleSheet.absoluteFill}
         />
 
-          <View style={styles.layerTop} />
-          <View style={styles.layerCenter}>
-            <View style={styles.layerLeft} />
-            <View style={styles.focused} />
-            <View style={styles.layerRight} />
-          </View>
-          <View style={styles.layerBottom} >
-            <Text style={{ color: 'white', fontSize: 25 }}> Scan the chocolate's barcode </Text>
-          </View>
+        {/* Camera Overlay */}
+        <View style={ScannerScreenStyles.overlayTop} />
+        <View style={ScannerScreenStyles.overlayCenter}>
+          <View style={ScannerScreenStyles.overlayLeft} />
+          <View style={ScannerScreenStyles.overlayFocused} />
+          <View style={ScannerScreenStyles.overlayRight} />
+        </View>
+        <View style={ScannerScreenStyles.overlayBottom} >
+          <Text style={ScannerScreenStyles.overlayText}> Scan the chocolate's barcode </Text>
+        </View>
       </View>
     );
   }
 }
-
-const opacity = 'rgba(0, 0, 0, .6)';
-const styles = StyleSheet.create({
-  layerTop: {
-    flex: 2,
-    backgroundColor: opacity
-  },
-  layerCenter: {
-    flex: 1,
-    flexDirection: 'row'
-  },
-  layerLeft: {
-    flex: 1,
-    backgroundColor: opacity
-  },
-  focused: {
-    flex: 10
-  },
-  layerRight: {
-    flex: 1,
-    backgroundColor: opacity
-  },
-  layerBottom: {
-    flex: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: opacity
-  },
-});

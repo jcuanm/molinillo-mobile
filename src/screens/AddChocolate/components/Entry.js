@@ -4,7 +4,6 @@ import {
   View, 
   Text,
   TouchableOpacity,
-  Dimensions,
  } from 'react-native';
 import DialogInput from 'react-native-dialog-input';
 import Modal from 'react-native-modal';
