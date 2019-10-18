@@ -44,7 +44,7 @@ export const ProfileNavTabStyles = StyleSheet.create({
     },
     text: {
         fontWeight:'bold', 
-        color:"white", 
+        color:Colors.Secondary, 
         paddingLeft:15
     }
 });
