@@ -1,7 +1,7 @@
 import React from 'react';
 import { FlatList, View } from 'react-native';
 import PropTypes from 'prop-types';
-import CustomListItem from "../../../../../helpers/CustomListItem";
+import CustomListItem from "../../../../../helpers/shared_components/CustomListItem";
 import { connectInfiniteHits } from 'react-instantsearch-native';
 import { InfinitHitsStyles } from '../styles';
 

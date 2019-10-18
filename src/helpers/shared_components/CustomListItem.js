@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { 
-    Dimensions,
     Image,
     Text,
     TouchableOpacity,
@@ -8,8 +7,9 @@ import {
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
-import DbHandler from './DbHandler';
-import Barcode from './Barcode';
+import DbHandler from '../DbHandler';
+import Barcode from '../Barcode';
+import { CustomListItemStyles } from './styles';
 
 export default class CustomListItem extends Component {
     constructor(props){
@@ -35,7 +35,7 @@ export default class CustomListItem extends Component {
 
         return(
             <TouchableOpacity
-                style={{paddingBottom: 10}}
+                style={CustomListItemStyles.container}
                 onPress={ () => { 
                     navigate(
                         "DetailScreen",
@@ -47,17 +47,17 @@ export default class CustomListItem extends Component {
                 }}
             >
                 <Image 
-                    style={{width: Dimensions.get('window').width, height: 200}}
+                    style={CustomListItemStyles.listingImage}
                     source={{ uri : imageDownloadUrl }}
                 />
                 <ListItem
-                    title={<Text style={{fontWeight:"bold"}}>{ producerName }</Text>}
+                    title={<Text style={CustomListItemStyles.listingTitle}>{ producerName }</Text>}
                     subtitle={
                         <View>
                             <Text>{ confectionName }</Text>
                             { 
                                 sumRatings && numStarRatings ? 
-                                    <Text style={{fontSize: 12, fontWeight: 'bold'}}> 
+                                    <Text style={CustomListItemStyles.listingSubtitle}> 
                                         <Ionicons name="md-star" size={15} color="gold" />   
                                         {(sumRatings / numStarRatings) ? (sumRatings / numStarRatings).toFixed(1) : " "}
                                     </Text>
