@@ -1,32 +1,15 @@
 import React from 'react';
-import { 
-  FlatList,
-  StyleSheet, 
-  View, 
-} from 'react-native';
+import { FlatList, View } from 'react-native';
 import PropTypes from 'prop-types';
 import CustomListItem from "../../../../../helpers/CustomListItem";
 import { connectInfiniteHits } from 'react-instantsearch-native';
-
-const styles = StyleSheet.create({
-  separator: {
-    borderBottomWidth: 1,
-    borderColor: '#ddd',
-  },
-  item: {
-    padding: 10,
-    flexDirection: 'column',
-  },
-  titleText: {
-    fontWeight: 'bold',
-  },
-});
+import { InfinitHitsStyles } from '../styles';
 
 const InfiniteHits = ({ hits, hasMore, refine, navigate }) => (
   <FlatList
     data={hits}
     keyExtractor={item => item.objectID}
-    ItemSeparatorComponent={() => <View style={styles.separator} />}
+    ItemSeparatorComponent={() => <View style={InfinitHitsStyles.separator} />}
     onEndReached={() => hasMore && refine()}
     renderItem={({ item }) => renderItem(item, navigate) }
   />

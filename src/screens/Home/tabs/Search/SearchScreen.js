@@ -12,7 +12,7 @@ import SearchBox from './components/SearchBox';
 import InfiniteHits from './components/InfiniteHits';
 import algoliasearch from 'algoliasearch/lite';
 import { Colors } from '../../../../helpers/Constants';
-import styles from '../../../../styles';
+import { SearchScreenStyles } from './styles';
 
 export default class SearchScreen extends Component {
   constructor(props){
@@ -21,7 +21,7 @@ export default class SearchScreen extends Component {
     this.root = {
       Root: View,
       props: {
-        style: { flex: 1 },
+        style: SearchScreenStyles.instantSearchBar,
       },
     };
   }
@@ -43,12 +43,12 @@ export default class SearchScreen extends Component {
       backgroundColor: Colors.Primary,
     },
     headerTitleStyle: {
-      color: 'white'
+      color: Colors.Secondary
     },
     headerLeft: (
-      <TouchableOpacity style={styles.headerButton} >
+      <TouchableOpacity style={SearchScreenStyles.headerButton} >
         <Image 
-          style={{height:40, width:40}}
+          style={SearchScreenStyles.headerImage}
           source={require('../../../../../assets/images/logo.png')}
         />
       </TouchableOpacity>
@@ -57,7 +57,7 @@ export default class SearchScreen extends Component {
 
   render(){
     return(
-      <View style={{flex:1}} >
+      <View style={SearchScreenStyles.instantSearchBarContainer} >
         <InstantSearch
           searchClient={this.algoliaSearchClient}
           indexName={AlgoliaSearchConfig.indexName}
@@ -67,7 +67,7 @@ export default class SearchScreen extends Component {
           <InfiniteHits navigate={this.props.navigation.navigate}/>
           <ActionButton
             buttonColor={Colors.Primary}
-            icon={<Ionicons name="md-camera" size={25} color="white" />}
+            icon={<Ionicons name="md-camera" size={25} color={Colors.Secondary} />}
             onPress={() => { this.props.navigation.navigate("ScannerScreen") }}
           />
         </InstantSearch> 
