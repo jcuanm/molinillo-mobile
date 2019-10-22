@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
-import { FlatList, ScrollView } from 'react-native';
+import { 
+    FlatList, 
+    ScrollView, 
+    View 
+} from 'react-native';
+import ActionButton from 'react-native-action-button';
 import DbHandler from '../../../../helpers/DbHandler';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
+import { Ionicons } from '@expo/vector-icons';
 import CustomListItem from "../../../../helpers/shared_components/CustomListItem";
 import Barcode from '../../../../helpers/Barcode';
 import CallbacksAndParams from '../../../../helpers/CallbacksAndParams';
 import { Colors, StringConcatenations } from '../../../../helpers/Constants';
+import { MyChocolatesScreenStyles } from './styles';
 
 export default class MyChocolatesScreen extends Component {
     constructor(props) {
@@ -82,7 +89,7 @@ export default class MyChocolatesScreen extends Component {
         let results = resultsAndParams.results.data();
 
         myChocolates.push({key : results});
-        
+
         this.setState({
             myChocolates: myChocolates
         });
@@ -102,14 +109,21 @@ export default class MyChocolatesScreen extends Component {
     render(){
         const { myChocolates } = this.state;
             return(
-                <ScrollView>
-                    <FlatList
-                        data={myChocolates}
-                        scrollEnabled={true}
-                        renderItem={({_, index}) => this.renderItem(myChocolates[index].key)}
-                        keyExtractor={(_, index) => index.toString()}
+                <View style={MyChocolatesScreenStyles.container}>
+                    <ScrollView>
+                        <FlatList
+                            data={myChocolates}
+                            scrollEnabled={true}
+                            renderItem={({_, index}) => this.renderItem(myChocolates[index].key)}
+                            keyExtractor={(_, index) => index.toString()}
+                        /> 
+                    </ScrollView>
+                    <ActionButton
+                        buttonColor={Colors.Primary}
+                        icon={<Ionicons name="md-camera" size={25} color={Colors.Secondary} />}
+                        onPress={() => { this.props.navigation.navigate("ScannerScreen") }}
                     />
-                </ScrollView>
+                </View>
             );
     }
 

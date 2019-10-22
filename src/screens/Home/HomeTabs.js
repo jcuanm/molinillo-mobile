@@ -1,5 +1,5 @@
 import React from 'react';
-import { createMaterialBottomTabNavigator, NavigationActions } from 'react-navigation-material-bottom-tabs';
+import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import SearchStack from '../../navigation/home_screen_stacks/SearchStack';
 import ProfileStack from '../../navigation/home_screen_stacks/ProfileStack';
 import MyChocolatesStack from '../../navigation/home_screen_stacks/MyChocolatesStack';
@@ -32,10 +32,7 @@ export default HomeTabs = createMaterialBottomTabNavigator(
         tabLabel: "My Chocolates",
         tabBarIcon: ({ tintColor }) => (    
           <Ionicons color={tintColor} size={28} name='md-heart'/>  
-        ),  
-        tabBarOnPress: ({navigation, defaultHandler}) => {
-          defaultHandler();
-        }
+        )
       }
     },
     Profile: { 
