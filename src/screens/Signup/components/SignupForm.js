@@ -65,11 +65,11 @@ export default class SignupForm extends Component {
           title="Signup"
           color={Platform.OS === 'ios' ? Colors.Secondary : 'rgba(255, 255,255,0.2)'}  
           onPress={() => this.dbHandler.signupUser({
-              email : this.state.email, 
-              displayName : this.state.displayName,
-              password : this.state.password, 
-              passwordConfirm : this.state.passwordConfirm
-            })} 
+            email : this.state.email, 
+            displayName : this.state.displayName,
+            password : this.state.password, 
+            passwordConfirm : this.state.passwordConfirm
+          })} 
         />
 
         <Text onPress={() => this.openWebpage(PrivacyPolicyUrl)} style={SignupFormStyles.privacyPolicyText}>  

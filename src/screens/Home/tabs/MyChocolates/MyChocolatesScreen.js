@@ -1,18 +1,22 @@
 import React, { Component } from 'react';
 import { FlatList, ScrollView } from 'react-native';
-import DbHandler from '../../helpers/DbHandler';
+import DbHandler from '../../../../helpers/DbHandler';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
-import CustomListItem from "../../helpers/shared_components/CustomListItem";
-import Barcode from '../../helpers/Barcode';
-import CallbacksAndParams from '../../helpers/CallbacksAndParams';
-import { Colors, StringConcatenations } from '../../helpers/Constants';
+import CustomListItem from "../../../../helpers/shared_components/CustomListItem";
+import Barcode from '../../../../helpers/Barcode';
+import CallbacksAndParams from '../../../../helpers/CallbacksAndParams';
+import { Colors, StringConcatenations } from '../../../../helpers/Constants';
 
 export default class MyChocolatesScreen extends Component {
     constructor(props) {
         super(props);
         this.dbHandler = new DbHandler();
         this.pushToMyChocolates = this.pushToMyChocolates.bind(this); 
+
+        props.navigation.setParams({
+            onTabFocus: this.handleTabFocus
+        });
 
         this.state = {
             myChocolates: []
@@ -23,6 +27,17 @@ export default class MyChocolatesScreen extends Component {
         this.getMyChocolates();
     }
 
+    componentWillUnmount(){
+        this.didFocusListener.remove();
+    }
+
+    componentDidMount() {
+        this.didFocusListener = this.props.navigation.addListener(
+          'didFocus',
+          () => { this.getMyChocolates() },
+        );
+    }
+    
     getMyChocolates(){
         let myChocolatesRef = firebase.firestore().collection("MyChocolates");
         let query = myChocolatesRef.where("userId", "==", this.dbHandler.currUser.uid);
@@ -31,26 +46,31 @@ export default class MyChocolatesScreen extends Component {
             .get()
             .then(results => {
                 let myChocolates = [];
-                results.forEach(doc => {
-                    const {
-                        barcodeType, 
-                        barcodeData, 
-                        uuid
-                    } = doc.data();
-
-                    let currBarcode = new Barcode(barcodeType, barcodeData);
-                    let barcodeTypeRef = this.dbHandler.getRef(
-                        StringConcatenations.Prefix, 
-                        currBarcode,
-                        uuid);
-                    let barcodeTypeCallbacksAndParams = new CallbacksAndParams(
-                        myChocolates,
-                        this.pushToMyChocolates,
-                        function(){ console.log("Could not find chocolate"); }
-                    );
-                    
-                    this.dbHandler.getData(barcodeTypeRef, barcodeTypeCallbacksAndParams);
-                });
+                if(results.size > 0){
+                    results.forEach(doc => {
+                        const {
+                            barcodeType, 
+                            barcodeData, 
+                            uuid
+                        } = doc.data();
+    
+                        let currBarcode = new Barcode(barcodeType, barcodeData);
+                        let barcodeTypeRef = this.dbHandler.getRef(
+                            StringConcatenations.Prefix, 
+                            currBarcode,
+                            uuid);
+                        let barcodeTypeCallbacksAndParams = new CallbacksAndParams(
+                            myChocolates,
+                            this.pushToMyChocolates,
+                            function(){ console.log("Could not find chocolate"); }
+                        );
+                        
+                        this.dbHandler.getData(barcodeTypeRef, barcodeTypeCallbacksAndParams);
+                    }); 
+                }
+                else{
+                    this.setState({myChocolates: []});
+                }  
             })
             .catch(error => {
                 console.log(error);
@@ -62,21 +82,21 @@ export default class MyChocolatesScreen extends Component {
         let results = resultsAndParams.results.data();
 
         myChocolates.push({key : results});
-
+        
         this.setState({
             myChocolates: myChocolates
         });
     }
 
     static navigationOptions = ({ navigation }) => ({
-        headerTintColor: 'white',
+        headerTintColor: Colors.Secondary,
         headerStyle: {
             backgroundColor: Colors.Primary,
         },
         headerTitleStyle: {
-            color: 'white'
+            color: Colors.Secondary
         },
-        title: "My Chocolates",
+        title: "My Chocolates"
     })
 
     render(){
