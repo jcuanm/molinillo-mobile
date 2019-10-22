@@ -3,13 +3,13 @@ import { FlatList, View } from 'react-native';
 import PropTypes from 'prop-types';
 import CustomListItem from "../../../../../helpers/shared_components/CustomListItem";
 import { connectInfiniteHits } from 'react-instantsearch-native';
-import { InfinitHitsStyles } from '../styles';
+import { InfiniteHitsStyles } from '../styles';
 
 const InfiniteHits = ({ hits, hasMore, refine, navigate }) => (
   <FlatList
     data={hits}
     keyExtractor={item => item.objectID}
-    ItemSeparatorComponent={() => <View style={InfinitHitsStyles.separator} />}
+    ItemSeparatorComponent={() => <View style={InfiniteHitsStyles.separator} />}
     onEndReached={() => hasMore && refine()}
     renderItem={({ item }) => renderItem(item, navigate) }
   />

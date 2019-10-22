@@ -10,6 +10,9 @@ npm-debug.*
 # Contain secrets to be passed to Google Cloud
 src/scripts/upload_chocolates/key_files
 
+# Contains vendor images
+src/scripts/upload_chocolates/images
+
 # Contains the most current Android and iOS builds
 builds/ 
 

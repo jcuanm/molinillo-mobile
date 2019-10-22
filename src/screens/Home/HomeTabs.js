@@ -1,7 +1,8 @@
 import React from 'react';
-import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
+import { createMaterialBottomTabNavigator, NavigationActions } from 'react-navigation-material-bottom-tabs';
 import SearchStack from '../../navigation/home_screen_stacks/SearchStack';
 import ProfileStack from '../../navigation/home_screen_stacks/ProfileStack';
+import MyChocolatesStack from '../../navigation/home_screen_stacks/MyChocolatesStack';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../helpers/Constants';
 
@@ -12,8 +13,29 @@ export default HomeTabs = createMaterialBottomTabNavigator(
       navigationOptions : {
         tabLabel: "Search",
         tabBarIcon: ({ tintColor }) => (    
-            <Ionicons color={tintColor} size={28} name='md-search'/>  
-          ),  
+          <Ionicons color={tintColor} size={28} name='md-search'/>  
+        ),  
+      }
+    },
+    Cart: { 
+      screen : SearchStack,
+      navigationOptions : {
+        tabLabel: "Cart",
+        tabBarIcon: ({ tintColor }) => (    
+          <Ionicons color={tintColor} size={28} name='md-cart'/>  
+        ),  
+      }
+    },
+    MyChocolates: { 
+      screen : MyChocolatesStack,
+      navigationOptions : {
+        tabLabel: "My Chocolates",
+        tabBarIcon: ({ tintColor }) => (    
+          <Ionicons color={tintColor} size={28} name='md-heart'/>  
+        ),  
+        tabBarOnPress: ({navigation, defaultHandler}) => {
+          defaultHandler();
+        }
       }
     },
     Profile: { 
@@ -21,8 +43,8 @@ export default HomeTabs = createMaterialBottomTabNavigator(
       navigationOptions : {
         tabLabel: "Profile",
         tabBarIcon: ({ tintColor }) => (    
-            <Ionicons color={tintColor} size={28} name='md-person'/>  
-          ),  
+          <Ionicons color={tintColor} size={28} name='md-person'/>  
+        ),  
       }
     },
   },
@@ -32,6 +54,7 @@ export default HomeTabs = createMaterialBottomTabNavigator(
     barStyle: {
       backgroundColor: Colors.Primary
     },
-    labeled: false, 
+    labeled: false,
+    lazy: false,
   },
 );

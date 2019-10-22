@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet,
   Text,
   View,
   TouchableOpacity
@@ -19,23 +18,3 @@ export default class Signin extends Component {
 		);
 	}
 }
-
-const styles = StyleSheet.create({
-  textContent : {
-  	flexGrow: 1,
-    alignItems: 'flex-end',
-    justifyContent : 'center',
-    paddingVertical: 16,
-    flexDirection: 'row'
-  },
-  text: {
-  	color: 'rgba(255,255,255,0.6)',
-  	fontSize: 16
-  },
-  button: {
-  	color: '#ffffff',
-  	fontSize: 16,
-  	fontWeight: '500'
-  }
-});
-
