@@ -60,7 +60,7 @@ export const CacaoStatsStyles = StyleSheet.create({
     },
     unknownText: {
         textAlign:'center', 
-        fontSize: 10
+        fontSize: 14
     }
 });
 

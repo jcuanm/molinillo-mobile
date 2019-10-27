@@ -23,7 +23,7 @@ export default class CacaoStats extends Component {
                 </View>
 
                 <View style={CacaoStatsStyles.percentageBlock}>	
-                    { percentage ? this.renderPercentageFound(percentage) : this.renderPercentageNotFound()}
+                    { percentage != "Unknown" ? this.renderPercentageFound(percentage) : this.renderPercentageNotFound()}
                 </View>
             </View>
 		);

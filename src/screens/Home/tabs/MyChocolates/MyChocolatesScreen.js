@@ -30,14 +30,6 @@ export default class MyChocolatesScreen extends Component {
         }
     }
 
-    componentWillMount(){
-        this.getMyChocolates();
-    }
-
-    componentWillUnmount(){
-        this.didFocusListener.remove();
-    }
-
     componentDidMount() {
         this.didFocusListener = this.props.navigation.addListener(
           'didFocus',
@@ -104,27 +96,27 @@ export default class MyChocolatesScreen extends Component {
             color: Colors.Secondary
         },
         title: "My Chocolates"
-    })
+    });
 
     render(){
         const { myChocolates } = this.state;
-            return(
-                <View style={MyChocolatesScreenStyles.container}>
-                    <ScrollView>
-                        <FlatList
-                            data={myChocolates}
-                            scrollEnabled={true}
-                            renderItem={({_, index}) => this.renderItem(myChocolates[index].key)}
-                            keyExtractor={(_, index) => index.toString()}
-                        /> 
-                    </ScrollView>
-                    <ActionButton
-                        buttonColor={Colors.Primary}
-                        icon={<Ionicons name="md-camera" size={25} color={Colors.Secondary} />}
-                        onPress={() => { this.props.navigation.navigate("ScannerScreen") }}
-                    />
-                </View>
-            );
+        return(
+            <View style={MyChocolatesScreenStyles.container}>
+                <ScrollView>
+                    <FlatList
+                        data={myChocolates}
+                        scrollEnabled={true}
+                        renderItem={({_, index}) => this.renderItem(myChocolates[index].key)}
+                        keyExtractor={(_, index) => index.toString()}
+                    /> 
+                </ScrollView>
+                <ActionButton
+                    buttonColor={Colors.Primary}
+                    icon={<Ionicons name="md-camera" size={25} color={Colors.Secondary} />}
+                    onPress={() => { this.props.navigation.navigate("ScannerScreen") }}
+                />
+            </View>
+        );
     }
 
     renderItem(item){

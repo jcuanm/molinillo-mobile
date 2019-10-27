@@ -73,7 +73,7 @@ export default class DataEntries extends Component {
     let possibleBarcodeTypeRef = callbacksAndParams.params.possibleBarcodeTypeRef;
     let inputValues = callbacksAndParams.params.inputValues;
 
-    await this.uploadImage(inputValues["imageDownloadUrl"], "Possible_");
+    await this.uploadImage(inputValues["imageDownloadUrl"]);
 
     possibleBarcodeTypeRef.set(inputValues);
     
@@ -96,10 +96,10 @@ export default class DataEntries extends Component {
 
   // This function was copied from the following link:
   // https://github.com/expo/expo/issues/2402
-  async uploadImage(uri, verificationId){
+  async uploadImage(uri){
     const blob = await this.getBlob(uri);
     const { barcode } = this.props;
-    let filename = verificationId + barcode.type + "/" + barcode.data;
+    let filename = "Possible_" + barcode.type + "/" + barcode.data;
     let ref = firebase
       .storage()
       .ref()
@@ -212,7 +212,7 @@ export default class DataEntries extends Component {
           />
         </ScrollView>
 
-        <View style={{padding: 10}}>
+        <View style={DataEntriesStyles.submitButton}>
           <Button
             title="Submit"
             onPress={() => this.checkIfShouldSubmit(this.inputValues)}

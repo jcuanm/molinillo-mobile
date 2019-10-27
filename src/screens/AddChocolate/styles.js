@@ -18,6 +18,8 @@ export const DataEntriesStyles = StyleSheet.create({
     }
 });
 
+
+const imageAreaHeight = Dimensions.get('window').height/3;
 export const EntryStyles = StyleSheet.create({
     border: {
         borderBottomWidth: 0.5, 
@@ -26,10 +28,15 @@ export const EntryStyles = StyleSheet.create({
     container: {
         justifyContent: 'center', 
         width: Dimensions.get('window').width, 
-        height: 50, 
         backgroundColor: Colors.Secondary 
     },
     displayName: {
+        textAlign: 'left', 
+        paddingLeft: 10,
+        fontWeight:'bold',
+        fontSize:15
+    },
+    displayValue: {
         textAlign: 'left', 
         paddingLeft: 10
     },
@@ -43,6 +50,53 @@ export const EntryStyles = StyleSheet.create({
     popupFlatlistContainer: {
         width: 300
     },
+    popupTextInputContainer: {
+        backgroundColor:"white", 
+        width: 330, 
+        height: 190, 
+        alignContent:"center", 
+        justifyContent:"center"
+    },
+    popupTextInputTitle: {
+        margin:5, 
+        fontSize: 14, 
+        fontWeight:"bold",
+        flex:1,
+        justifyContent:"flex-start"
+    },
+    popupTextInputArea: {
+        backgroundColor:"white", 
+        marginLeft:5, 
+        height: 120, 
+        width:320, 
+        borderColor: 'gray', 
+        borderWidth: 1
+    },
+    popupInputTextButton: {
+        backgroundColor:"white", 
+        justifyContent: 'center', 
+        height: 30, 
+        width:155, 
+        margin: 5
+    },
+    popupCancelButtonText: {
+        textAlign:"center", 
+        color: "red"
+    },
+    popupSubmitButtonText: {
+        textAlign:"center", 
+        color: Colors.Primary
+    },
+    popupSubmitButton: {
+        backgroundColor:"white", 
+        justifyContent: 'center', 
+        height: 30, 
+        width:155, 
+        margin: 5
+    },
+    popupButtonContainer: {
+        flexDirection:"row"
+    },
     popupEntriesBackground: {
         backgroundColor: Colors.Secondary, 
         borderBottomWidth: 0.5, 
@@ -51,6 +105,15 @@ export const EntryStyles = StyleSheet.create({
     popupEntriesText: {
         textAlign:'center', 
         fontSize: 20
+    },
+    popupInputTextHeader: {
+        flexDirection: "row"
+    },
+    refreshIcon: {
+        alignItems:"center", 
+        margin: 5, 
+        flex: 1, 
+        justifyContent: "flex-end"
     }
 });
 
@@ -59,7 +122,7 @@ export const ImageAreaStyles = StyleSheet.create({
         justifyContent: 'center', 
         alignItems: 'center', 
         width: Dimensions.get('window').width, 
-        height: 150, 
+        height: imageAreaHeight, 
         backgroundColor: 'rgba(0,0,0,.3)'
     }, 
     text: {
@@ -67,6 +130,6 @@ export const ImageAreaStyles = StyleSheet.create({
     },
     image: {
         width: Dimensions.get('window').width, 
-        height: 250
+        height: imageAreaHeight
     }
 });

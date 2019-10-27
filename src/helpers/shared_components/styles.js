@@ -6,7 +6,7 @@ export const CustomListItemStyles = StyleSheet.create({
     },
     listingImage: {
         width: Dimensions.get('window').width, 
-        height: 200
+        height: Dimensions.get('window').height/3
     },
     listingTitle: {
         fontWeight:"bold"
