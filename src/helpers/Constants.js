@@ -35,7 +35,7 @@ export const Months = [
 export const OurStoryText = 
     `\"During my senior year at Harvard University, I took Professor Carla Martin’s Chocolate Class: Chocolate, Culture, and Politics of Food, which forever changed the way I see fine chocolate. I learned not only about the wonders of chocolate, such as its ancient and rich history and the nuanced ways of appraising it, but also about the ugly truths hiding within the cacao industry’s supply chain today: child labor, wage-shortening, and other forms of exploitation and injustice. As a consumer, I wanted to become more intentional about where I purchased chocolate, but didn’t know how – especially when these problems felt so far away in countries such as Mexico, Coitre Voir, and Nigeria.
 
-So I set out to empower myself (and others) to make more informed decisions about the chocolate we consume, and this was the beginning of Molinillo. At Molinillo, our mission is to create transparency around cleanly sourced chocolate and a fairer world for the cacao farmers and workers who make our lives more delicious.\"`
+So I set out to empower myself (and others) to make more informed decisions about the chocolate we consume, and this was the beginning of Molinillo. At Molinillo, our mission is to create transparency around ethically sourced chocolate and a fairer world for the cacao farmers and workers who make our lives more delicious.\"`
 
 export const CountryCodeMappings = {
     "AFGHANISTAN": "AF",

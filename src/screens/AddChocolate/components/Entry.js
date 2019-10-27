@@ -96,6 +96,7 @@ export default class Entry extends Component {
     return(
       <Modal 
         onBackdropPress={() => this.toggleDialogBox()}
+        style={{alignSelf:"center"}}
         isVisible={this.state.isDialogVisible}
       >
         <View style={EntryStyles.popupTextInputContainer}>
