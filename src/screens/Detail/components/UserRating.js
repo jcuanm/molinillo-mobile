@@ -1,10 +1,23 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { 
+    View, 
+    TextInput,
+    Text,
+    TouchableOpacity
+} from 'react-native';
 import StarRating from 'react-native-star-rating';
-import DialogInput from 'react-native-dialog-input';
+import Modal from 'react-native-modal';
+import { Ionicons } from '@expo/vector-icons';
 import { UserRatingStyles } from '../styles';
 
 export default class UserRating extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+          dialogBoxText: ''
+        }
+    }
+
 	render() {
         const { 
             maxStars,
@@ -17,6 +30,8 @@ export default class UserRating extends Component {
             toggleDialogBox
          } = this.props;
 
+         const { dialogBoxText } = this.state;
+
 		return (
 			<View style={UserRatingStyles.container}>
                 <StarRating
@@ -28,16 +43,50 @@ export default class UserRating extends Component {
                     fullStarColor={"gold"}
                 />
                 <Text style={UserRatingStyles.subtext}>Tap to rate</Text>
-                <DialogInput 
-                    isDialogVisible={isDialogVisible}
-                    title={"What did you think about this chocolate?"}
-                    submitInput={ inputText => {
-                        submitComment(inputText); 
-                        toggleDialogBox(); 
-                    }}
-                    cancelText={"No thanks"}
-                    closeDialog={ () => { toggleDialogBox() }}>
-                </DialogInput>
+
+                <Modal 
+                    onBackdropPress={() => toggleDialogBox()}
+                    style={{alignSelf:"center"}}
+                    isVisible={isDialogVisible}
+                >
+                    <View style={UserRatingStyles.popupTextInputContainer}>
+
+                        {/* Header */}
+                        <View style={UserRatingStyles.popupInputTextHeader}>
+                            <Text style={UserRatingStyles.popupTextInputTitle}>Send your thoughts!</Text>
+                            <TouchableOpacity 
+                            onPress={() => this.setState({dialogBoxText: ''}) } 
+                            style={UserRatingStyles.refreshIcon}
+                            >
+                            <Ionicons name="md-refresh" size={20} color={"white"} />  
+                            </TouchableOpacity>
+                        </View>
+
+                        {/* Text Input Area */}
+                        <TextInput
+                            style={UserRatingStyles.popupTextInputArea}
+                            onChangeText={text => this.setState({dialogBoxText: text})}
+                            value={dialogBoxText}
+                            multiline={true}
+                        />
+
+                        {/* Buttons */}
+                        <View style={UserRatingStyles.popupButtonContainer}>
+                            <TouchableOpacity onPress={() => toggleDialogBox()} style={UserRatingStyles.popupInputTextButton}>
+                                <Text style={UserRatingStyles.popupCancelButtonText}>Cancel</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity 
+                                onPress={() => {
+                                    submitComment(dialogBoxText); 
+                                    toggleDialogBox(); 
+                                }} 
+                                style={UserRatingStyles.popupInputTextButton}
+                            >
+                                <Text style={UserRatingStyles.popupSubmitButtonText}>Submit</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
             </View>
 		);
 	}

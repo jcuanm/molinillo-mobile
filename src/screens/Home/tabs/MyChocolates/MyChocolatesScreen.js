@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { 
     FlatList, 
+    Image,
     ScrollView, 
+    TouchableOpacity,
     View 
 } from 'react-native';
 import ActionButton from 'react-native-action-button';
@@ -88,15 +90,25 @@ export default class MyChocolatesScreen extends Component {
     }
 
     static navigationOptions = ({ navigation }) => ({
-        headerTintColor: Colors.Secondary,
+        title: "My Chocolates",
         headerStyle: {
             backgroundColor: Colors.Primary,
         },
         headerTitleStyle: {
             color: Colors.Secondary
         },
-        title: "My Chocolates"
-    });
+        headerLeft: (
+            <TouchableOpacity
+                onPress={() => navigation.navigate("SearchScreen")} 
+                style={MyChocolatesScreenStyles.headerButton} 
+            >
+                <Image 
+                    style={MyChocolatesScreenStyles.headerImage}
+                    source={require('../../../../../assets/images/logo.png')}
+                />
+            </TouchableOpacity>
+        ),
+    })
 
     render(){
         const { myChocolates } = this.state;

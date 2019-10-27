@@ -64,14 +64,16 @@ export const FeedbackStyles = StyleSheet.create({
         width: 330, 
         height: 190, 
         alignContent:"center", 
-        justifyContent:"center"
+        justifyContent:"center",
+        backgroundColor: Colors.Primary
     },
     popupTextInputTitle: {
         margin:5, 
         fontSize: 14, 
         fontWeight:"bold",
         flex:1,
-        justifyContent:"flex-start"
+        justifyContent:"flex-start",
+        color: "white"
     },
     popupTextInputArea: {
         backgroundColor:"white", 

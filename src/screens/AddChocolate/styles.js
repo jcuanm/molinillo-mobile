@@ -52,7 +52,7 @@ export const EntryStyles = StyleSheet.create({
         width: 300
     },
     popupTextInputContainer: {
-        backgroundColor:"white", 
+        backgroundColor:Colors.Primary, 
         width: 330, 
         height: 190, 
         alignContent:"center", 
@@ -63,7 +63,8 @@ export const EntryStyles = StyleSheet.create({
         fontSize: 14, 
         fontWeight:"bold",
         flex:1,
-        justifyContent:"flex-start"
+        justifyContent:"flex-start",
+        color:"white"
     },
     popupTextInputArea: {
         backgroundColor:"white", 
