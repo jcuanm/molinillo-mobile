@@ -7,7 +7,7 @@ import {
  } from 'react-native';
 import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
-import { dialogOptionsDatasets, Colors } from '../../../helpers/Constants';
+import { dialogOptionsDatasets } from '../../../helpers/Constants';
 import { EntryStyles } from '../styles';
 import { TextInput } from 'react-native-paper';
 
@@ -108,7 +108,7 @@ export default class Entry extends Component {
               onPress={() => this.setState({dialogBoxText: ''}) } 
               style={EntryStyles.refreshIcon}
             >
-              <Ionicons name="md-refresh" size={20} color={Colors.Primary} />  
+              <Ionicons name="md-refresh" size={20} color={"white"} />  
             </TouchableOpacity>
           </View>
 

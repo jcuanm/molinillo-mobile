@@ -8,10 +8,8 @@ import {
  } from 'react-native';
  import Modal from 'react-native-modal';
  import { Ionicons } from '@expo/vector-icons';
- import DialogInput from 'react-native-dialog-input';
  import DbHandler from '../../../../../helpers/DbHandler';
  import { ProfileNavTabStyles, FeedbackStyles } from '../styles';
- import { Colors } from '../../../../../helpers/Constants';
 
 export default class Feedback extends Component {
     constructor(props) {
@@ -39,17 +37,18 @@ export default class Feedback extends Component {
                 >
                     <View style={FeedbackStyles.popupTextInputContainer}>
 
+                        {/* Header */}
                         <View style={FeedbackStyles.popupInputTextHeader}>
                             <Text style={FeedbackStyles.popupTextInputTitle}>{this.props.title}</Text>
                             <TouchableOpacity 
                             onPress={() => this.setState({dialogBoxText: ''}) } 
                             style={FeedbackStyles.refreshIcon}
                             >
-                            <Ionicons name="md-refresh" size={20} color={Colors.Primary} />  
+                            <Ionicons name="md-refresh" size={20} color={"white"} />  
                             </TouchableOpacity>
                         </View>
 
-                        
+                        {/* Text Input Area */}
                         <TextInput
                             style={FeedbackStyles.popupTextInputArea}
                             onChangeText={text => this.setState({dialogBoxText: text})}
@@ -57,7 +56,7 @@ export default class Feedback extends Component {
                             multiline={true}
                         />
 
-                        
+                        {/* Buttons */}
                         <View style={FeedbackStyles.popupButtonContainer}>
                             <TouchableOpacity onPress={() => this.toggleDialogBox()} style={FeedbackStyles.popupInputTextButton}>
                                 <Text style={FeedbackStyles.popupCancelButtonText}>Cancel</Text>

@@ -192,6 +192,63 @@ export const UserRatingStyles = StyleSheet.create({
         paddingTop: 5, 
         color: 'rgba(0, 0, 0, .4)', 
         textAlign: 'center'
+    },
+    popupTextInputContainer: {
+        backgroundColor:Colors.Primary, 
+        width: 330, 
+        height: 190, 
+        alignContent:"center", 
+        justifyContent:"center"
+    },
+    popupTextInputTitle: {
+        margin:5, 
+        fontSize: 14, 
+        fontWeight:"bold",
+        flex:1,
+        justifyContent:"flex-start",
+        color:"white"
+    },
+    popupTextInputArea: {
+        backgroundColor:"white", 
+        marginLeft:5, 
+        height: 120, 
+        width:320, 
+        borderColor: 'gray', 
+        borderWidth: 1
+    },
+    popupInputTextButton: {
+        backgroundColor:"white", 
+        justifyContent: 'center', 
+        height: 30, 
+        width:155, 
+        margin: 5
+    },
+    popupCancelButtonText: {
+        textAlign:"center", 
+        color: "red"
+    },
+    popupSubmitButtonText: {
+        textAlign:"center", 
+        color: Colors.Primary
+    },
+    popupSubmitButton: {
+        backgroundColor:"white", 
+        justifyContent: 'center', 
+        height: 30, 
+        width:155, 
+        margin: 5
+    },
+    popupButtonContainer: {
+        flexDirection:"row"
+    },
+    popupInputTextHeader: {
+        flexDirection: "row"
+    },
+    refreshIcon: {
+        alignItems:"center", 
+        margin: 5, 
+        flex: 1, 
+        justifyContent: "flex-end"
     }
 });
 
