@@ -116,7 +116,7 @@ export const EntryStyles = StyleSheet.create({
         margin: 5, 
         flex: 1, 
         justifyContent: "flex-end"
-    }
+    },
 });
 
 export const ImageAreaStyles = StyleSheet.create({
