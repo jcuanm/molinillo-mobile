@@ -45,7 +45,8 @@ export const EntryStyles = StyleSheet.create({
         paddingLeft: 10
     },
     popupModal: {
-        alignContent: 'center'
+        alignContent: 'center',
+        alignSelf:"center"
     },
     popupFlatlistContainer: {
         width: 300

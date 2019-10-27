@@ -2,12 +2,16 @@ import React, { Component } from 'react';
 import { 
     Alert,
     View, 
+    TextInput,
     Text, 
     TouchableOpacity,
  } from 'react-native';
+ import Modal from 'react-native-modal';
+ import { Ionicons } from '@expo/vector-icons';
  import DialogInput from 'react-native-dialog-input';
  import DbHandler from '../../../../../helpers/DbHandler';
- import { ProfileNavTabStyles } from '../styles';
+ import { ProfileNavTabStyles, FeedbackStyles } from '../styles';
+ import { Colors } from '../../../../../helpers/Constants';
 
 export default class Feedback extends Component {
     constructor(props) {
@@ -15,29 +19,61 @@ export default class Feedback extends Component {
 
         this.dbHandler = new DbHandler();
 		this.state = {
-			isDialogVisible: false,
+            isDialogVisible: false,
+            dialogBoxText: ''
 		};
     }
     
     render(){
-        const { isDialogVisible } = this.state;
+        const { isDialogVisible, dialogBoxText } = this.state;
 
         return(
             <TouchableOpacity onPress={() => this.toggleDialogBox()}>
                 <View style={ProfileNavTabStyles.container}>
                     <Text style={ProfileNavTabStyles.text}>{this.props.title}</Text> 
                 </View>
+                <Modal 
+                    onBackdropPress={() => this.toggleDialogBox()}
+                    style={FeedbackStyles.modalContainer}
+                    isVisible={isDialogVisible}
+                >
+                    <View style={FeedbackStyles.popupTextInputContainer}>
 
-                <DialogInput 
-                    isDialogVisible={isDialogVisible}
-                    title={"What do you like about Molinillo? What should we improve?"}
-                    submitInput={ inputText => {
-                        this.submitFeedback(inputText); 
-                        this.toggleDialogBox(); 
-                    }}
-                    cancelText={"Cancel"}
-                    closeDialog={ () => this.toggleDialogBox() }>
-                </DialogInput>
+                        <View style={FeedbackStyles.popupInputTextHeader}>
+                            <Text style={FeedbackStyles.popupTextInputTitle}>{this.props.title}</Text>
+                            <TouchableOpacity 
+                            onPress={() => this.setState({dialogBoxText: ''}) } 
+                            style={FeedbackStyles.refreshIcon}
+                            >
+                            <Ionicons name="md-refresh" size={20} color={Colors.Primary} />  
+                            </TouchableOpacity>
+                        </View>
+
+                        
+                        <TextInput
+                            style={FeedbackStyles.popupTextInputArea}
+                            onChangeText={text => this.setState({dialogBoxText: text})}
+                            value={dialogBoxText}
+                            multiline={true}
+                        />
+
+                        
+                        <View style={FeedbackStyles.popupButtonContainer}>
+                            <TouchableOpacity onPress={() => this.toggleDialogBox()} style={FeedbackStyles.popupInputTextButton}>
+                                <Text style={FeedbackStyles.popupCancelButtonText}>Cancel</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity 
+                                onPress={() => {
+                                    this.submitFeedback(dialogBoxText); 
+                                    this.toggleDialogBox(); 
+                                }} 
+                                style={FeedbackStyles.popupInputTextButton}
+                            >
+                                <Text style={FeedbackStyles.popupSubmitButtonText}>Submit</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
             </TouchableOpacity>   
         );
     }

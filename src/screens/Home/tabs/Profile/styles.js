@@ -54,3 +54,74 @@ export const ProfileOptionsStyles = StyleSheet.create({
         flexDirection: 'column'
     }
 });
+
+export const FeedbackStyles = StyleSheet.create({
+    modalContainer: {
+        alignSelf:"center"
+    },
+    popupTextInputContainer: {
+        backgroundColor:"white", 
+        width: 330, 
+        height: 190, 
+        alignContent:"center", 
+        justifyContent:"center"
+    },
+    popupTextInputTitle: {
+        margin:5, 
+        fontSize: 14, 
+        fontWeight:"bold",
+        flex:1,
+        justifyContent:"flex-start"
+    },
+    popupTextInputArea: {
+        backgroundColor:"white", 
+        marginLeft:5, 
+        height: 120, 
+        width:320, 
+        borderColor: 'gray', 
+        borderWidth: 1
+    },
+    popupInputTextButton: {
+        backgroundColor:"white", 
+        justifyContent: 'center', 
+        height: 30, 
+        width:155, 
+        margin: 5
+    },
+    popupCancelButtonText: {
+        textAlign:"center", 
+        color: "red"
+    },
+    popupSubmitButtonText: {
+        textAlign:"center", 
+        color: Colors.Primary
+    },
+    popupSubmitButton: {
+        backgroundColor:"white", 
+        justifyContent: 'center', 
+        height: 30, 
+        width:155, 
+        margin: 5
+    },
+    popupButtonContainer: {
+        flexDirection:"row"
+    },
+    popupEntriesBackground: {
+        backgroundColor: Colors.Secondary, 
+        borderBottomWidth: 0.5, 
+        borderBottomColor: "grey"
+    },
+    popupEntriesText: {
+        textAlign:'center', 
+        fontSize: 20
+    },
+    popupInputTextHeader: {
+        flexDirection: "row"
+    },
+    refreshIcon: {
+        alignItems:"center", 
+        margin: 5, 
+        flex: 1, 
+        justifyContent: "flex-end"
+    }
+});
