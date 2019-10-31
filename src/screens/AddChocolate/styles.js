@@ -121,14 +121,28 @@ export const EntryStyles = StyleSheet.create({
 
 export const ImageAreaStyles = StyleSheet.create({
     blankImageContainer: {
-        justifyContent: 'center', 
-        alignItems: 'center', 
         width: Dimensions.get('window').width, 
         height: imageAreaHeight, 
-        backgroundColor: 'rgba(0,0,0,.3)'
+        backgroundColor: 'rgba(0,0,0,.3)',
+        flexDirection:"row"
     }, 
-    text: {
-        fontSize: 25
+    redoParentContainer:{
+        flexDirection:"row"
+    },
+    redoIconContainer:{
+        justifyContent:"center", 
+        alignItems:"flex-end", 
+        padding: 5,
+        flex:1
+    },
+    retakeText:{
+        flex:1, 
+        padding:5
+    },
+    uploadIconContainer: {
+        justifyContent:"center", 
+        alignItems:"center", 
+        flex:1
     },
     image: {
         width: Dimensions.get('window').width, 

@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
+import { Entypo } from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { ImageAreaStyles } from '../styles';
 
@@ -18,14 +19,24 @@ export default class ImageArea extends Component {
     }
   }
 
-  getPicture = async() =>{
+  getPicture = async(imageCaptureMethod) =>{
     await Permissions.askAsync(Permissions.CAMERA);
     await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
-    let result = await ImagePicker.launchCameraAsync({
+    const params = {
       allowsEditing: true,
       aspect: [6, 5],
-    });
+    }
+
+    if(imageCaptureMethod == "image_library"){
+      var result = await ImagePicker.launchImageLibraryAsync(params);
+    }
+    else if(imageCaptureMethod == "camera"){
+      var result = await ImagePicker.launchCameraAsync(params);
+    }
+    else{ 
+      return; 
+    }
 
     if (!result.cancelled) { 
       const input = {
@@ -40,25 +51,44 @@ export default class ImageArea extends Component {
 
   renderBlankImage(){
     return(
-      <TouchableOpacity onPress={()=>{ this.getPicture(); }}>
+      <View>
         <View style={ImageAreaStyles.blankImageContainer}>
-          <Text style={ImageAreaStyles.text}>
-            <Ionicons size={25} name="md-add" color="grey"/>
-            {" " + this.props.displayName}
-          </Text> 
+          <TouchableOpacity 
+            onPress={()=>{ this.getPicture("image_library"); }} 
+            style={ImageAreaStyles.uploadIconContainer}
+          >
+            <Entypo size={45} name={"upload"} />
+          </TouchableOpacity>
+          
+          <TouchableOpacity 
+            onPress={()=>{ this.getPicture("camera"); }} 
+            style={ImageAreaStyles.uploadIconContainer}
+          >
+            <Ionicons size={45} name="md-camera" color="black"/>
+          </TouchableOpacity>
         </View>
-      </TouchableOpacity> 
+      </View> 
     );  
   }
 
   renderImage(){
     return(
-      <TouchableOpacity onPress={()=>{ this.getPicture(); }}>
+      <View>
         <Image 
           style={ImageAreaStyles.image}
           source={{ uri: this.state.imageDownloadUrl }}
         />
-      </TouchableOpacity>
+
+        <TouchableOpacity 
+          onPress={()=>{ this.setState({imageDownloadUrl: ''}); }} 
+          style={ImageAreaStyles.redoParentContainer}
+        >
+          <View style={ImageAreaStyles.redoIconContainer} >
+            <Ionicons size={20} name="md-refresh" color="black"/>
+          </View>
+          <Text style={ImageAreaStyles.retakeText}>Retake</Text>
+        </TouchableOpacity>
+      </View>
     );
   }
   
