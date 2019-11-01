@@ -10,7 +10,7 @@ A React Native Expo project that allows the user to interact with ethical fine c
 # Setting up your environments
 3. [Create a Firebase account](https://firebase.google.com/) and follow the directions for setting up a Firestore (NOT a relational database) database. You will need to create two buckets (1 for both your development and production environemnts)
 4. [Create an Algolia account](https://www.algolia.com/) and follow the directions for setting up an Algolia account. You will need to create two indices (1 for both your development and production environemnts)
-5. Paste your credentials into your `.env` and `'env.production` files in a format such as the one that follows:
+5. Paste your credentials into your `.env` and `env.production` files in a format such as the one that follows:
 
 ```javascript
   FIREBASE_API_KEY = [insert value]
