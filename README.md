@@ -39,12 +39,18 @@ A React Native Expo project that allows the user to interact with ethical fine c
 
    * This project uses Expo CLS version `3.0.10` (check out [this website](https://inglife.code.blog/2019/05/12/how-to-install-expo-cli-in-linux/) to see how to install)
    
-8. Run `npm i` in your root directory to install all of the relevant node modules
+   
+8. Install the Firebase CLI by executing the following command:
 
-9. Run `expo start` to run the project
+   * `npm install -g firebase`
+
+   
+9. Run `npm i` in your root directory to install all of the relevant node modules
+
+10. Run `expo start` to run the project
   * NOTE: If your project can't find expo, try the instructions on this link: https://stackoverflow.com/questions/33725639/npm-install-g-less-does-not-work
 
-10. You should now be in the Expo pop-up interface. Press either `a` or `i` to run either an Android or iPhone emulator respectively. Or you could download the Expo App from the app store and run the application on your own mobile device.
+11. You should now be in the Expo pop-up interface. Press either `a` or `i` to run either an Android or iPhone emulator respectively. Or you could download the Expo App from the app store and run the application on your own mobile device.
 
   * NOTES: An android emulator must be running already before you press `a`. If you're having issues with the ios emulator, try waiting for the emulator to finish loading up and then press `i` wen it is loaded.
   
