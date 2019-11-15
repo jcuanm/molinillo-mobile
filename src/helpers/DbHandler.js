@@ -132,6 +132,11 @@ export default class DbHandler{
                     .collection(root)
                     .doc(uuidv4());
                 break;
+            case 'Cart':
+                ref = this.dbRef
+                    .collection(root)
+                    .doc(this.currUser.uid + "_" + uuidv4());
+                break;
             default:
                 ref = null; 
         }
