@@ -20,6 +20,7 @@ import CountryOrigin from './components/CountryOrigin';
 import VendorAddress from './components/VendorAddress';
 import VendorWebsite from './components/VendorWebsite';
 import ChocolateName from './components/ChocolateName';
+import Commerce from './components/Commerce';
 import Barcode from '../../helpers/Barcode';
 import CallbacksAndParams from '../../helpers/CallbacksAndParams';
 import { Colors, StringConcatenations } from '../../helpers/Constants';
@@ -157,7 +158,8 @@ export default class DetailScreen extends Component {
 			imageDownloadUrl, 
 			vendorAddress,
 			vendorUrl,
-			uuid
+			uuid,
+			price,
 		} = this.results;
 
 		const {
@@ -177,6 +179,17 @@ export default class DetailScreen extends Component {
 					<Image 
 						style={DetailScreenStyles.image}
 						source={{ uri : imageDownloadUrl }}
+					/>
+
+					<Commerce 
+						sumRatings={sumRatings}
+						numStarRatings={numStarRatings}
+						barcodeData={barcodeData}
+						barcodeType={barcodeType}
+						uuid={uuid}
+						producerName={producerName}
+						price={price}
+						confectionName={confectionName}
 					/>
 
 					<Header 

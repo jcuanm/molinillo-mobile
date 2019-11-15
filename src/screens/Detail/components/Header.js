@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
     Alert,
 	View,
-	Text
+    Text,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import CallbacksAndParams from '../../../helpers/CallbacksAndParams';
@@ -41,29 +41,31 @@ export default class Header extends Component {
 	render() {
         const { numStarRatings, sumRatings } = this.props;
 		return (
-			<View style={HeaderStyles.container}>
-                <View style={HeaderStyles.heartIcon}>
-                    <Ionicons
-                        name="md-heart"
-                        size={30}
-                        color={this.state.isInMyChocolates ? "red" : "grey"}
-                        onPress={() => this.handleInMyChocolates()}
-                    />
-                </View>
+            <View>
+                <View style={HeaderStyles.container}>
+                    <View style={HeaderStyles.heartIcon}>
+                        <Ionicons
+                            name="md-heart"
+                            size={30}
+                            color={this.state.isInMyChocolates ? "red" : "grey"}
+                            onPress={() => this.handleInMyChocolates()}
+                        />
+                    </View>
 
-                <View style={HeaderStyles.ratingBlock}>	
-                    <Text style={HeaderStyles.starIcon}> 
-                        <Ionicons 
-                            name="md-star" 
-                            size={30} 
-                            color="gold" 
-                        />   
-                        {(sumRatings / numStarRatings) ? (sumRatings / numStarRatings).toFixed(1) : " "}
-                    </Text>
+                    <View style={HeaderStyles.ratingBlock}>	
+                        <Text style={HeaderStyles.starIcon}> 
+                            <Ionicons 
+                                name="md-star" 
+                                size={30} 
+                                color="gold" 
+                            />   
+                            {(sumRatings / numStarRatings) ? (sumRatings / numStarRatings).toFixed(1) : " "}
+                        </Text>
 
-                    <Text style={HeaderStyles.numRatingsText}>
-                        {numStarRatings} <Text style={HeaderStyles.ratingsTitle}>ratings</Text>
-                    </Text>
+                        <Text style={HeaderStyles.numRatingsText}>
+                            {numStarRatings} <Text style={HeaderStyles.ratingsTitle}>ratings</Text>
+                        </Text>
+                    </View>
                 </View>
             </View>
 		);

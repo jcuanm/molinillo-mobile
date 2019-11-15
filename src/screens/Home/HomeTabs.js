@@ -3,6 +3,7 @@ import { createMaterialBottomTabNavigator } from 'react-navigation-material-bott
 import SearchStack from '../../navigation/home_screen_stacks/SearchStack';
 import ProfileStack from '../../navigation/home_screen_stacks/ProfileStack';
 import MyChocolatesStack from '../../navigation/home_screen_stacks/MyChocolatesStack';
+import CartStack from '../../navigation/home_screen_stacks/CartStack';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../helpers/Constants';
 
@@ -18,7 +19,7 @@ export default HomeTabs = createMaterialBottomTabNavigator(
       }
     },
     Cart: { 
-      screen : SearchStack,
+      screen : CartStack,
       navigationOptions : {
         tabLabel: "Cart",
         tabBarIcon: ({ tintColor }) => (    

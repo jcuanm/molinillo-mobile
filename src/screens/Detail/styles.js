@@ -73,12 +73,12 @@ export const ChocolateNameStyles = StyleSheet.create({
     chocolateNameBlock: {
         width: Dimensions.get('window').width,
         justifyContent:'center',
-        paddingLeft: 30, 
+        paddingLeft: 25, 
         paddingRight: 25,
-        fontSize:18
     },
     producerName: {
-        fontWeight:'bold'
+        fontWeight:'bold',
+        fontSize:14
     }
 });
 
@@ -105,6 +105,62 @@ export const CommentStyles = StyleSheet.create({
     commentText: {
         fontSize:12, 
         paddingBottom: 5
+    }
+});
+
+export const CommerceStyles = StyleSheet.create({
+    border: {
+        borderBottomColor: "black", 
+        borderBottomWidth: .5
+    },
+    button: {
+        backgroundColor: Colors.Primary, 
+        padding:5, 
+        marginLeft:20, 
+        marginBottom:20, 
+        width: Dimensions.get('window').width / 2
+    },
+    buttonText: {
+        color:"white", 
+        textAlign:"center", 
+        fontWeight:"bold"
+    },
+    container: {
+        flexDirection: 'row',
+        height: 80,
+        paddingLeft: 25,
+    },
+    column: {
+        fontWeight:'bold', 
+        paddingBottom: 3
+    },
+    inStockText: {
+        color:"green", 
+        fontSize:14, 
+        paddingBottom:3
+    },
+    priceValue: {
+        fontSize: 14, 
+        fontWeight: 'bold',
+        paddingBottom:3
+    },
+    pickerContainer: {
+        flexDirection:"row", 
+        paddingBottom:16
+    },
+    picker: {
+        backgroundColor: 'rgba(0, 0, 0, .1)',
+        borderBottomWidth: 2,
+        width:40,
+        height:30,
+        transform: [{ scaleX: .9 }, { scaleY: .9 }]
+    },
+    pickerText: {
+        fontSize:14
+    },
+    qtyText: {
+        paddingRight: 3, 
+        fontSize:14
     }
 });
 
@@ -141,7 +197,7 @@ export const CountryOriginStyles = StyleSheet.create({
 export const DescriptionStyles = StyleSheet.create({
     container: {
         fontSize: 12, 
-        paddingLeft: 30, 
+        paddingLeft: 25, 
         paddingRight: 25, 
         paddingBottom:10
     }
@@ -150,13 +206,12 @@ export const DescriptionStyles = StyleSheet.create({
 export const HeaderStyles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        height: 100,
-        backgroundColor: Colors.Secondary
+        height: 80,
+        paddingLeft: 25
     },
     heartIcon: {
         width: Dimensions.get('window').width / 2,
         justifyContent:'center',
-        paddingLeft: 25, 
         fontSize:18
     },
     ratingBlock: {
@@ -183,8 +238,7 @@ export const UserRatingStyles = StyleSheet.create({
         padding:15, 
         paddingLeft:110, 
         paddingRight:110, 
-        borderBottomColor: 
-        Colors.Primary, 
+        borderBottomColor: Colors.Primary, 
         borderBottomWidth: .5
     },
     subtext: {
