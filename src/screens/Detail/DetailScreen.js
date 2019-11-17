@@ -18,7 +18,6 @@ import UserRating from './components/UserRating';
 import CacaoStats from './components/CacaoStats';
 import CountryOrigin from './components/CountryOrigin';
 import VendorAddress from './components/VendorAddress';
-import VendorWebsite from './components/VendorWebsite';
 import ChocolateName from './components/ChocolateName';
 import Barcode from '../../helpers/Barcode';
 import CallbacksAndParams from '../../helpers/CallbacksAndParams';
@@ -221,11 +220,6 @@ export default class DetailScreen extends Component {
 
 					<VendorAddress 
 						address={vendorAddress}
-					/>
-
-					<VendorWebsite 
-						url={vendorUrl}
-						openWebpage={this.openWebpage}
 					/>
 
 					<TouchableOpacity style={DetailScreenStyles.viewCommentsButtonContainer} onPress={() => this.getComments()}>
