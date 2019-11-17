@@ -31,7 +31,7 @@ A React Native Expo project that allows the user to interact with ethical fine c
    * You can find your Algolia account credentials for your search index under the "API keys" section. Make sure to use the admin apiKey. NOTE: Your index name is the name of the storage unit where you will be holding all of your searchable data.
    
 
-6. Install `npm` for your terminal/command prompt 
+6. Install `npm` for your terminal/command prompt (NOTE: You will need to install Node version `10.16.0` in order for this project to work!!!)
 
    * This project uses 'npm' version `6.11.2`
    
