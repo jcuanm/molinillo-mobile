@@ -283,35 +283,3 @@ export const VendorAddressStyles = StyleSheet.create({
         textAlign:'center'
     }
 });
-
-export const VendorWebsiteStyles = StyleSheet.create({
-    container: {
-        flexDirection: 'row'
-    },
-    iconBlock: {
-        width: Dimensions.get('window').width / 2,
-        height: 100,
-        backgroundColor: Colors.Secondary,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    iconText: {
-        textAlign:"center", 
-        fontSize:14, 
-        paddingLeft: 10, 
-        paddingRight: 10
-    },
-    linkBlock: {
-        width: Dimensions.get('window').width / 2,
-        height: 100,
-        backgroundColor: Colors.Secondary,
-        justifyContent: 'center',
-        alignItems: "center"
-    },
-    linkText: {
-        fontSize:14, 
-        textAlign:"center", 
-        color: Colors.Primary, 
-        fontWeight:"bold"
-    }
-});
