@@ -180,17 +180,21 @@ export default class DetailScreen extends Component {
 						source={{ uri : imageDownloadUrl }}
 					/>
 
-					<Commerce 
-						sumRatings={sumRatings}
-						numStarRatings={numStarRatings}
-						barcodeData={barcodeData}
-						barcodeType={barcodeType}
-						uuid={uuid}
-						producerName={producerName}
-						price={price}
-						confectionName={confectionName}
-					/>
-
+					{
+						price > 0 ?
+							<Commerce 
+								barcodeData={barcodeData}
+								barcodeType={barcodeType}
+								uuid={uuid}
+								producerName={producerName}
+								price={price}
+								confectionName={confectionName}
+								imageDownloadUrl={imageDownloadUrl}
+							/>
+						:
+							null
+					}
+					
 					<Header 
 						sumRatings={sumRatings}
 						numStarRatings={numStarRatings}

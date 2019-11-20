@@ -54,11 +54,6 @@ export default class DbHandler{
                 console.log("Error!: ", error);
             });
     }
-
-    setData(rootName, inputData){
-        let ref = this.getRef(rootName);
-        ref.set(inputData);
-    }
     
     incrementValue(rootName, fieldname, amount, barcode=null, uuid=null){
         let ref = this.getRef(rootName, barcode, uuid);
@@ -135,7 +130,7 @@ export default class DbHandler{
             case 'Cart':
                 ref = this.dbRef
                     .collection(root)
-                    .doc(this.currUser.uid + "_" + uuidv4());
+                    .doc(this.currUser.uid + "_" + barcodeUuid);
                 break;
             default:
                 ref = null; 
