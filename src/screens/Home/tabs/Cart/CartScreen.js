@@ -11,66 +11,51 @@ import DbHandler from '../../../../helpers/DbHandler';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import { Ionicons } from '@expo/vector-icons';
-import CustomListItem from "../../../../helpers/shared_components/CustomListItem";
-import Barcode from '../../../../helpers/Barcode';
-import CallbacksAndParams from '../../../../helpers/CallbacksAndParams';
-import { Colors, StringConcatenations } from '../../../../helpers/Constants';
-import { MyChocolatesScreenStyles } from './styles';
+import CartItem from "./components/CartItem";
+import { Colors } from '../../../../helpers/Constants';
+import { CartScreenStyles } from './styles';
 
 export default class CartScreen extends Component {
     constructor(props) {
         super(props);
         this.dbHandler = new DbHandler();
-        this.pushToMyChocolates = this.pushToMyChocolates.bind(this); 
+        this.pushToUserCartItems = this.pushToUserCartItems.bind(this); 
+        this.getUserCartItems = this.getUserCartItems.bind(this); 
 
         props.navigation.setParams({
             onTabFocus: this.handleTabFocus
         });
 
         this.state = {
-            myChocolates: []
+            cartItems: []
         }
     }
 
     componentDidMount() {
         this.didFocusListener = this.props.navigation.addListener(
           'didFocus',
-          () => { this.getMyChocolates() },
+          () => { this.getUserCartItems() },
         );
     }
     
-    getMyChocolates(){
-        let myChocolatesRef = firebase.firestore().collection("MyChocolates");
-        let query = myChocolatesRef.where("userId", "==", this.dbHandler.currUser.uid);
+    getUserCartItems(){
+        let cartRef = firebase.firestore().collection("Cart");
+        let query = cartRef.where("userId", "==", this.dbHandler.currUser.uid);
 
         query 
             .get()
             .then(results => {
-                let myChocolates = [];
+                let cartItems = [];
                 if(results.size > 0){
                     results.forEach(doc => {
-                        const {
-                            barcodeType, 
-                            barcodeData, 
-                            uuid
-                        } = doc.data();
-    
-                        let currBarcode = new Barcode(barcodeType, barcodeData);
-                        let barcodeTypeRef = this.dbHandler.getRef(
-                            StringConcatenations.Prefix, 
-                            currBarcode,
-                            uuid);
-                        let barcodeTypeCallbacksAndParams = new CallbacksAndParams(
-                            myChocolates,
-                            this.pushToMyChocolates,
-                            function(){ console.log("Could not find chocolate"); }
-                        );
-                        
-                        this.dbHandler.getData(barcodeTypeRef, barcodeTypeCallbacksAndParams);
+                        let item = { key : doc.data() };
+                        cartItems.push({key : item});
                     }); 
+
+                    this.setState({cartItems: cartItems})
                 }
                 else{
-                    this.setState({myChocolates: []});
+                    this.setState({cartItems: []});
                 }  
             })
             .catch(error => {
@@ -78,14 +63,14 @@ export default class CartScreen extends Component {
             });
     }
 
-    pushToMyChocolates(resultsAndParams){
-        let myChocolates = resultsAndParams.params;
+    pushToUserCartItems(resultsAndParams){
+        let cartItems = resultsAndParams.params;
         let results = resultsAndParams.results.data();
 
-        myChocolates.push({key : results});
+        cartItems.push({key : results});
 
         this.setState({
-            myChocolates: myChocolates
+            cartItems: cartItems
         });
     }
 
@@ -100,10 +85,10 @@ export default class CartScreen extends Component {
         headerLeft: (
             <TouchableOpacity
                 onPress={() => navigation.navigate("SearchScreen")} 
-                style={MyChocolatesScreenStyles.headerButton} 
+                style={CartScreenStyles.headerButton} 
             >
                 <Image 
-                    style={MyChocolatesScreenStyles.headerImage}
+                    style={CartScreenStyles.headerImage}
                     source={require('../../../../../assets/images/logo.png')}
                 />
             </TouchableOpacity>
@@ -111,14 +96,14 @@ export default class CartScreen extends Component {
     })
 
     render(){
-        const { myChocolates } = this.state;
+        const { cartItems } = this.state;
         return(
-            <View style={MyChocolatesScreenStyles.container}>
+            <View style={CartScreenStyles.container}>
                 <ScrollView>
                     <FlatList
-                        data={myChocolates}
+                        data={cartItems}
                         scrollEnabled={true}
-                        renderItem={({_, index}) => this.renderItem(myChocolates[index].key)}
+                        renderItem={({_, index}) => this.renderItem(cartItems[index].key)}
                         keyExtractor={(_, index) => index.toString()}
                     /> 
                 </ScrollView>
@@ -132,11 +117,25 @@ export default class CartScreen extends Component {
     }
 
     renderItem(item){
+        const { 
+            price,
+            imageDownloadUrl,
+            producerName,
+            confectionName,
+            quantity, 
+            chocolateUuid
+        } = item.key;
+
         return(
-            <CustomListItem 
+            <CartItem 
                 navigate={this.props.navigation.navigate}
-                results={item}
-                parentScreen={"MyChocolates"}
+                getUserCartItems={this.getUserCartItems}
+                price={price}
+                chocolateUuid={chocolateUuid}
+                imageDownloadUrl={imageDownloadUrl}
+                producerName={producerName}
+                confectionName={confectionName}
+                quantity={quantity} 
             />
         );
     }

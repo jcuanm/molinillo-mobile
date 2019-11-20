@@ -6,6 +6,8 @@ import {
     Text,
     TouchableOpacity
 } from 'react-native';
+import * as firebase from 'firebase';
+import 'firebase/firestore';
 import DbHandler from '../../../helpers/DbHandler';
 import { CommerceStyles } from '../styles';
 
@@ -21,17 +23,16 @@ export default class Commerce extends Component {
     }
 
 	render() {
-        const { numStarRatings, sumRatings } = this.props;
 
 		return (
             <View style={CommerceStyles.border}>
                 <View style={CommerceStyles.container}>
                     <View style={CommerceStyles.column} >
                         <Text style={CommerceStyles.inStockText}>
-                            In Stock: {numStarRatings}
+                            In Stock
                         </Text>
                         <Text style={CommerceStyles.priceValue}> 
-                            ${(sumRatings / numStarRatings) ? (sumRatings / numStarRatings).toFixed(2) : " "}
+                            ${this.props.price.toFixed(2)}
                         </Text>
 
                         <View style={CommerceStyles.pickerContainer}>
@@ -75,32 +76,75 @@ export default class Commerce extends Component {
             uuid,
             price,
             producerName,
-            confectionName 
+            confectionName,
+            imageDownloadUrl
         } = this.props;
 
-        const data = {
-            created_ts: new Date(),
-            userId: this.dbHandler.currUser.uid,
-            quantity: this.state.quantity,
-            price: 10.00,
-            producerName: producerName,
-            confectionName: confectionName,
-            chocolateUuid: uuid,
-            barcodeData: barcodeData,
-            barcodeType: barcodeType
-        };
+        let db = firebase.firestore();
+        let userId = this.dbHandler.currUser.uid;
+        let quantity = this.state.quantity;
 
+        db
+            .collection("Cart")
+            .where("userId", "==", userId)
+            .where("chocolateUuid", "==", uuid)
+            .get()
+            .then( doc => {
 
-        let cartRef = this.dbHandler.getRef(
-            "Cart", 
-            null, 
-            uuid);
-
-        cartRef
-            .set(data)
-            .then( _ => {
+                if(doc.empty){
+                    let cartRef = this.dbHandler.getRef(
+                        "Cart", 
+                        null, 
+                        uuid);
+    
+                    const data = {
+                        created_ts: new Date(),
+                        userId: userId,
+                        quantity: this.state.quantity,
+                        price: price,
+                        producerName: producerName,
+                        confectionName: confectionName,
+                        chocolateUuid: uuid,
+                        barcodeData: barcodeData,
+                        barcodeType: barcodeType,
+                        imageDownloadUrl: imageDownloadUrl
+                    };
+    
+                    cartRef
+                        .set(data)
+                        .then( _ => {
+                            Alert.alert(
+                                "Added to shopping cart",
+                                "",
+                                [
+                                    {text: 'OK'}
+                                ],
+                                { cancelable: false }
+                            );
+                        })
+                        .catch( _ => {
+                            Alert.alert(
+                                "Error adding to shopping cart",
+                                "",
+                                [
+                                    {text: 'OK'}
+                                ],
+                                { cancelable: false }
+                            );
+                        });
+                }
+                else{
+                    db
+                        .collection("Cart")
+                        .doc(userId + "_" + uuid)
+                        .update({
+                            quantity: firebase.firestore.FieldValue.increment(quantity)
+                        });
+                }
+            })
+            .catch( _ => {
                 Alert.alert(
-                    "Added to shopping cart",
+                    "Error adding to shopping cart",
                     "",
                     [
                         {text: 'OK'}
