@@ -23,7 +23,6 @@ export default class CartItem extends Component {
 
     render(){
         const { 
-            navigate, 
             chocolateUuid,
             price,
             imageDownloadUrl,
@@ -44,7 +43,10 @@ export default class CartItem extends Component {
                     <Text>${price.toFixed(2)}</Text>
 
                     <View style={CartItemStyles.quantityChangerContainer}>
-                        <TouchableOpacity onPress={() => this.deleteItem(chocolateUuid)}>
+                        <TouchableOpacity 
+                            style={CartItemStyles.trashIcon} 
+                            onPress={() => this.deleteItem(chocolateUuid)}
+                        >
                             <Ionicons 
                                 size={32}
                                 name={"md-trash"}
