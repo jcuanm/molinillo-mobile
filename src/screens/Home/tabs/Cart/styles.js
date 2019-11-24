@@ -1,4 +1,5 @@
 import { Dimensions, StyleSheet } from 'react-native';
+import { Colors } from '../../../../helpers/Constants';
 
 export const CartScreenStyles = StyleSheet.create({
     container: {
@@ -15,6 +16,19 @@ export const CartScreenStyles = StyleSheet.create({
         height:40, 
         width:40
     },
+    proceedToCheckoutButton: {
+        width: Dimensions.get('window').width - 20,
+        height: 40,
+        backgroundColor: "gold",
+        margin: 10,
+        alignSelf:"center",
+        justifyContent: "center"
+    },
+    proceedToCheckoutText: {
+        color: Colors.Primary,
+        textAlign: "center",
+        fontWeight: 'bold'
+    }
 });
 
 export const CartItemStyles = StyleSheet.create({
@@ -67,12 +81,14 @@ export const CartItemStyles = StyleSheet.create({
         textAlign:"center"
     },
     quantityChangerButton:{
-        justifyContent:"center", 
-        marginLeft:15, 
+        justifyContent:"center",  
         borderColor:"grey", 
         borderWidth:1, 
         backgroundColor:"white", 
         width:30, 
         height:30
+    },
+    trashIcon: {
+        marginRight:15
     }
 });

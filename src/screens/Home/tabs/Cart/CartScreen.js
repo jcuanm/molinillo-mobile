@@ -3,6 +3,7 @@ import {
     FlatList, 
     Image,
     ScrollView, 
+    Text,
     TouchableOpacity,
     View 
 } from 'react-native';
@@ -106,7 +107,19 @@ export default class CartScreen extends Component {
                         renderItem={({_, index}) => this.renderItem(cartItems[index].key)}
                         keyExtractor={(_, index) => index.toString()}
                     /> 
+
+                    {
+                        this.state.cartItems.length > 0 ?
+                            <TouchableOpacity style={CartScreenStyles.proceedToCheckoutButton}>
+                                <Text style={CartScreenStyles.proceedToCheckoutText}>
+                                    Proceed to checkout
+                                </Text>
+                            </TouchableOpacity>
+                        :
+                            null
+                    }
                 </ScrollView>
+
                 <ActionButton
                     buttonColor={Colors.Primary}
                     icon={<Ionicons name="md-camera" size={25} color={Colors.Secondary} />}
@@ -128,7 +141,6 @@ export default class CartScreen extends Component {
 
         return(
             <CartItem 
-                navigate={this.props.navigation.navigate}
                 getUserCartItems={this.getUserCartItems}
                 price={price}
                 chocolateUuid={chocolateUuid}
