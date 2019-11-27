@@ -149,7 +149,8 @@ export const CommerceStyles = StyleSheet.create({
         paddingBottom:16
     },
     picker: {
-        backgroundColor: 'rgba(0, 0, 0, .1)',
+        backgroundColor: Colors.Primary,
+        color: Colors.Secondary,
         borderBottomWidth: 2,
         width:40,
         height:30,

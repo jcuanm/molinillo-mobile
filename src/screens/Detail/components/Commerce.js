@@ -43,7 +43,7 @@ export default class Commerce extends Component {
                                 style={CommerceStyles.picker}
                                 textStyle={CommerceStyles.pickerText}
                             >
-                                {this.getPickerItems(this.numPickerItems)}
+                                {this.getPickerItems()}
                             </Picker>
                         </View>
                     </View>
@@ -58,9 +58,9 @@ export default class Commerce extends Component {
 		);
     }
 
-    getPickerItems(numPickerItems){
+    getPickerItems(){
         let pickerItems = [];
-        for(var i = 1; i < numPickerItems + 1; i++){
+        for(var i = 1; i < this.numPickerItems + 1; i++){
             pickerItems.push(
                 <Picker.Item key={i} label={i.toString()} value={i} />
             );
@@ -77,7 +77,8 @@ export default class Commerce extends Component {
             price,
             producerName,
             confectionName,
-            imageDownloadUrl
+            imageDownloadUrl,
+            vendorAddress
         } = this.props;
 
         let db = firebase.firestore();
@@ -107,7 +108,8 @@ export default class Commerce extends Component {
                         chocolateUuid: uuid,
                         barcodeData: barcodeData,
                         barcodeType: barcodeType,
-                        imageDownloadUrl: imageDownloadUrl
+                        imageDownloadUrl: imageDownloadUrl,
+                        vendorAddress: vendorAddress
                     };
     
                     cartRef
@@ -122,7 +124,7 @@ export default class Commerce extends Component {
                                 { cancelable: false }
                             );
                         })
-                        .catch( _ => {
+                        .catch( error => {
                             Alert.alert(
                                 "Error adding to shopping cart",
                                 "",

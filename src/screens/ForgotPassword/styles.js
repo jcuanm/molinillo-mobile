@@ -27,14 +27,13 @@ export const ForgotPasswordFormStyles = StyleSheet.create({
         backgroundColor:'rgba(255, 255,255,0.2)',
         borderRadius: 25,
         paddingHorizontal:16,
+        margin:10,
         fontSize:16,
         color: Colors.Secondary,
     },
     button: {
         width:300,
-        borderRadius: 25,
-        marginVertical: 10,
-        paddingVertical: 13
+        borderRadius: 25
     },
 });
 

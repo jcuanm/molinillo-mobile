@@ -1,20 +1,37 @@
 import { Dimensions, StyleSheet } from 'react-native';
-import { Colors } from '../../../../helpers/Constants';
+import { Colors } from '../../helpers/Constants';
 
-export const CartScreenStyles = StyleSheet.create({
-    container: {
-        flex: 1
-    },
+export const DeliveryMethodScreenStyles = StyleSheet.create({
     headerButton: {
         height: 44,
         width: 44,
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    promptText: {
+        textAlign: "center",
+        fontSize: 18,
+        fontWeight: "bold"
     },
     headerImage: {
         height:40, 
         width:40
+    },
+    pickerContainer: {
+        borderBottomColor: Colors.Primary,
+        borderBottomWidth: 1,
+        padding: 35
+    },
+    picker: {
+        backgroundColor: Colors.Primary,
+        color: Colors.Secondary,
+        borderBottomWidth: 2,
+        width:100,
+        height:30,
+        transform: [{ scaleX: .9 }, { scaleY: .9 }],
+        alignSelf: "center",
+        margin:5,
     },
     proceedToCheckoutButton: {
         width: Dimensions.get('window').width - 20,
@@ -30,7 +47,7 @@ export const CartScreenStyles = StyleSheet.create({
     }
 });
 
-export const CartItemStyles = StyleSheet.create({
+export const ItemLocationStyles = StyleSheet.create({
     container: {
         paddingBottom: 10,
         flexDirection:"row",
@@ -65,7 +82,7 @@ export const CartItemStyles = StyleSheet.create({
         textAlign:"center", 
         fontSize:28
     },
-    producerName: {
+    importantText: {
         fontWeight:"bold"
     },
     quantityTextContainer: {

@@ -110,7 +110,10 @@ export default class CartScreen extends Component {
 
                     {
                         this.state.cartItems.length > 0 ?
-                            <TouchableOpacity style={CartScreenStyles.proceedToCheckoutButton}>
+                            <TouchableOpacity 
+                                onPress={() => this.props.navigation.navigate("DeliveryMethodScreen", { cartItems: cartItems }) }
+                                style={CartScreenStyles.proceedToCheckoutButton}
+                            >
                                 <Text style={CartScreenStyles.proceedToCheckoutText}>
                                     Proceed to checkout
                                 </Text>
