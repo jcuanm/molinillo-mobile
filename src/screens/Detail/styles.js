@@ -113,15 +113,13 @@ export const CommerceStyles = StyleSheet.create({
         borderBottomColor: "black", 
         borderBottomWidth: .5
     },
-    button: {
-        backgroundColor: Colors.Primary, 
+    addToCartButton: {
+        backgroundColor: "gold", 
         padding:5, 
-        marginLeft:20, 
-        marginBottom:20, 
+        margin: 20,
         width: Dimensions.get('window').width / 2
     },
     buttonText: {
-        color:"white", 
         textAlign:"center", 
         fontWeight:"bold"
     },
@@ -139,6 +137,12 @@ export const CommerceStyles = StyleSheet.create({
         fontSize:14, 
         paddingBottom:3
     },
+    iosQuantityText: {
+        fontWeight:"bold", 
+        color: Colors.Secondary, 
+        textAlign:"center", 
+        fontSize:18
+    },
     priceValue: {
         fontSize: 14, 
         fontWeight: 'bold',
@@ -149,20 +153,33 @@ export const CommerceStyles = StyleSheet.create({
         paddingBottom:16
     },
     picker: {
+        justifyContent:"center",
         backgroundColor: Colors.Primary,
         color: Colors.Secondary,
         borderBottomWidth: 2,
         width:40,
         height:30,
-        transform: [{ scaleX: .9 }, { scaleY: .9 }]
-    },
-    pickerText: {
-        fontSize:14
     },
     qtyText: {
         paddingRight: 3, 
         fontSize:14
-    }
+    },
+    popupModal: {
+        alignContent: 'center',
+        alignSelf:"center"
+    },
+    popupFlatlistContainer: {
+        width: 300
+    },
+    popupEntriesBackground: {
+        backgroundColor: Colors.Secondary, 
+        borderBottomWidth: 0.5, 
+        borderBottomColor: "grey"
+    },
+    popupEntriesText: {
+        textAlign:'center', 
+        fontSize: 20
+    },
 });
 
 export const CountryOriginStyles = StyleSheet.create({

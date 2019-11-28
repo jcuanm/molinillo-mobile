@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import {
     Alert,
+    FlatList,
     Picker,
+    Platform,
 	View,
     Text,
     TouchableOpacity
 } from 'react-native';
+import Modal from 'react-native-modal';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import DbHandler from '../../../helpers/DbHandler';
@@ -18,12 +21,38 @@ export default class Commerce extends Component {
         this.numPickerItems = 30;
 
 		this.state = {
-			quantity: 1
+            quantity: 1,
+            isIosDialogVisible: false
 		};
     }
 
-	render() {
+    updateQuantity(quantity){
+        const {isIosDialogVisible} = this.state;
+        if(isIosDialogVisible){
+            this.setState({ 
+                quantity: parseInt(quantity),
+                isIosDialogVisible: false 
+            });  
+        }
+        else{
+            this.setState({ 
+                quantity: parseInt(quantity),
+                isIosDialogVisible: true 
+            }); 
+        }   
+    }
 
+    toggleIosDialogBox(){ 
+        const {isIosDialogVisible} = this.state;
+        if(isIosDialogVisible){
+            this.setState({ isIosDialogVisible: false }); 
+        }
+        else{
+            this.setState({ isIosDialogVisible: true }); 
+        }   
+    }
+
+	render() {
 		return (
             <View style={CommerceStyles.border}>
                 <View style={CommerceStyles.container}>
@@ -37,19 +66,27 @@ export default class Commerce extends Component {
 
                         <View style={CommerceStyles.pickerContainer}>
                             <Text style={CommerceStyles.qtyText}>Qty:</Text>
-                            <Picker 
-                                selectedValue={this.state.quantity}
-                                onValueChange={(itemValue, itemIndex) => this.setState({ quantity: itemValue })}
-                                style={CommerceStyles.picker}
-                                textStyle={CommerceStyles.pickerText}
-                            >
-                                {this.getPickerItems()}
-                            </Picker>
+                            {
+                                Platform.OS == "ios" ?
+                                    this.renderIosPicker()
+                                :
+                                    <Picker 
+                                        selectedValue={this.state.quantity}
+                                        onValueChange={(itemValue, itemIndex) => this.setState({ quantity: itemValue })}
+                                        style={CommerceStyles.picker}
+                                        textStyle={CommerceStyles.pickerText}
+                                    >
+                                        {this.getPickerItems()}
+                                    </Picker>
+                            }
                         </View>
                     </View>
                 </View>
 
-                <TouchableOpacity onPress={() => this.addToCart()} style={CommerceStyles.button}>
+                <TouchableOpacity 
+                    onPress={() => this.addToCart()} 
+                    style={CommerceStyles.addToCartButton}
+                >
                     <Text style={CommerceStyles.buttonText}>
                         Add to cart
                     </Text>
@@ -64,6 +101,47 @@ export default class Commerce extends Component {
             pickerItems.push(
                 <Picker.Item key={i} label={i.toString()} value={i} />
             );
+        }
+        return pickerItems;
+    }
+
+    renderIosPicker(){
+        return(
+            <View>
+                <TouchableOpacity 
+                    onPress={() => this.toggleIosDialogBox()}
+                    style={CommerceStyles.picker}
+                >
+                    <Text style={CommerceStyles.iosQuantityText}>{this.state.quantity}</Text>
+                </TouchableOpacity>
+                <Modal 
+                    onBackdropPress={() => this.toggleIosDialogBox()}
+                    style={CommerceStyles.popupModal} 
+                    isVisible={this.state.isIosDialogVisible}
+                >
+                    <View style={CommerceStyles.popupFlatlistContainer}>
+                        <FlatList
+                            data={this.getIosPickerItems()}
+                            renderItem={
+                            ({ item }) =>
+                                <TouchableOpacity 
+                                    onPress={ () => this.updateQuantity(item.key) }
+                                    style={CommerceStyles.popupEntriesBackground}
+                                >
+                                <Text style={CommerceStyles.popupEntriesText}>{item.key}</Text>
+                                </TouchableOpacity>
+                            }
+                        />
+                    </View>
+                </Modal>
+            </View>
+        );
+    }
+
+    getIosPickerItems(){
+        let pickerItems = [];
+        for(var i = 1; i < this.numPickerItems + 1; i++){
+            pickerItems.push({ key: i.toString() });
         }
         return pickerItems;
     }
@@ -141,6 +219,16 @@ export default class Commerce extends Component {
                         .doc(userId + "_" + uuid)
                         .update({
                             quantity: firebase.firestore.FieldValue.increment(quantity)
+                        })
+                        .then( _ => {
+                            Alert.alert(
+                                "Updated your shopping cart",
+                                "",
+                                [
+                                    {text: 'OK'}
+                                ],
+                                { cancelable: false }
+                            );
                         });
                 }
             })
