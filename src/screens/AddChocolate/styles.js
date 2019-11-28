@@ -19,7 +19,6 @@ export const DataEntriesStyles = StyleSheet.create({
 });
 
 
-const imageAreaHeight = Dimensions.get('window').height/3;
 export const EntryStyles = StyleSheet.create({
     border: {
         borderBottomWidth: 0.5, 
@@ -119,6 +118,7 @@ export const EntryStyles = StyleSheet.create({
     },
 });
 
+const imageAreaHeight = Dimensions.get('window').height/3;
 export const ImageAreaStyles = StyleSheet.create({
     blankImageContainer: {
         width: Dimensions.get('window').width, 

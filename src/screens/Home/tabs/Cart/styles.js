@@ -42,7 +42,7 @@ export const CartItemStyles = StyleSheet.create({
         alignItems: "center",
         justifyContent:"center"
     },
-    image: {
+    chocolateImage: {
         width: 120, 
         height: 120,
         flex:1
@@ -63,7 +63,6 @@ export const CartItemStyles = StyleSheet.create({
     },
     quantityChangerSymbol: {
         textAlign:"center", 
-        fontSize:28
     },
     producerName: {
         fontWeight:"bold"

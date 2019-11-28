@@ -12,12 +12,14 @@ import DbHandler from '../../../../../helpers/DbHandler';
 import { CartItemStyles } from '../styles';
 
 export default class CartItem extends Component {
-    constructor(props){
-        super(props);
-        this.dbHandler = new DbHandler();
-        this.maxStars = 5;
-        this.state = {
-            quantity: this.props.quantity
+    dbHandler = new DbHandler();
+    state = {
+        quantity: this.props.quantity
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.quantity !== this.props.quantity){
+            this.setState({quantity:nextProps.quantity});
         }
     }
 
@@ -27,13 +29,13 @@ export default class CartItem extends Component {
             price,
             imageDownloadUrl,
             producerName,
-            confectionName,
+            confectionName
         } = this.props;
 
         return(
             <View style={CartItemStyles.container} >
                 <Image 
-                    style={CartItemStyles.image}
+                    style={CartItemStyles.chocolateImage}
                     source={{ uri : imageDownloadUrl }}
                 />
 
@@ -48,20 +50,25 @@ export default class CartItem extends Component {
                             onPress={() => this.deleteItem(chocolateUuid)}
                         >
                             <Ionicons 
-                                size={32}
+                                size={28}
                                 name={"md-trash"}
                             />
                         </TouchableOpacity>
                         
+                        {/* Decrementer */}
                         <TouchableOpacity 
                             onPress={() => this.decrement(chocolateUuid)} 
                             style={CartItemStyles.quantityChangerButton}
                         >
                             <Text style={CartItemStyles.quantityChangerSymbol}>-</Text>
                         </TouchableOpacity>
+
+                        {/* Quantity */}
                         <View style={CartItemStyles.quantityTextContainer}>
                             <Text style={CartItemStyles.quantityText}>{this.state.quantity}</Text>
                         </View>
+
+                        {/* Incrementer */}
                         <TouchableOpacity 
                             onPress={() => this.increment(chocolateUuid)} 
                             style={CartItemStyles.quantityChangerButton}
@@ -104,7 +111,6 @@ export default class CartItem extends Component {
     }
 
     increment(chocolateUuid){
-        const { quantity } = this.state;
         let cartRef = this.dbHandler.getRef("Cart", null, chocolateUuid);
 
         cartRef
@@ -112,7 +118,7 @@ export default class CartItem extends Component {
                 quantity: firebase.firestore.FieldValue.increment(1)
             })
             .then( _ => {
-                this.setState({quantity: quantity + 1});
+                this.setState({quantity: this.state.quantity + 1});
             });
     }
 }
