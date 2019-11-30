@@ -9,6 +9,28 @@ export const DeliveryMethodScreenStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    iosDeliveryMethodText: {
+        fontWeight:"bold", 
+        color: Colors.Secondary, 
+        textAlign:"center", 
+        fontSize:18
+    },
+    popupModal: {
+        alignContent: 'center',
+        alignSelf:"center",
+    },
+    popupFlatlistContainer: {
+        width: 300
+    },
+    popupEntriesBackground: {
+        backgroundColor: Colors.Secondary, 
+        borderBottomWidth: 0.5, 
+        borderBottomColor: "grey"
+    },
+    popupEntriesText: {
+        textAlign:'center', 
+        fontSize: 20
+    },
     promptText: {
         textAlign: "center",
         fontSize: 18,
@@ -32,6 +54,7 @@ export const DeliveryMethodScreenStyles = StyleSheet.create({
         transform: [{ scaleX: .9 }, { scaleY: .9 }],
         alignSelf: "center",
         margin:5,
+        justifyContent: "center"
     },
     proceedToCheckoutButton: {
         width: Dimensions.get('window').width - 20,
@@ -44,7 +67,7 @@ export const DeliveryMethodScreenStyles = StyleSheet.create({
     proceedToCheckoutText: {
         textAlign: "center",
         fontWeight: 'bold'
-    }
+    },
 });
 
 export const ItemLocationStyles = StyleSheet.create({

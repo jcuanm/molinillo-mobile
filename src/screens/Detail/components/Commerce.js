@@ -42,16 +42,6 @@ export default class Commerce extends Component {
         }   
     }
 
-    toggleIosDialogBox(){ 
-        const {isIosDialogVisible} = this.state;
-        if(isIosDialogVisible){
-            this.setState({ isIosDialogVisible: false }); 
-        }
-        else{
-            this.setState({ isIosDialogVisible: true }); 
-        }   
-    }
-
 	render() {
 		return (
             <View style={CommerceStyles.border}>
@@ -136,6 +126,16 @@ export default class Commerce extends Component {
                 </Modal>
             </View>
         );
+    }
+
+    toggleIosDialogBox(){ 
+        const {isIosDialogVisible} = this.state;
+        if(isIosDialogVisible){
+            this.setState({ isIosDialogVisible: false }); 
+        }
+        else{
+            this.setState({ isIosDialogVisible: true }); 
+        }   
     }
 
     getIosPickerItems(){
