@@ -2,24 +2,32 @@ import React, { Component } from 'react';
 import { 
     FlatList, 
     Picker,
+    Platform,
     ScrollView, 
     Text,
     TouchableOpacity,
     View 
 } from 'react-native';
+import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../helpers/Constants';
 import { DeliveryMethodScreenStyles } from './styles';
 import ItemLocation from './components/ItemLocation';
+
 
 export default class DeliveryMethodScreen extends Component {
     constructor(props) {
         super(props);
         this.numPickerItems = 2;
         this.cartItems = this.props.navigation.getParam('cartItems', {});
+        this.displayText = {
+            "pickup": "Pickup",
+            "shipping": "Shipping"
+        }
 
         this.state = {
-            selectedDeliveryMethod: "pickup"
+            selectedDeliveryMethod: "pickup",
+            isIosDialogVisible: false
         }
     }
 
@@ -49,14 +57,21 @@ export default class DeliveryMethodScreen extends Component {
             <ScrollView>
                 <View style={DeliveryMethodScreenStyles.pickerContainer}>
                     <Text style={DeliveryMethodScreenStyles.promptText}>Select your delivery method</Text>
-                    <Picker 
-                        selectedValue={selectedDeliveryMethod}
-                        onValueChange={(itemValue, itemIndex) => this.setState({ selectedDeliveryMethod: itemValue })}
-                        style={DeliveryMethodScreenStyles.picker}
-                    >
-                        <Picker.Item label={"Pickup"} value={"pickup"} />
-                        <Picker.Item label={"Shipping"} value={"shipping"} />
-                    </Picker>
+
+                    {
+                        Platform.OS == "ios" ?
+                            this.renderIosPicker()
+                        :
+                            <Picker 
+                                selectedValue={selectedDeliveryMethod}
+                                onValueChange={(itemValue, itemIndex) => this.setState({ selectedDeliveryMethod: itemValue })}
+                                style={DeliveryMethodScreenStyles.picker}
+                            >
+                                <Picker.Item label={"Pickup"} value={"pickup"} />
+                                <Picker.Item label={"Shipping"} value={"shipping"} />
+                            </Picker>
+                    }
+                    
                 </View>
 
                 {
@@ -82,6 +97,75 @@ export default class DeliveryMethodScreen extends Component {
                 </TouchableOpacity>
             </ScrollView>
         );
+    }
+
+    renderIosPicker(){
+        const {selectedDeliveryMethod, isIosDialogVisible} = this.state;
+        return(
+            <View>
+                <TouchableOpacity 
+                    onPress={() => this.toggleIosDialogBox()}
+                    style={DeliveryMethodScreenStyles.picker}
+                >
+                    <Text style={DeliveryMethodScreenStyles.iosDeliveryMethodText}>{this.displayText[selectedDeliveryMethod]}</Text>
+                </TouchableOpacity>
+                <Modal 
+                    onBackdropPress={() => this.toggleIosDialogBox()}
+                    style={DeliveryMethodScreenStyles.popupModal} 
+                    isVisible={isIosDialogVisible}
+                >
+                    <View style={DeliveryMethodScreenStyles.popupFlatlistContainer}>
+                        <FlatList
+                            data={this.getIosPickerItems()}
+                            renderItem={
+                            ({ item }) =>
+                                <TouchableOpacity 
+                                    onPress={ () => this.updateDeliveryMethod(item.key) }
+                                    style={DeliveryMethodScreenStyles.popupEntriesBackground}
+                                >
+                                    <Text style={DeliveryMethodScreenStyles.popupEntriesText}>{this.displayText[item.key]}</Text>
+                                </TouchableOpacity>
+                            }
+                        />
+                    </View>
+                </Modal>
+            </View>
+        );
+    }
+
+    toggleIosDialogBox(){ 
+        const {isIosDialogVisible} = this.state;
+        if(isIosDialogVisible){
+            this.setState({ isIosDialogVisible: false }); 
+        }
+        else{
+            this.setState({ isIosDialogVisible: true }); 
+        }   
+    }
+
+    getIosPickerItems(){
+        const items = [
+            {key: "pickup"},
+            {key: "shipping"}
+        ];
+
+        return items;
+    }
+
+    updateDeliveryMethod(method){
+        const {isIosDialogVisible} = this.state;
+        if(isIosDialogVisible){
+            this.setState({ 
+                selectedDeliveryMethod: method,
+                isIosDialogVisible: false 
+            });  
+        }
+        else{
+            this.setState({ 
+                selectedDeliveryMethod: method,
+                isIosDialogVisible: true 
+            }); 
+        }   
     }
 
     renderItem(item){
