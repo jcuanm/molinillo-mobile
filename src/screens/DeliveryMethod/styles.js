@@ -41,9 +41,10 @@ export const DeliveryMethodScreenStyles = StyleSheet.create({
         width:40
     },
     pickerContainer: {
-        borderBottomColor: Colors.Primary,
+        borderBottomColor: "grey",
         borderBottomWidth: 1,
-        padding: 35
+        padding: 35,
+        marginBottom: 30
     },
     picker: {
         backgroundColor: Colors.Primary,
@@ -57,6 +58,7 @@ export const DeliveryMethodScreenStyles = StyleSheet.create({
         justifyContent: "center"
     },
     proceedToCheckoutButton: {
+        marginTop: 60,
         width: Dimensions.get('window').width - 20,
         height: 40,
         backgroundColor: "gold",
@@ -70,7 +72,7 @@ export const DeliveryMethodScreenStyles = StyleSheet.create({
     },
 });
 
-export const ItemLocationStyles = StyleSheet.create({
+export const ItemPickupLocationStyles = StyleSheet.create({
     container: {
         paddingBottom: 10,
         flexDirection:"row",
@@ -130,4 +132,59 @@ export const ItemLocationStyles = StyleSheet.create({
     trashIcon: {
         marginRight:15
     }
+});
+
+const inputPadding = 5;
+const inputWidth = Dimensions.get('window').width - 20;
+const inputHeight = 30;
+const marginTop = 10;
+export const ShippingAddressInputStyles = StyleSheet.create({
+    inputBox: {
+        marginTop: marginTop,
+        width: inputWidth,
+        paddingLeft: inputPadding,
+        paddingRight: inputPadding,
+        height: inputHeight,
+        borderColor: Colors.Primary,
+        borderWidth:1,
+        alignSelf: "center"
+    },
+    chevron: {
+        alignSelf:"flex-end"
+    },
+    countryButton: {
+        marginTop: marginTop,
+        width: inputWidth,
+        height: inputHeight,
+        backgroundColor: "rgba(0,0,0,.1)",
+        paddingLeft: inputPadding,
+        paddingRight: inputPadding,
+        borderColor: Colors.Primary,
+        borderWidth:1,
+        alignSelf: "center",
+        justifyContent: "center",
+        flexDirection: "row"
+    },
+    countryButtonText: {
+        marginTop: 5,
+        fontSize: 15,
+        flex:2
+    },
+    popupModal: {
+        alignContent: 'center',
+        alignSelf:"center",
+    },
+    popupFlatlistContainer: {
+        marginTop: 20,
+        width: 300
+    },
+    popupEntriesBackground: {
+        backgroundColor: Colors.Secondary, 
+        borderBottomWidth: 0.5, 
+        borderBottomColor: "grey",
+    },
+    popupEntriesText: {
+        textAlign:'center', 
+        fontSize: 20
+    },
 });

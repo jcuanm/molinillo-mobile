@@ -12,8 +12,8 @@ import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../helpers/Constants';
 import { DeliveryMethodScreenStyles } from './styles';
-import ItemLocation from './components/ItemLocation';
-
+import ItemPickupLocation from './components/ItemPickupLocation';
+import ShippingAddressInput from './components/ShippingAddressInput';
 
 export default class DeliveryMethodScreen extends Component {
     constructor(props) {
@@ -82,6 +82,13 @@ export default class DeliveryMethodScreen extends Component {
                             renderItem={({_, index}) => this.renderItem(this.cartItems[index].key)}
                             keyExtractor={(_, index) => index.toString()}
                         /> 
+                    :
+                        null
+                }
+
+                {
+                    selectedDeliveryMethod == "shipping" ?
+                        <ShippingAddressInput />
                     :
                         null
                 }
@@ -177,7 +184,7 @@ export default class DeliveryMethodScreen extends Component {
         } = item.key;
 
         return(
-            <ItemLocation
+            <ItemPickupLocation
                 vendorAddress={vendorAddress}
                 imageDownloadUrl={imageDownloadUrl}
                 producerName={producerName}

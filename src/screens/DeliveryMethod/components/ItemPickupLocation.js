@@ -5,9 +5,9 @@ import {
     View
 } from 'react-native';
 import 'firebase/firestore';
-import { ItemLocationStyles } from '../styles';
+import { ItemPickupLocationStyles } from '../styles';
 
-export default class ItemLocation extends Component {
+export default class ItemPickupLocation extends Component {
 
     render(){
         const {
@@ -18,16 +18,16 @@ export default class ItemLocation extends Component {
         } = this.props;
 
         return(
-            <View style={ItemLocationStyles.container} >
+            <View style={ItemPickupLocationStyles.container} >
                 <Image 
-                    style={ItemLocationStyles.image}
+                    style={ItemPickupLocationStyles.image}
                     source={{ uri : imageDownloadUrl }}
                 />
 
-                <View style={ItemLocationStyles.itemInfoContainer}>
-                    <Text style={ItemLocationStyles.importantText}>{producerName}</Text>
+                <View style={ItemPickupLocationStyles.itemInfoContainer}>
+                    <Text style={ItemPickupLocationStyles.importantText}>{producerName}</Text>
                     <Text>{confectionName} {"\n"}</Text>
-                    <Text style={ItemLocationStyles.importantText}>Pickup location:</Text>
+                    <Text style={ItemPickupLocationStyles.importantText}>Pickup location:</Text>
                     <Text>{vendorAddress}</Text>
                 </View>
             </View>
