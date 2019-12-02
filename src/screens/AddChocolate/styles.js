@@ -48,6 +48,7 @@ export const EntryStyles = StyleSheet.create({
         alignSelf:"center"
     },
     popupFlatlistContainer: {
+        marginTop: 20,
         width: 300
     },
     popupTextInputContainer: {
