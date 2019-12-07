@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { 
+    Alert,
     FlatList, 
     Picker,
     Platform,
@@ -10,7 +11,7 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors } from '../../helpers/Constants';
+import { Colors, DeliveryMethodDisplayText } from '../../helpers/Constants';
 import { DeliveryMethodScreenStyles } from './styles';
 import ItemPickupLocation from './components/ItemPickupLocation';
 import ShippingAddressInput from './components/ShippingAddressInput';
@@ -18,16 +19,21 @@ import ShippingAddressInput from './components/ShippingAddressInput';
 export default class DeliveryMethodScreen extends Component {
     constructor(props) {
         super(props);
-        this.numPickerItems = 2;
         this.cartItems = this.props.navigation.getParam('cartItems', {});
-        this.displayText = {
-            "pickup": "Pickup",
-            "shipping": "Shipping"
-        }
+        this.updateAddress = this.updateAddress.bind(this); 
 
         this.state = {
             selectedDeliveryMethod: "pickup",
-            isIosDialogVisible: false
+            isIosDialogVisible: false,
+
+            // Delivery Address info
+            userFullName: "",
+            streetAddress1: "",
+            streetAddress2: "",
+            city: "",
+            state: "",
+            zipcode: "",
+            country: "United States",
         }
     }
 
@@ -51,7 +57,16 @@ export default class DeliveryMethodScreen extends Component {
     })
 
     render(){
-        const { selectedDeliveryMethod } = this.state;
+        const { 
+            selectedDeliveryMethod,
+            userFullName,
+            streetAddress1,
+            streetAddress2,
+            city,
+            state,
+            zipcode,
+            country,
+        } = this.state;
 
         return(
             <ScrollView>
@@ -79,7 +94,7 @@ export default class DeliveryMethodScreen extends Component {
                         <FlatList
                             data={this.cartItems}
                             scrollEnabled={true}
-                            renderItem={({_, index}) => this.renderItem(this.cartItems[index].key)}
+                            renderItem={({_, index}) => this.renderItem(this.cartItems[index])}
                             keyExtractor={(_, index) => index.toString()}
                         /> 
                     :
@@ -88,14 +103,23 @@ export default class DeliveryMethodScreen extends Component {
 
                 {
                     selectedDeliveryMethod == "shipping" ?
-                        <ShippingAddressInput />
+                        <ShippingAddressInput 
+                            updateAddress={this.updateAddress}
+                            userFullName={userFullName}
+                            streetAddress1={streetAddress1}
+                            streetAddress2={streetAddress2}
+                            city={city}
+                            state={state}
+                            zipcode={zipcode}
+                            country={country}
+                        />
                     :
                         null
                 }
                 
 
                 <TouchableOpacity 
-                    onPress={() => console.log("Continue to payment method")} // this.props.navigation.navigate("DeliveryMethodScreen", { cartItems: cartItems }) }
+                    onPress={() => this.proceedToReview() } 
                     style={DeliveryMethodScreenStyles.proceedToCheckoutButton}
                 >
                     <Text style={DeliveryMethodScreenStyles.proceedToCheckoutText}>
@@ -103,6 +127,81 @@ export default class DeliveryMethodScreen extends Component {
                     </Text>
                 </TouchableOpacity>
             </ScrollView>
+        );
+    }
+
+    updateAddress(field, text){
+        this.setState({[field]: text});
+    }
+
+    proceedToReview(){
+        if(this.isVerifiedToProceed()){
+            const {
+                selectedDeliveryMethod,
+                userFullName,
+                streetAddress1,
+                streetAddress2,
+                city,
+                state,
+                zipcode,
+                country,
+            } = this.state;
+
+            if(selectedDeliveryMethod == "pickup"){
+                var order = {
+                    cartItems: this.cartItems,
+                    selectedDeliveryMethod: selectedDeliveryMethod
+                }
+            }
+            else{
+                var order = {
+                    cartItems: this.cartItems,
+                    selectedDeliveryMethod: selectedDeliveryMethod,
+                    userFullName: userFullName,
+                    streetAddress1: streetAddress1,
+                    streetAddress2: streetAddress2,
+                    city: city,
+                    state: state,
+                    zipcode: zipcode,
+                    country: country
+                }
+            }
+
+            this.props.navigation.navigate("ReviewOrderScreen", { order: order });
+        }
+        else{
+            Alert.alert(
+                "You must fill in the required fields",
+                "",
+                [
+                  {text: 'OK'}
+                ],
+                { cancelable: false }
+            );
+            return;
+        }
+    }
+
+    isVerifiedToProceed(){
+        const {
+            selectedDeliveryMethod,
+            userFullName,
+            streetAddress1,
+            city,
+            state,
+            zipcode,
+        } = this.state;
+
+        // Ensure required fields are filled in if shipping
+        return (
+            selectedDeliveryMethod == "pickup" || 
+            (
+                userFullName.trim() !== "" &&
+                streetAddress1.trim() !== "" &&
+                city.trim() !== "" &&
+                state.trim() !== "" &&
+                zipcode.trim() !== ""
+            )
         );
     }
 
@@ -114,7 +213,7 @@ export default class DeliveryMethodScreen extends Component {
                     onPress={() => this.toggleIosDialogBox()}
                     style={DeliveryMethodScreenStyles.picker}
                 >
-                    <Text style={DeliveryMethodScreenStyles.iosDeliveryMethodText}>{this.displayText[selectedDeliveryMethod]}</Text>
+                    <Text style={DeliveryMethodScreenStyles.iosDeliveryMethodText}>{DeliveryMethodDisplayText[selectedDeliveryMethod]}</Text>
                 </TouchableOpacity>
                 <Modal 
                     onBackdropPress={() => this.toggleIosDialogBox()}
@@ -124,13 +223,12 @@ export default class DeliveryMethodScreen extends Component {
                     <View style={DeliveryMethodScreenStyles.popupFlatlistContainer}>
                         <FlatList
                             data={this.getIosPickerItems()}
-                            renderItem={
-                            ({ item }) =>
+                            renderItem={ ({ item }) =>
                                 <TouchableOpacity 
                                     onPress={ () => this.updateDeliveryMethod(item.key) }
                                     style={DeliveryMethodScreenStyles.popupEntriesBackground}
                                 >
-                                    <Text style={DeliveryMethodScreenStyles.popupEntriesText}>{this.displayText[item.key]}</Text>
+                                    <Text style={DeliveryMethodScreenStyles.popupEntriesText}>{DeliveryMethodDisplayText[item.key]}</Text>
                                 </TouchableOpacity>
                             }
                         />

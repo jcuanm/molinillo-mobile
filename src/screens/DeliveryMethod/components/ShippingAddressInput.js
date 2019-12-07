@@ -18,14 +18,6 @@ export default class ShippingAddressInput extends Component {
         this.maxStringLength = 255;
 
 		this.state = {
-            userFullName: "",
-            streetAddress1: "",
-            streetAddress2: "",
-            city: "",
-            state: "",
-            zipcode: "",
-            country: "United States",
-
             isCountryDialogVisible: false
 		};
     }
@@ -39,11 +31,11 @@ export default class ShippingAddressInput extends Component {
                   {text: 'OK'}
                 ],
                 { cancelable: false }
-              );
+            );
             return;
         }
         else{
-            this.setState({[field]: newText} )
+            this.props.updateAddress(field, newText);
         }
     }
 
@@ -56,7 +48,8 @@ export default class ShippingAddressInput extends Component {
             state,
             zipcode,
             country
-        } = this.state;
+        } = this.props;
+
 		return (
             <View>
                 <TextInput 
@@ -127,7 +120,8 @@ export default class ShippingAddressInput extends Component {
     }
 
     renderOptionsDialog(){
-        const {isCountryDialogVisible} = this.state;
+        const { isCountryDialogVisible } = this.state;
+
         return(
             <Modal 
                 onBackdropPress={() => this.setState({isCountryDialogVisible: false})}
@@ -140,8 +134,8 @@ export default class ShippingAddressInput extends Component {
                         renderItem={ ({ item }) =>
                             <TouchableOpacity 
                                 onPress={ () => {
+                                    this.props.updateAddress("country", item.key);
                                     this.setState({
-                                        country: item.key,
                                         isCountryDialogVisible: false
                                     })
                                 }} 
