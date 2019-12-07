@@ -49,8 +49,7 @@ export default class CartScreen extends Component {
                 let cartItems = [];
                 if(results.size > 0){
                     results.forEach(doc => {
-                        let item = { key : doc.data() };
-                        cartItems.push({key : item});
+                        cartItems.push({key : doc.data()});
                     }); 
 
                     this.setState({cartItems: cartItems})
@@ -98,6 +97,7 @@ export default class CartScreen extends Component {
 
     render(){
         const { cartItems } = this.state;
+        
         return(
             <View style={CartScreenStyles.container}>
                 <ScrollView>
@@ -140,7 +140,7 @@ export default class CartScreen extends Component {
             confectionName,
             quantity, 
             chocolateUuid
-        } = item.key;
+        } = item;
 
         return(
             <CartItem 

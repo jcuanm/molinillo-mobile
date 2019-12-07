@@ -12,6 +12,11 @@ export const StringConcatenations = {
     Prefix: "BarcodeType_",
 }
 
+export const DeliveryMethodDisplayText = {
+    "pickup": "Pickup",
+    "shipping": "Shipping"
+};
+
 export const Colors = {
     Primary: "#4B006E",
     Secondary: "white"
