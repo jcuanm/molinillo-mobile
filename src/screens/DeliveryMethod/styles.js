@@ -92,46 +92,9 @@ export const ItemPickupLocationStyles = StyleSheet.create({
     itemInfoContainer: {
         flex:1
     },
-    listingTitle: {
-        fontWeight:"bold"
-    },
-    listingSubtitle: {
-        fontSize: 12, 
-        fontWeight: 'bold'
-    },
-    quantityChangerContainer:{
-        flexDirection:"row", 
-        marginTop:20
-    },
-    quantityChangerSymbol: {
-        textAlign:"center", 
-        fontSize:28
-    },
     importantText: {
         fontWeight:"bold"
     },
-    quantityTextContainer: {
-        justifyContent:"center", 
-        borderColor:"grey", 
-        borderWidth:1, 
-        backgroundColor:"white", 
-        width:60, 
-        height:30
-    },
-    quantityText: {
-        textAlign:"center"
-    },
-    quantityChangerButton:{
-        justifyContent:"center",  
-        borderColor:"grey", 
-        borderWidth:1, 
-        backgroundColor:"white", 
-        width:30, 
-        height:30
-    },
-    trashIcon: {
-        marginRight:15
-    }
 });
 
 const inputPadding = 5;

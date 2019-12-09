@@ -2,11 +2,10 @@ import { Dimensions, StyleSheet } from 'react-native';
 import { Colors } from '../../helpers/Constants';
 
 const screenMargin = 15;
+
 export const ReviewOrderScreenStyles = StyleSheet.create({
     container: {
         marginTop:10,
-        marginLeft:screenMargin,
-        marginRight: screenMargin
     },
     headerButton: {
         height: 44,
@@ -17,6 +16,7 @@ export const ReviewOrderScreenStyles = StyleSheet.create({
     },
     proceedToCheckoutButton: {
         marginTop: 10,
+        marginBottom:10,
         width: Dimensions.get('window').width - 20,
         height: 40,
         backgroundColor: "gold",
@@ -27,13 +27,17 @@ export const ReviewOrderScreenStyles = StyleSheet.create({
         textAlign: "center",
         fontWeight: 'bold'
     },
+    policyLink: {
+        color: "#004C99"
+    },
     policyText: {
+        marginLeft: screenMargin,
+        marginRight: screenMargin,
         marginTop: 60,
         fontSize:12,
     }
 });
 
-const valueFontSize = 15;
 export const DeliveryMethodStyles = StyleSheet.create({
     deliveryMethodContainer:{
         backgroundColor: Colors.Primary,
@@ -44,14 +48,13 @@ export const DeliveryMethodStyles = StyleSheet.create({
         justifyContent:"center"
     },
     deliveryMethodTitle:{
-        fontSize: valueFontSize,
+        
         flex:2,
         fontWeight:"bold",
         color: Colors.Secondary
     },
     deliveryMethodValue:{
-        textAlign: "right",
-        fontSize: valueFontSize,
+        textAlign: "left",
         flex:2,
         fontWeight:"bold",
         color: Colors.Secondary
@@ -61,24 +64,27 @@ export const DeliveryMethodStyles = StyleSheet.create({
 export const PriceBreakdownStyles = StyleSheet.create({
     calculation: {
         marginTop:5,
+        marginLeft:screenMargin,
+        marginRight: screenMargin,
         flexDirection:"row",
         justifyContent:"center"
     },
     calculationTitle: {
-        fontSize: valueFontSize,
         flex:2
     },
     calculationAmount: {
         flex:2,
         textAlign: "right",
-        fontSize: valueFontSize,
+    },
+    container: {
+        marginTop:15
     },
     orderTotalTitle: {
         color:Colors.Primary,
         fontWeight: "bold"
     },
     orderTotalAmount:{
-        color:"red",
+        color:"green",
         fontWeight:"bold"
     },
     orderTotalBorder: {
@@ -87,4 +93,35 @@ export const PriceBreakdownStyles = StyleSheet.create({
         borderTopColor: "grey", 
         borderTopWidth: 1,
     },
+});
+
+export const ReviewItemStyles = StyleSheet.create({
+    container: {
+        paddingBottom: 10,
+        flexDirection:"row",
+        backgroundColor: "white",
+        width: Dimensions.get('window').width, 
+        height: Dimensions.get('window').height/4,
+        borderBottomColor: "grey",
+        borderBottomWidth: 1,
+        alignItems: "center",
+        justifyContent:"center"
+    },
+    image: {
+        width: 120, 
+        height: 120,
+        flex:1
+    },
+    itemInfoContainer: {
+        flex:1
+    },
+    importantText: {
+        fontWeight:"bold",
+    },
+    quantityAmountText: {
+        fontWeight:"normal",
+    },
+    priceText: {
+        color: "green"
+    }
 });

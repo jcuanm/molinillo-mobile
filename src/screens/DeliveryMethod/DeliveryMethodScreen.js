@@ -147,24 +147,20 @@ export default class DeliveryMethodScreen extends Component {
                 country,
             } = this.state;
 
-            if(selectedDeliveryMethod == "pickup"){
-                var order = {
-                    cartItems: this.cartItems,
-                    selectedDeliveryMethod: selectedDeliveryMethod
-                }
+            const shippingAddress = {
+                userFullName: userFullName,
+                streetAddress1: streetAddress1,
+                streetAddress2: streetAddress2,
+                city: city,
+                state: state,
+                zipcode: zipcode,
+                country: country,
             }
-            else{
-                var order = {
-                    cartItems: this.cartItems,
-                    selectedDeliveryMethod: selectedDeliveryMethod,
-                    userFullName: userFullName,
-                    streetAddress1: streetAddress1,
-                    streetAddress2: streetAddress2,
-                    city: city,
-                    state: state,
-                    zipcode: zipcode,
-                    country: country
-                }
+
+            var order = {
+                cartItems: this.cartItems,
+                selectedDeliveryMethod: selectedDeliveryMethod,
+                shippingAddress: shippingAddress
             }
 
             this.props.navigation.navigate("ReviewOrderScreen", { order: order });

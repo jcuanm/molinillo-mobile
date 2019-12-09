@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import { 
     FlatList, 
+    Linking,
     ScrollView, 
     Text,
     TouchableOpacity
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors } from '../../helpers/Constants';
+import { Colors, PrivacyPolicyUrl } from '../../helpers/Constants';
 import { ReviewOrderScreenStyles } from './styles';
 import PriceBreakdown from './components/PriceBreakdown';
 import DeliveryMethod from './components/DeliveryMethod';
+import ReviewItem from './components/ReviewItem';
 
 export default class ReviewOrderScreen extends Component {
     constructor(props) {
@@ -37,13 +39,24 @@ export default class ReviewOrderScreen extends Component {
     })
 
     render(){
-        const { cartItems, selectedDeliveryMethod } = this.order;
+        const { 
+            cartItems, 
+            selectedDeliveryMethod,
+            shippingAddress
+        } = this.order;
         
         return(
             <ScrollView style={ReviewOrderScreenStyles.container}> 
 
                 <DeliveryMethod 
+                    shippingAddress={shippingAddress}
                     selectedDeliveryMethod={selectedDeliveryMethod} 
+                />
+
+                <FlatList
+                    data={cartItems}
+                    renderItem={({_, index}) => this.renderItem(cartItems[index])}
+                    keyExtractor={(_, index) => index.toString()}
                 />
 
                 <PriceBreakdown 
@@ -52,7 +65,11 @@ export default class ReviewOrderScreen extends Component {
                 />
 
                 <Text style={ReviewOrderScreenStyles.policyText}>
-                    By placing your order, you agree to Molinillo's privacy policy and terms of use.
+                    By placing your order, you agree to Molinillo's <Text 
+                        onPress={() => this.openWebpage(PrivacyPolicyUrl)} 
+                        style={ReviewOrderScreenStyles.policyLink}>
+                            privacy policy
+                    </Text> and terms of use.
                 </Text>
                 <TouchableOpacity 
                     onPress={() => console.log("Enter credit card info") } 
@@ -65,4 +82,42 @@ export default class ReviewOrderScreen extends Component {
             </ScrollView>
         );
     }
+
+    renderItem(item){
+        const { 
+            imageDownloadUrl,
+            producerName,
+            confectionName,
+            vendorAddress,
+            quantity,
+            price
+        } = item.key;
+
+        return(
+            <ReviewItem
+                selectedDeliveryMethod={this.order.selectedDeliveryMethod}
+                vendorAddress={vendorAddress}
+                imageDownloadUrl={imageDownloadUrl}
+                producerName={producerName}
+                confectionName={confectionName}
+                quantity={quantity}
+                price={price}
+            />
+        );
+    }
+
+    openWebpage(url){
+		if(url){
+			Linking
+				.canOpenURL(url)
+				.then(supported =>{
+					if(supported){
+						Linking.openURL(url);
+					}
+				})
+				.catch(error => {
+					console.log(error);
+				});
+		}
+	}
 }
