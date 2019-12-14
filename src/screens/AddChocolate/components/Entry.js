@@ -114,6 +114,7 @@ export default class Entry extends Component {
 
           {/* Text Input Area */}
           <TextInput
+            maxLength={500}
             style={EntryStyles.popupTextInputArea}
             onChangeText={text => this.setState({dialogBoxText: text})}
             value={this.state.dialogBoxText}

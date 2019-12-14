@@ -50,6 +50,7 @@ export default class Feedback extends Component {
 
                         {/* Text Input Area */}
                         <TextInput
+                            maxLength={1000}
                             style={FeedbackStyles.popupTextInputArea}
                             onChangeText={text => this.setState({dialogBoxText: text})}
                             value={dialogBoxText}

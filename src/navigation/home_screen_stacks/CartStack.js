@@ -5,6 +5,7 @@ import DetailScreen from '../../screens/Detail/DetailScreen';
 import AddChocolateScreen from '../../screens/AddChocolate/AddChocolateScreen';
 import DeliveryMethodScreen from '../../screens/DeliveryMethod/DeliveryMethodScreen';
 import ReviewOrderScreen from '../../screens/ReviewOrder/ReviewOrderScreen';
+import PaymentScreen from '../../screens/Payment/PaymentScreen';
 
 export default createStackNavigator({
     CartScreen,
@@ -12,5 +13,6 @@ export default createStackNavigator({
     DetailScreen,
     AddChocolateScreen,
     DeliveryMethodScreen,
-    ReviewOrderScreen
+    ReviewOrderScreen,
+    PaymentScreen
 });

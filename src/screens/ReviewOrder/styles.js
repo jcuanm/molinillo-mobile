@@ -14,16 +14,16 @@ export const ReviewOrderScreenStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    proceedToCheckoutButton: {
-        marginTop: 10,
-        marginBottom:10,
+    proceedToPaymentButton: {
+        marginTop: 25,
+        margin:10,
         width: Dimensions.get('window').width - 20,
         height: 40,
         backgroundColor: "gold",
         alignSelf:"center",
         justifyContent: "center"
     },
-    proceedToCheckoutText: {
+    proceedToPaymentText: {
         textAlign: "center",
         fontWeight: 'bold'
     },
@@ -33,7 +33,7 @@ export const ReviewOrderScreenStyles = StyleSheet.create({
     policyText: {
         marginLeft: screenMargin,
         marginRight: screenMargin,
-        marginTop: 60,
+        marginTop: 50,
         fontSize:12,
     }
 });

@@ -72,10 +72,10 @@ export default class ReviewOrderScreen extends Component {
                     </Text> and terms of use.
                 </Text>
                 <TouchableOpacity 
-                    onPress={() => console.log("Enter credit card info") } 
-                    style={ReviewOrderScreenStyles.proceedToCheckoutButton}
+                    onPress={() => this.props.navigation.navigate("PaymentScreen", { order: this.order }) } 
+                    style={ReviewOrderScreenStyles.proceedToPaymentButton}
                 >
-                    <Text style={ReviewOrderScreenStyles.proceedToCheckoutText}>
+                    <Text style={ReviewOrderScreenStyles.proceedToPaymentText}>
                         Proceed to payment
                     </Text>
                 </TouchableOpacity>

@@ -81,6 +81,7 @@ export default class DeliveryMethodScreen extends Component {
                                 selectedValue={selectedDeliveryMethod}
                                 onValueChange={(itemValue, itemIndex) => this.setState({ selectedDeliveryMethod: itemValue })}
                                 style={DeliveryMethodScreenStyles.picker}
+                                mode={"dropdown"}
                             >
                                 <Picker.Item label={"Pickup"} value={"pickup"} />
                                 <Picker.Item label={"Shipping"} value={"shipping"} />
@@ -119,10 +120,10 @@ export default class DeliveryMethodScreen extends Component {
                 
 
                 <TouchableOpacity 
-                    onPress={() => this.proceedToReview() } 
-                    style={DeliveryMethodScreenStyles.proceedToCheckoutButton}
+                    onPress={() => this.proceed() } 
+                    style={DeliveryMethodScreenStyles.confirmDeliveryButton}
                 >
-                    <Text style={DeliveryMethodScreenStyles.proceedToCheckoutText}>
+                    <Text style={DeliveryMethodScreenStyles.confirmDeliveryText}>
                         Confirm delivery method
                     </Text>
                 </TouchableOpacity>
@@ -134,7 +135,7 @@ export default class DeliveryMethodScreen extends Component {
         this.setState({[field]: text});
     }
 
-    proceedToReview(){
+    proceed(){
         if(this.isVerifiedToProceed()){
             const {
                 selectedDeliveryMethod,
@@ -163,7 +164,7 @@ export default class DeliveryMethodScreen extends Component {
                 shippingAddress: shippingAddress
             }
 
-            this.props.navigation.navigate("ReviewOrderScreen", { order: order });
+            this.props.navigation.navigate("PaymentScreen", { order: order });
         }
         else{
             Alert.alert(
