@@ -12,6 +12,9 @@ import {
   ALGOLIA_API_KEY,
   ALGOLIA_APP_ID,
   ALGOLIA_INDEX_NAME,
+
+  // Stripe Credentials
+  STRIPE_API_KEY
 } from 'react-native-dotenv';
 
 export const FirebaseConfig = {
@@ -22,10 +25,14 @@ export const FirebaseConfig = {
   storageBucket: STORAGE_BUCKET,
   messagingSenderId: MESSAGING_SENDER_ID,
   appId: FIREBASE_APP_ID
-}
+};
 
 export const AlgoliaSearchConfig = {
   apiKey: ALGOLIA_API_KEY,
   applicationID: ALGOLIA_APP_ID,
   indexName: ALGOLIA_INDEX_NAME
-}
+};
+
+export const StripeConfig = {
+  apiKey: STRIPE_API_KEY
+};

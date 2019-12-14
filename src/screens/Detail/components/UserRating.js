@@ -64,6 +64,7 @@ export default class UserRating extends Component {
 
                         {/* Text Input Area */}
                         <TextInput
+                            maxLength={1000}
                             style={UserRatingStyles.popupTextInputArea}
                             onChangeText={text => this.setState({dialogBoxText: text})}
                             value={dialogBoxText}

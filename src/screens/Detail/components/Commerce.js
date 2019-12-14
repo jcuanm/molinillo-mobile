@@ -65,6 +65,7 @@ export default class Commerce extends Component {
                                         onValueChange={(itemValue, itemIndex) => this.setState({ quantity: itemValue })}
                                         style={CommerceStyles.picker}
                                         textStyle={CommerceStyles.pickerText}
+                                        mode={"dropdown"}
                                     >
                                         {this.getPickerItems()}
                                     </Picker>

@@ -7,6 +7,8 @@ import { SearchBoxStyles } from '../styles';
 const SearchBox = ({ currentRefinement, refine }) => (
   <View style={SearchBoxStyles.container}>
     <TextInput
+      maxLength={255}
+      clearButtonMode={"always"}
       style={SearchBoxStyles.input}
       onChangeText={value => refine(value)}
       value={currentRefinement}

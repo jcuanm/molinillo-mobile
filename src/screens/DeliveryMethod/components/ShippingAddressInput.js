@@ -55,6 +55,7 @@ export default class ShippingAddressInput extends Component {
                 <TextInput 
                     value={userFullName}
                     blurOnSubmit
+                    maxLength={255}
                     placeholder={"Receiver full name"}
                     clearButtonMode={"always"}
                     style={ShippingAddressInputStyles.inputBox} 
@@ -62,6 +63,7 @@ export default class ShippingAddressInput extends Component {
                 />
                <TextInput 
                     value={streetAddress1}
+                    maxLength={255}
                     blurOnSubmit
                     placeholder={"Street address or P.O. Box"}
                     clearButtonMode={"always"}
@@ -69,6 +71,7 @@ export default class ShippingAddressInput extends Component {
                     onChangeText={newText => this.onChangeText("streetAddress1", newText)}
                 />
                 <TextInput 
+                    maxLength={255}
                     value={streetAddress2}
                     blurOnSubmit
                     placeholder={"Apt, Suite, Unit, Building (optional)"}
@@ -77,6 +80,7 @@ export default class ShippingAddressInput extends Component {
                     onChangeText={newText => this.onChangeText("streetAddress2", newText)}
                 />
                 <TextInput 
+                    maxLength={255}
                     value={city}
                     blurOnSubmit
                     placeholder={"City"}
@@ -85,6 +89,7 @@ export default class ShippingAddressInput extends Component {
                     onChangeText={newText => this.onChangeText("city", newText)}
                 />
                 <TextInput 
+                    maxLength={255}
                     value={state}
                     blurOnSubmit
                     placeholder={"State/Province/Region"}
@@ -93,6 +98,7 @@ export default class ShippingAddressInput extends Component {
                     onChangeText={newText => this.onChangeText("state", newText)}
                 />
                 <TextInput 
+                    maxLength={255}
                     value={zipcode}
                     blurOnSubmit
                     placeholder={"ZIP"}

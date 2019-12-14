@@ -1,7 +1,10 @@
 import { Dimensions, StyleSheet } from 'react-native';
 import { Colors } from '../../helpers/Constants';
 
-export const DeliveryMethodScreenStyles = StyleSheet.create({
+export const PaymentScreenStyles = StyleSheet.create({
+    container: {
+        marginTop:10,
+    },
     headerButton: {
         height: 44,
         width: 44,
@@ -9,99 +12,78 @@ export const DeliveryMethodScreenStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    iosDeliveryMethodText: {
-        fontWeight:"bold", 
-        color: Colors.Secondary, 
-        textAlign:"center", 
-        fontSize:18
-    },
-    popupModal: {
-        alignContent: 'center',
-        alignSelf:"center",
-    },
-    popupFlatlistContainer: {
-        width: 300
-    },
-    popupEntriesBackground: {
-        backgroundColor: Colors.Secondary, 
-        borderBottomWidth: 0.5, 
-        borderBottomColor: "grey"
-    },
-    popupEntriesText: {
-        textAlign:'center', 
-        fontSize: 20
-    },
-    promptText: {
-        textAlign: "center",
-        fontSize: 18,
-        fontWeight: "bold"
-    },
-    headerImage: {
-        height:40, 
-        width:40
-    },
-    pickerContainer: {
-        borderBottomColor: "grey",
-        borderBottomWidth: 1,
-        padding: 35,
-        marginBottom: 30
-    },
-    picker: {
-        backgroundColor: Colors.Primary,
-        color: Colors.Secondary,
-        borderBottomWidth: 2,
-        width:100,
-        height:30,
-        transform: [{ scaleX: .9 }, { scaleY: .9 }],
-        alignSelf: "center",
-        margin:5,
-        justifyContent: "center"
-    },
-    confirmDeliveryButton: {
+    proceedToReviewButton: {
         marginTop: 25,
+        margin:10,
         width: Dimensions.get('window').width - 20,
         height: 40,
         backgroundColor: "gold",
-        margin: 10,
         alignSelf:"center",
         justifyContent: "center"
     },
-    confirmDeliveryText: {
+    proceedToReviewText: {
         textAlign: "center",
         fontWeight: 'bold'
     },
 });
 
-export const ItemPickupLocationStyles = StyleSheet.create({
-    container: {
-        paddingBottom: 10,
+const inputPadding = 5;
+export const CreditCardInfoStyles = StyleSheet.create({
+    inputBox: {
+        marginTop: 10,
+        width: Dimensions.get('window').width - 20,
+        paddingLeft: inputPadding,
+        paddingRight: inputPadding,
+        height: 30,
+        borderColor: Colors.Primary,
+        borderWidth:1,
+        alignSelf: "center"
+    },
+    cvcBox: {
+        marginTop: 10,
+        width: Dimensions.get('window').width/3 - 20,
+        marginLeft: inputPadding + 5,
+        paddingLeft: inputPadding,
+        paddingRight: inputPadding,
+        height: 30,
+        borderColor: Colors.Primary,
+        borderWidth:1,
+        alignSelf: "flex-start"
+    },
+    pickersContainer: {
         flexDirection:"row",
-        backgroundColor: "white",
-        width: Dimensions.get('window').width, 
-        height: Dimensions.get('window').height/4,
-        borderBottomColor: "grey",
-        borderBottomWidth: 1,
-        alignItems: "center",
-        justifyContent:"center"
+        alignContent: "flex-start"
     },
-    image: {
-        width: 120, 
-        height: 120,
-        flex:1
+    picker: {
+        marginTop:20,
+        flex:1,
+        backgroundColor: Colors.Primary,
+        color: Colors.Secondary,
+        width:50,
+        height:30,
+        transform: [{ scaleX: .9 }, { scaleY: .9 }],
     },
-    itemInfoContainer: {
-        flex:1
+    iosPicker: {
+        marginTop: -30,
+        flex:1,
+        transform: [{ scaleX: .7 }, { scaleY: .7 }],
     },
-    importantText: {
-        fontWeight:"bold"
+    title: {
+        fontWeight: "bold",
+        marginTop:20,
+        paddingLeft: inputPadding + 5,
+        color: Colors.Primary
     },
 });
 
-const inputPadding = 5;
 const inputWidth = Dimensions.get('window').width - 20;
 const inputHeight = 30;
 const marginTop = 10;
-export const ShippingAddressInputStyles = StyleSheet.create({
+export const BillingAddressInputStyles = StyleSheet.create({
+    checkbox:{
+        flex: 1, 
+        padding: 10
+    },
     inputBox: {
         marginTop: marginTop,
         width: inputWidth,
@@ -149,5 +131,11 @@ export const ShippingAddressInputStyles = StyleSheet.create({
     popupEntriesText: {
         textAlign:'center', 
         fontSize: 20
+    },
+    title: {
+        fontWeight: "bold",
+        marginTop:20,
+        paddingLeft: inputPadding + 5,
+        color: Colors.Primary
     },
 });

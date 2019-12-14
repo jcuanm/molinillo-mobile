@@ -22,7 +22,10 @@ export default class LoginForm extends Component {
 	render(){
 		return(
 			<View style={LoginFormStyles.container}>
-        <TextInput style={LoginFormStyles.inputBox} 
+        <TextInput 
+          maxLength={255}
+          clearButtonMode={"always"}
+          style={LoginFormStyles.inputBox} 
           underlineColorAndroid='rgba(0,0,0,0)' 
           onChangeText={(text) => { this.setState({ email: text }) }}
           placeholder="Email"
@@ -32,6 +35,8 @@ export default class LoginForm extends Component {
           onSubmitEditing={()=> this.password.focus()}
         />
         <TextInput 
+          maxLength={255}
+          clearButtonMode={"always"}
           style={LoginFormStyles.inputBox} 
           underlineColorAndroid='rgba(0,0,0,0)' 
           onChangeText={(text) => { this.setState({password: text}) }}

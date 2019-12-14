@@ -30,7 +30,9 @@ export default class ForgotPasswordForm extends Component {
 	render(){
 		return(
 			<View style={ForgotPasswordFormStyles.container}>
-        <TextInput 
+        <TextInput
+          maxLength={255} 
+          clearButtonMode={"always"}
           style={ForgotPasswordFormStyles.inputBox} 
           underlineColorAndroid='rgba(0,0,0,0)' 
           onChangeText={(text) => { this.setState({ email: text }) }}

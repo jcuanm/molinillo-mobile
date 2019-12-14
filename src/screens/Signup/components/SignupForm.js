@@ -27,7 +27,10 @@ export default class SignupForm extends Component {
 	render(){
 		return(
 			<View style={SignupFormStyles.container}>
-        <TextInput style={SignupFormStyles.inputBox} 
+        <TextInput 
+          maxLength={255}
+          clearButtonMode={"always"}
+          style={SignupFormStyles.inputBox} 
           underlineColorAndroid='rgba(0,0,0,0)' 
           onChangeText={(text) => { this.setState({ email: text }) }}
           placeholder="Email"
@@ -35,7 +38,10 @@ export default class SignupForm extends Component {
           selectionColor="#fff"
           keyboardType="email-address"
         />
-        <TextInput style={SignupFormStyles.inputBox} 
+        <TextInput 
+          maxLength={255}
+          clearButtonMode={"always"}
+          style={SignupFormStyles.inputBox} 
           underlineColorAndroid='rgba(0,0,0,0)' 
           onChangeText={(text) => { this.setState({ displayName: text }) }}
           placeholder="Display Name"
@@ -43,6 +49,8 @@ export default class SignupForm extends Component {
           selectionColor="#fff"
         />
         <TextInput 
+          maxLength={255}
+          clearButtonMode={"always"}
           style={SignupFormStyles.inputBox} 
           underlineColorAndroid='rgba(0,0,0,0)' 
           onChangeText={(text) => { this.setState({ password: text }) }}
@@ -51,6 +59,8 @@ export default class SignupForm extends Component {
           placeholderTextColor = "#ffffff"
         />  
         <TextInput 
+          maxLength={255}
+          clearButtonMode={"always"}
           style={SignupFormStyles.inputBox} 
           underlineColorAndroid='rgba(0,0,0,0)' 
           onChangeText={(text) => { this.setState({ passwordConfirm: text }) }}

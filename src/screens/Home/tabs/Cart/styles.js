@@ -21,6 +21,7 @@ export const CartScreenStyles = StyleSheet.create({
         height: 40,
         backgroundColor: "gold",
         margin: 10,
+        marginTop: 25,
         alignSelf:"center",
         justifyContent: "center"
     },
