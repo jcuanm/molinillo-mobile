@@ -14,18 +14,17 @@ export const ReviewOrderScreenStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    proceedToPaymentButton: {
+    finalizeSlider: {
         marginTop: 25,
         margin:10,
         width: Dimensions.get('window').width - 20,
-        height: 40,
-        backgroundColor: "gold",
+        backgroundColor: "green",
         alignSelf:"center",
-        justifyContent: "center"
     },
-    proceedToPaymentText: {
+    finalizeText: {
         textAlign: "center",
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color:"white"
     },
     policyLink: {
         color: "#004C99"
@@ -58,6 +57,26 @@ export const DeliveryMethodStyles = StyleSheet.create({
         flex:2,
         fontWeight:"bold",
         color: Colors.Secondary
+    },
+});
+
+export const PaymentMethodStyles = StyleSheet.create({
+    paymentMethod: {
+        marginTop:5,
+        marginLeft:screenMargin,
+        marginRight: screenMargin,
+        flexDirection:"row",
+        justifyContent:"center"
+    },
+    paymentMethodTitle: {
+        flex:2
+    },
+    lastFourDigits: {
+        flex:2,
+        textAlign: "right",
+    },
+    container: {
+        marginTop:15
     },
 });
 
