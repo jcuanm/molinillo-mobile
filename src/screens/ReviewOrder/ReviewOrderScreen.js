@@ -7,16 +7,22 @@ import {
     TouchableOpacity
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import Stripe from 'react-native-stripe-api';
+import { StripeConfig } from '../../../assets/Config';
 import { Colors, PrivacyPolicyUrl } from '../../helpers/Constants';
 import { ReviewOrderScreenStyles } from './styles';
 import PriceBreakdown from './components/PriceBreakdown';
 import DeliveryMethod from './components/DeliveryMethod';
 import ReviewItem from './components/ReviewItem';
+import PaymentMethod from './components/PaymentMethod';
+import { RNSlidingButton, SlideDirection } from 'rn-sliding-button';
 
 export default class ReviewOrderScreen extends Component {
     constructor(props) {
         super(props);
+        this.stripeClient = new Stripe(StripeConfig.apiKey);
         this.order = this.props.navigation.getParam('order', {});
+        this.billingInfo = this.props.navigation.getParam('billingInfo', {});
     }
 
     static navigationOptions = ({ navigation }) => ({
@@ -44,6 +50,8 @@ export default class ReviewOrderScreen extends Component {
             selectedDeliveryMethod,
             shippingAddress
         } = this.order;
+
+        const { nameOnCard, creditCardNumber } = this.billingInfo;
         
         return(
             <ScrollView style={ReviewOrderScreenStyles.container}> 
@@ -59,6 +67,11 @@ export default class ReviewOrderScreen extends Component {
                     keyExtractor={(_, index) => index.toString()}
                 />
 
+                <PaymentMethod
+                    nameOnCard={nameOnCard}
+                    creditCardNumber={creditCardNumber}
+                />
+
                 <PriceBreakdown 
                     cartItems={cartItems}
                     selectedDeliveryMethod={selectedDeliveryMethod}
@@ -69,16 +82,19 @@ export default class ReviewOrderScreen extends Component {
                         onPress={() => this.openWebpage(PrivacyPolicyUrl)} 
                         style={ReviewOrderScreenStyles.policyLink}>
                             privacy policy
-                    </Text> and terms of use.
+                    </Text> and terms of use. All sales are final after being placed.
                 </Text>
-                <TouchableOpacity 
-                    onPress={() => this.props.navigation.navigate("PaymentScreen", { order: this.order }) } 
-                    style={ReviewOrderScreenStyles.proceedToPaymentButton}
+
+                <RNSlidingButton
+                    style={ReviewOrderScreenStyles.finalizeSlider}
+                    height={40}
+                    onSlidingSuccess={() => this.placeOrder()}
+                    slideDirection={SlideDirection.RIGHT}
                 >
-                    <Text style={ReviewOrderScreenStyles.proceedToPaymentText}>
-                        Proceed to payment
+                    <Text style={ReviewOrderScreenStyles.finalizeText}>
+                        Slide right to place order >
                     </Text>
-                </TouchableOpacity>
+                </RNSlidingButton>
             </ScrollView>
         );
     }
@@ -119,5 +135,9 @@ export default class ReviewOrderScreen extends Component {
 					console.log(error);
 				});
 		}
-	}
+    }
+    
+    placeOrder(){
+        console.log("Place order");
+    }
 }

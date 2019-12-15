@@ -8,8 +8,6 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../helpers/Constants';
 import { PaymentScreenStyles } from './styles';
-import Stripe from 'react-native-stripe-api';
-import { StripeConfig } from '../../../assets/Config';
 import CreditCardInfo from './components/CreditCardInfo';
 import BillingAddressInput from './components/BillingAddressInput';
 
@@ -18,9 +16,9 @@ export default class PaymentScreen extends React.Component {
     constructor(props) {
         super(props);
         this.order = this.props.navigation.getParam('order', {});
-        this.stripeClient = new Stripe(StripeConfig.apiKey);
         this.updatePaymentInfo = this.updatePaymentInfo.bind(this); 
         this.updateToShippingAddress = this.updateToShippingAddress.bind(this); 
+        this.minCreditCardLength = 4;
 
         this.state = {
             nameOnCard: "",
@@ -182,6 +180,7 @@ export default class PaymentScreen extends React.Component {
         return (
             nameOnCard.trim() !== "" &&
             creditCardNumber.trim() !== "" &&
+            creditCardNumber.trim().length >= this.minCreditCardLength &&
             cvc.trim() !== "" &&
             expirationMonth.trim() !== "" &&
             expirationYear.trim() !== "" &&
