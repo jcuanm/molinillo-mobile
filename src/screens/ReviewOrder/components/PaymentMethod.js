@@ -23,7 +23,7 @@ export default class PaymentMethod extends Component {
 
                 <View style={PaymentMethodStyles.paymentMethod}>
                     <Text style={PaymentMethodStyles.paymentMethodTitle}>
-                        Last 4 digits:
+                        Card number:
                     </Text>
                     <Text style={PaymentMethodStyles.lastFourDigits}>
                         ****-****-****-{creditCardNumber.substr(creditCardNumber.length - 4)}
