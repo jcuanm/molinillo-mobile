@@ -8,8 +8,8 @@ export default class ForgotPasswordScreen extends Component{
   
 	render() {
 		return(
-      <KeyboardAvoidingView 
-        style={ForgotPasswordScreenStyles.container}
+			<KeyboardAvoidingView 
+				style={ForgotPasswordScreenStyles.container}
 				behavior="position" 
 				contentContainerStyle={ForgotPasswordScreenStyles.contentContainer}
 				enabled

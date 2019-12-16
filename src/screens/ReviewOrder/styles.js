@@ -116,6 +116,7 @@ export const PriceBreakdownStyles = StyleSheet.create({
 
 export const ReviewItemStyles = StyleSheet.create({
     container: {
+        marginTop:10,
         paddingBottom: 10,
         flexDirection:"row",
         backgroundColor: "white",
