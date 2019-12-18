@@ -51,7 +51,7 @@ export default class DetailScreen extends Component {
 		};
 	}
 
-	componentWillMount(){
+	componentDidMount(){
 		this.initializeScreen();
 	}
 

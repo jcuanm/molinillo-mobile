@@ -20,7 +20,7 @@ export default class Header extends Component {
 		};
     }
     
-    componentWillMount(){
+    componentDidMount(){
         this.checkMyChocolates();
     }
 
