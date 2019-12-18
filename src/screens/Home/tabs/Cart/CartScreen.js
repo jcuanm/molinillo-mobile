@@ -20,7 +20,6 @@ export default class CartScreen extends Component {
     constructor(props) {
         super(props);
         this.dbHandler = new DbHandler();
-        this.pushToUserCartItems = this.pushToUserCartItems.bind(this); 
         this.getUserCartItems = this.getUserCartItems.bind(this); 
 
         props.navigation.setParams({
@@ -61,17 +60,6 @@ export default class CartScreen extends Component {
             .catch(error => {
                 console.log(error);
             });
-    }
-
-    pushToUserCartItems(resultsAndParams){
-        let cartItems = resultsAndParams.params;
-        let results = resultsAndParams.results.data();
-
-        cartItems.push({key : results});
-
-        this.setState({
-            cartItems: cartItems
-        });
     }
 
     static navigationOptions = ({ navigation }) => ({
@@ -134,23 +122,25 @@ export default class CartScreen extends Component {
 
     renderItem(item){
         const { 
-            price,
             imageDownloadUrl,
             producerName,
             confectionName,
             quantity, 
-            chocolateUuid
+            chocolateUuid,
+            barcodeType,
+            barcodeData,
         } = item;
 
         return(
             <CartItem 
                 getUserCartItems={this.getUserCartItems}
-                price={price}
                 chocolateUuid={chocolateUuid}
                 imageDownloadUrl={imageDownloadUrl}
                 producerName={producerName}
                 confectionName={confectionName}
                 quantity={quantity} 
+                barcodeData={barcodeData}
+                barcodeType={barcodeType}
             />
         );
     }
