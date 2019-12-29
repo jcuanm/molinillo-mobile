@@ -15,6 +15,8 @@ import { Ionicons } from '@expo/vector-icons';
 import CartItem from "./components/CartItem";
 import { Colors } from '../../../../helpers/Constants';
 import { CartScreenStyles } from './styles';
+import Barcode from '../../../../helpers/Barcode';
+import { StringConcatenations } from '../../../../helpers/Constants';
 
 export default class CartScreen extends Component {
     constructor(props) {
@@ -48,7 +50,34 @@ export default class CartScreen extends Component {
                 let cartItems = [];
                 if(results.size > 0){
                     results.forEach(doc => {
-                        cartItems.push({key : doc.data()});
+
+                        const { 
+                            barcodeData, 
+                            barcodeType, 
+                            chocolateUuid 
+                        } = doc.data();
+                
+                        let barcode = new Barcode(barcodeType, barcodeData);
+                        let barcodeTypeRef = this.dbHandler.getRef(
+                            StringConcatenations.Prefix, 
+                            barcode,
+                            chocolateUuid);
+
+                        // Getting the price of each item
+                        barcodeTypeRef
+                            .get()
+                            .then(result => {
+                                if(result.exists){
+                                    let item = {
+                                        ...doc.data(),
+                                        price: result.data().price
+                                    }
+                                    this.setState({cartItems: [...this.state.cartItems, item]});
+                                }
+                            })
+                            .catch(error => {
+                                console.log(error);
+                            });
                     }); 
 
                     this.setState({cartItems: cartItems})
@@ -85,14 +114,13 @@ export default class CartScreen extends Component {
 
     render(){
         const { cartItems } = this.state;
-        
         return(
             <View style={CartScreenStyles.container}>
                 <ScrollView>
                     <FlatList
                         data={cartItems}
                         scrollEnabled={true}
-                        renderItem={({_, index}) => this.renderItem(cartItems[index].key)}
+                        renderItem={({_, index}) => this.renderItem(cartItems[index])}
                         keyExtractor={(_, index) => index.toString()}
                     /> 
 
@@ -129,6 +157,7 @@ export default class CartScreen extends Component {
             chocolateUuid,
             barcodeType,
             barcodeData,
+            price
         } = item;
 
         return(
@@ -141,6 +170,7 @@ export default class CartScreen extends Component {
                 quantity={quantity} 
                 barcodeData={barcodeData}
                 barcodeType={barcodeType}
+                price={price}
             />
         );
     }

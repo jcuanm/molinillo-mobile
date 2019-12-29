@@ -276,7 +276,7 @@ export default class DeliveryMethodScreen extends Component {
             producerName,
             confectionName,
             vendorAddress
-        } = item.key;
+        } = item;
 
         return(
             <ItemPickupLocation

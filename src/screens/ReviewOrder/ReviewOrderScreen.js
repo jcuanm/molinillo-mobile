@@ -107,7 +107,7 @@ export default class ReviewOrderScreen extends Component {
             vendorAddress,
             quantity,
             price
-        } = item.key;
+        } = item;
 
         return(
             <ReviewItem
