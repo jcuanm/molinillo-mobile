@@ -87,7 +87,7 @@ export default class PriceBreakdown extends Component {
         let total = 0;
 
         for(var i = 0; i < cartItems.length; i++){
-            let { price, quantity } = cartItems[i].key;
+            let { price, quantity } = cartItems[i];
             let itemTotal = price * quantity;
             total = +(total + itemTotal).toFixed(2);
         }
