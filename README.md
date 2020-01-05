@@ -21,11 +21,13 @@ A React Native Expo project that allows the user to interact with ethical fine c
   MESSAGING_SENDER_ID = [insert value]
   FIREBASE_APP_ID = [insert value]
 
-
-
   ALGOLIA_API_KEY = [insert value]
   ALGOLIA_APP_ID = [insert value]
   ALGOLIA_INDEX_NAME = [insert value]
+  
+  STRIPE_API_KEY = [insert value]
+
+  SHIPPO_API_KEY = [insert value]
 ```
    * To find where in your Firebase account you can find the credentials for your Firestore database, follow the directions in this link https://support.google.com/firebase/answer/7015592?hl=en under the section "Get config object for your web app". NOTE: The instructions for finding credentials for a Firebase web app are the same as those for a mobile app.
    * You can find your Algolia account credentials for your search index under the "API keys" section. Make sure to use the admin apiKey. NOTE: Your index name is the name of the storage unit where you will be holding all of your searchable data.
