@@ -75,7 +75,7 @@ export default class DbHandler{
         return handleFailureCallback({ params: callbackParams});
     }
 
-    getRef(root, barcode=null, barcodeUuid=null, commentUuid=null){
+    getRef(root, barcode=null, chocolateUuid=null, commentUuid=null){
         var ref;
         switch(root){
             case StringConcatenations.Prefix:
@@ -87,7 +87,7 @@ export default class DbHandler{
                 else{
                     ref = this.dbRef
                         .collection(root + "NoBarcode")
-                        .doc(barcodeUuid);
+                        .doc(chocolateUuid);
                 }
                 break;
             case 'Possible' + StringConcatenations.Prefix:
@@ -98,7 +98,7 @@ export default class DbHandler{
             case 'MyChocolates':
                 ref = this.dbRef
                     .collection(root)
-                    .doc(this.currUser.uid + "_" + barcodeUuid);
+                    .doc(this.currUser.uid + "_" + chocolateUuid);
                 break;
             case 'Scans':
                 ref = this.dbRef
@@ -113,12 +113,12 @@ export default class DbHandler{
             case 'StarRatingsPerUser':
                 ref = this.dbRef
                     .collection(root)
-                    .doc(this.currUser.uid + "_" + barcodeUuid);
+                    .doc(this.currUser.uid + "_" + chocolateUuid);
                 break;
             case 'Comments':
                 ref = this.dbRef
                     .collection(root)
-                    .doc(barcodeUuid)
+                    .doc(chocolateUuid)
                     .collection("ratings")
                     .doc(commentUuid);
                 break;
@@ -130,7 +130,12 @@ export default class DbHandler{
             case 'Cart':
                 ref = this.dbRef
                     .collection(root)
-                    .doc(this.currUser.uid + "_" + barcodeUuid);
+                    .doc(this.currUser.uid + "_" + chocolateUuid);
+                break;
+            case 'ChocolateShippingInfo':
+                ref = this.dbRef
+                    .collection(root)
+                    .doc(chocolateUuid);
                 break;
             default:
                 ref = null; 

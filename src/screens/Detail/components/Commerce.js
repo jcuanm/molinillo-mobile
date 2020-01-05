@@ -157,7 +157,8 @@ export default class Commerce extends Component {
             producerName,
             confectionName,
             imageDownloadUrl,
-            vendorAddress
+            vendorAddress,
+            vendorUid
         } = this.props;
 
         let db = firebase.firestore();
@@ -188,7 +189,8 @@ export default class Commerce extends Component {
                         barcodeData: barcodeData,
                         barcodeType: barcodeType,
                         imageDownloadUrl: imageDownloadUrl,
-                        vendorAddress: vendorAddress
+                        vendorAddress: vendorAddress,
+                        vendorUid: vendorUid
                     };
     
                     cartRef

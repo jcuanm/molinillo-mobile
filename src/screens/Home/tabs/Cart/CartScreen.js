@@ -67,10 +67,12 @@ export default class CartScreen extends Component {
                         barcodeTypeRef
                             .get()
                             .then(result => {
-                                if(result.exists){
+                                let price = result.data().price;
+
+                                if(result.exists && price > 0){
                                     let item = {
                                         ...doc.data(),
-                                        price: result.data().price
+                                        price: price
                                     }
                                     this.setState({cartItems: [...this.state.cartItems, item]});
                                 }
