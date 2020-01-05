@@ -156,6 +156,7 @@ export default class DetailScreen extends Component {
 			confectionName,
 			imageDownloadUrl, 
 			vendorAddress,
+			vendorUid,
 			vendorUrl,
 			uuid,
 			price,
@@ -191,6 +192,7 @@ export default class DetailScreen extends Component {
 								confectionName={confectionName}
 								imageDownloadUrl={imageDownloadUrl}
 								vendorAddress={vendorAddress}
+								vendorUid={vendorUid}
 							/>
 						:
 							null

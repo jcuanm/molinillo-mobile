@@ -14,7 +14,10 @@ import {
   ALGOLIA_INDEX_NAME,
 
   // Stripe Credentials
-  STRIPE_API_KEY
+  STRIPE_API_KEY,
+
+  // Shippo Credentials
+  SHIPPO_API_KEY
 } from 'react-native-dotenv';
 
 export const FirebaseConfig = {
@@ -35,4 +38,8 @@ export const AlgoliaSearchConfig = {
 
 export const StripeConfig = {
   apiKey: STRIPE_API_KEY
+};
+
+export const ShippoConfig = {
+  apiKey: SHIPPO_API_KEY
 };
