@@ -27,7 +27,8 @@ export default class ReviewOrderScreen extends Component {
         this.order = this.props.navigation.getParam('order', {});
         this.billingInfo = this.props.navigation.getParam('billingInfo', {});
         this.state = {
-            shippingCost: 0
+            shippingCost: 0,
+            shippingCostsByVendorUid: {}
         }
     }
 
@@ -58,20 +59,30 @@ export default class ReviewOrderScreen extends Component {
 
     getShippingCosts(){
         const { cartItems, shippingAddress } = this.order;
-            
-        for(var cartItem of cartItems){
+        let shippingInfoRequests = [];
+        
+        for(var i = 0; i < cartItems.length; i++){
             let chocolateShippingInfoRef = this.dbHandler.getRef(
                 "ChocolateShippingInfo", 
                 null, 
-                cartItem.chocolateUuid);
-                            
-            chocolateShippingInfoRef
-                .get()
-                .then( results => {
-                    if(results.exists){
-                        let shippingInfo = results.data(); 
+                cartItems[i].chocolateUuid);
+            
+            let request = chocolateShippingInfoRef.get();
+            shippingInfoRequests.push(request);
+        }
 
-                        fetch('https://api.goshippo.com/shipments/', {
+        Promise
+            .all(shippingInfoRequests)
+            .then(shippingInfoResultsArray => {
+                let shippoRequests = [];
+
+                for(var results of shippingInfoResultsArray){
+                    if(results.exists){
+                        let shippingInfo = results.data();
+
+                        console.log("API KEY: " + ShippoConfig.apiKey + "\n\n");
+
+                        let request = fetch('https://api.goshippo.com/shipments/', {
                             method: 'POST',
                             headers: {
                                 Accept: 'application/json',
@@ -97,36 +108,63 @@ export default class ReviewOrderScreen extends Component {
                                     zip: shippingInfo.zip,
                                     country: shippingInfo.country,
                                 },
-                                parcels: this.getParcels(shippingInfo, cartItem.quantity),
+                                // parcels: this.getParcels(shippingInfo, cartItems[i].quantity),
+                                parcels: [
+                                    {
+                                        length: 8,
+                                        width: 4,
+                                        height: 2,
+                                        distance_unit: "in",
+                                        weight: 16,
+                                        mass_unit: "oz"
+                                    },
+                                    // {
+                                    //     length: 8,
+                                    //     width: 4,
+                                    //     height: 2,
+                                    //     distance_unit: "in",
+                                    //     weight: 16,
+                                    //     mass_unit: "oz"
+                                    // }
+                                ],
                                 async: false
-                            }),
-                        })
-                        .then(response => response.json())
-                        .then(responseJson => {
-                            console.log(responseJson.rates);
-                        })
-                        .catch((error) => {
-                            console.log(error);
+                            })
                         });
+
+                        shippoRequests.push(request);
                     }
                     else{
-
-                        // Navigate away from the page if we can't find the shipping info for a chocolate
-                        
-                        this.props.navigation.popToTop();
-
-                        Alert.alert(
-                            "We apologize for the inconvenience",
-                            "There was an error in trying to process one or more of your chocolates.",
-                            [{text: 'OK'}],
-                            { cancelable: false }
-                        );
+                        console.log("Doesn't exist");
+                        console.log(results);
+                        console.log("\n\n");
                     }
-                })
-                .catch( error => {
-                    console.log(error);
-                });
-        }
+                }
+
+                Promise
+                    .all(shippoRequests)
+                    .then(responses => {
+
+                        let responsePromises = [];
+
+                        for(var response of responses){
+                            responsePromises.push(response.json());
+                        }
+
+                        Promise
+                            .all(responsePromises)
+                            .then(resultsArray => {
+                                console.log("HI");
+                                console.log(resultsArray);
+                            })
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+                
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
 
     getParcels(shippingInfo, quantity){
@@ -148,17 +186,16 @@ export default class ReviewOrderScreen extends Component {
         return parcels;
     }
 
-    handleShippingCostNotFound(){
-        // Navigate away from the page if we can't find the shipping info for a chocolate
-                        
-        this.props.navigation.popToTop();
-
+    // Navigate away from the page and alert the user
+    handleShippingCostNotFound(){     
         Alert.alert(
-            "We apologize for the inconvenience",
-            "There was an error in trying to process one or more of your chocolates.",
+            "Shipping is not available for this order.",
+            "Try picking it up instead!",
             [{text: 'OK'}],
             { cancelable: false }
         );
+
+        this.props.navigation.popToTop();
     }
 
     render(){
