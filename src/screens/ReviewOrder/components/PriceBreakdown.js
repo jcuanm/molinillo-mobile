@@ -5,8 +5,15 @@ import { PriceBreakdownStyles } from '../styles';
 export default class PriceBreakdown extends Component {
 
     render(){
-        const { cartItems, selectedDeliveryMethod } = this.props;
-        const subtotal = this.calculateSubTotal(cartItems).toFixed(2);
+        const { 
+            cartItems, 
+            selectedDeliveryMethod, 
+            shippingCostsPerVendor
+        } = this.props;
+
+        const totalShippingCosts = this.calculateTotalShippingCosts(shippingCostsPerVendor);
+        const subtotal = this.calculateSubTotal(cartItems);
+        const finalTotal = subtotal + totalShippingCosts;
         
         return(
             <View style={PriceBreakdownStyles.container}> 
@@ -17,7 +24,7 @@ export default class PriceBreakdown extends Component {
                         Items:
                     </Text>
                     <Text style={PriceBreakdownStyles.calculationAmount}>
-                        ${subtotal}
+                        ${subtotal.toFixed(2)}
                     </Text>
                 </View>
 
@@ -27,7 +34,7 @@ export default class PriceBreakdown extends Component {
                         Total before tax:
                     </Text>
                     <Text style={PriceBreakdownStyles.calculationAmount}>
-                        ${subtotal}
+                        ${subtotal.toFixed(2)}
                     </Text>
                 </View>
 
@@ -39,7 +46,7 @@ export default class PriceBreakdown extends Component {
                                 Shipping & handling:
                             </Text>
                             <Text style={PriceBreakdownStyles.calculationAmount}>
-                                $Undefined
+                                ${totalShippingCosts.toFixed(2)}
                             </Text>
                         </View>
                     :
@@ -76,7 +83,7 @@ export default class PriceBreakdown extends Component {
                         Order Total:
                     </Text>
                     <Text style={[PriceBreakdownStyles.calculationAmount, PriceBreakdownStyles.orderTotalAmount]}>
-                        ${subtotal}
+                        ${finalTotal.toFixed(2)}
                     </Text>
                 </View>
             </View>
@@ -89,7 +96,18 @@ export default class PriceBreakdown extends Component {
         for(var i = 0; i < cartItems.length; i++){
             let { price, quantity } = cartItems[i];
             let itemTotal = price * quantity;
-            total = +(total + itemTotal).toFixed(2);
+            total += itemTotal;
+        }
+        return total;
+    }
+
+    calculateTotalShippingCosts(shippingCostsPerVendor){
+        let total = 0;
+
+        if(Object.keys(shippingCostsPerVendor).length > 0){
+            for(var vendorUid in shippingCostsPerVendor){
+                total += shippingCostsPerVendor[vendorUid];
+            }
         }
         return total;
     }

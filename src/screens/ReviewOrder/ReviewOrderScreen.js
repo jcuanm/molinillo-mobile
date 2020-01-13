@@ -27,8 +27,8 @@ export default class ReviewOrderScreen extends Component {
         this.order = this.props.navigation.getParam('order', {});
         this.billingInfo = this.props.navigation.getParam('billingInfo', {});
         this.state = {
-            shippingCost: 0,
-            shippingCostsByVendorUid: {}
+            shippingCostsPerVendor: {},
+            chocolatesWithShippingRates: [],
         }
     }
 
@@ -57,10 +57,13 @@ export default class ReviewOrderScreen extends Component {
         }
     }
 
+    // This function makes waves of HTTP requests to Firebase and Shippo and waits for each request in each
+    // wave to return results before doing something with the results.
     getShippingCosts(){
         const { cartItems, shippingAddress } = this.order;
         let shippingInfoRequests = [];
         
+        // Initiating first wave of Firebase calls to get shipping info (weight, dimensions, etc.)
         for(var i = 0; i < cartItems.length; i++){
             let chocolateShippingInfoRef = this.dbHandler.getRef(
                 "ChocolateShippingInfo", 
@@ -71,16 +74,18 @@ export default class ReviewOrderScreen extends Component {
             shippingInfoRequests.push(request);
         }
 
+        // Wait until all Firebase calls resolve until doing something with the shippingInfoResults array
         Promise
             .all(shippingInfoRequests)
-            .then(shippingInfoResultsArray => {
+            .then(shippingInfoResults => {
                 let shippoRequests = [];
 
-                for(var results of shippingInfoResultsArray){
+                // Making a call to Shippo for each chocolate to find out shipping rates by
+                // starting the next wave of requests to Shippo's API
+                for(var results of shippingInfoResults){
                     if(results.exists){
                         let shippingInfo = results.data();
-
-                        console.log("API KEY: " + ShippoConfig.apiKey + "\n\n");
+                        let chocolateUuid = results.id;                        
 
                         let request = fetch('https://api.goshippo.com/shipments/', {
                             method: 'POST',
@@ -108,6 +113,7 @@ export default class ReviewOrderScreen extends Component {
                                     zip: shippingInfo.zip,
                                     country: shippingInfo.country,
                                 },
+                                metadata: shippingInfo.vendorUid + "_" + chocolateUuid,
                                 // parcels: this.getParcels(shippingInfo, cartItems[i].quantity),
                                 parcels: [
                                     {
@@ -134,28 +140,51 @@ export default class ReviewOrderScreen extends Component {
                         shippoRequests.push(request);
                     }
                     else{
-                        console.log("Doesn't exist");
-                        console.log(results);
+                        console.log("There is no entry in ChocolateShippingInfo");
                         console.log("\n\n");
                     }
                 }
 
+                // Wait until all Shippo requests resolve before doing something with the responses array
                 Promise
                     .all(shippoRequests)
                     .then(responses => {
-
                         let responsePromises = [];
 
                         for(var response of responses){
                             responsePromises.push(response.json());
                         }
 
+                        // Iterating through all of the shipping rates returned by Shippo... finally
                         Promise
                             .all(responsePromises)
-                            .then(resultsArray => {
-                                console.log("HI");
-                                console.log(resultsArray);
+                            .then(shippingCosts => {
+                                let shippingCostsPerVendor = {};
+                                let chocolatesWithShippingRates = [];
+
+                                for(var shippingCostInfo of shippingCosts){
+                                    let vendorUidAndChocolateUuid = shippingCostInfo.metadata.split("_");
+                                    let vendorUid = vendorUidAndChocolateUuid[0];
+                                    let chocolateUuid = vendorUidAndChocolateUuid[1];
+
+                                    // Only record chocolates that we were able to get rates for
+                                    if(shippingCostInfo.rates.length > 0){
+                                        let bestShippingCost = this.getBestShippingCost(shippingCostInfo.rates);
+                                        shippingCostsPerVendor[vendorUid] = shippingCostsPerVendor[vendorUid] === undefined ? 
+                                                                                                                bestShippingCost : 
+                                                                                                                shippingCostsPerVendor[vendorUid] + bestShippingCost;
+                                        chocolatesWithShippingRates.push(chocolateUuid);
+                                    }
+                                }
+
+                                this.setState({
+                                    shippingCostsPerVendor: shippingCostsPerVendor,
+                                    chocolatesWithShippingRates: chocolatesWithShippingRates
+                                });
                             })
+                            .catch(error => {
+                                console.log(error);
+                            });
                     })
                     .catch(error => {
                         console.log(error);
@@ -165,6 +194,14 @@ export default class ReviewOrderScreen extends Component {
             .catch(error => {
                 console.log(error);
             });
+    }
+
+    getBestShippingCost(rates){
+        for(var rate of rates){
+            if(rate.attributes.includes("BESTVALUE")){
+                return parseFloat(rate.amount);
+            }
+        }
     }
 
     getParcels(shippingInfo, quantity){
@@ -178,7 +215,7 @@ export default class ReviewOrderScreen extends Component {
                 distance_unit: shippingInfo.distance_unit,
                 weight: shippingInfo.weight,
                 mass_unit: shippingInfo.mass_unit
-            }
+            };
 
             parcels.push(parcel);
         }
@@ -205,6 +242,8 @@ export default class ReviewOrderScreen extends Component {
             shippingAddress
         } = this.order;
 
+        const { shippingCostsPerVendor, chocolatesWithShippingRates} = this.state;
+
         const { nameOnCard, creditCardNumber } = this.billingInfo;
         
         return(
@@ -228,6 +267,7 @@ export default class ReviewOrderScreen extends Component {
 
                 <PriceBreakdown 
                     cartItems={cartItems}
+                    shippingCostsPerVendor={shippingCostsPerVendor}
                     selectedDeliveryMethod={selectedDeliveryMethod}
                 />
 
