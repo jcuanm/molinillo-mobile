@@ -112,6 +112,7 @@ export default class CartItem extends Component {
                 })
                 .then( _ => {
                     this.setState({quantity: quantity - 1});
+                    this.props.getUserCartItems();
                 });
         }
     }
@@ -125,6 +126,7 @@ export default class CartItem extends Component {
             })
             .then( _ => {
                 this.setState({quantity: this.state.quantity + 1});
+                this.props.getUserCartItems();
             });
     }
 }
