@@ -28,6 +28,7 @@ export default class DeliveryMethodScreen extends Component {
 
             // Delivery Address info
             userFullName: "",
+            phone: "",
             streetAddress1: "",
             streetAddress2: "",
             city: "",
@@ -60,6 +61,7 @@ export default class DeliveryMethodScreen extends Component {
         const { 
             selectedDeliveryMethod,
             userFullName,
+            phone,
             streetAddress1,
             streetAddress2,
             city,
@@ -107,6 +109,7 @@ export default class DeliveryMethodScreen extends Component {
                         <ShippingAddressInput 
                             updateAddress={this.updateAddress}
                             userFullName={userFullName}
+                            phone={phone}
                             streetAddress1={streetAddress1}
                             streetAddress2={streetAddress2}
                             city={city}
@@ -140,6 +143,7 @@ export default class DeliveryMethodScreen extends Component {
             const {
                 selectedDeliveryMethod,
                 userFullName,
+                phone,
                 streetAddress1,
                 streetAddress2,
                 city,
@@ -150,6 +154,7 @@ export default class DeliveryMethodScreen extends Component {
 
             const shippingAddress = {
                 userFullName: userFullName,
+                phone: phone,
                 streetAddress1: streetAddress1,
                 streetAddress2: streetAddress2,
                 city: city,
@@ -183,6 +188,7 @@ export default class DeliveryMethodScreen extends Component {
         const {
             selectedDeliveryMethod,
             userFullName,
+            phone,
             streetAddress1,
             city,
             state,
@@ -194,6 +200,7 @@ export default class DeliveryMethodScreen extends Component {
             selectedDeliveryMethod == "pickup" || 
             (
                 userFullName.trim() !== "" &&
+                phone.trim() !== "" &&
                 streetAddress1.trim() !== "" &&
                 city.trim() !== "" &&
                 state.trim() !== "" &&

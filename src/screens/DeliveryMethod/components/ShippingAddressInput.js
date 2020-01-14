@@ -22,26 +22,10 @@ export default class ShippingAddressInput extends Component {
 		};
     }
 
-    onChangeText(field, newText){
-        if(newText.length > this.maxStringLength){
-            Alert.alert(
-                "Can't exceed 255 characters",
-                "",
-                [
-                  {text: 'OK'}
-                ],
-                { cancelable: false }
-            );
-            return;
-        }
-        else{
-            this.props.updateAddress(field, newText);
-        }
-    }
-
 	render() {
         const {
             userFullName,
+            phone,
             streetAddress1,
             streetAddress2,
             city,
@@ -60,6 +44,15 @@ export default class ShippingAddressInput extends Component {
                     clearButtonMode={"always"}
                     style={ShippingAddressInputStyles.inputBox} 
                     onChangeText={newText => this.onChangeText("userFullName", newText)}
+                />
+                <TextInput 
+                    value={phone}
+                    maxLength={20}
+                    blurOnSubmit
+                    placeholder={"Phone number"}
+                    clearButtonMode={"always"}
+                    style={ShippingAddressInputStyles.inputBox} 
+                    onChangeText={newText => this.onChangeText("phone", newText)}
                 />
                <TextInput 
                     value={streetAddress1}
@@ -123,6 +116,23 @@ export default class ShippingAddressInput extends Component {
                 </TouchableOpacity>   
             </View>
 		);
+    }
+
+    onChangeText(field, newText){
+        if(newText.length > this.maxStringLength){
+            Alert.alert(
+                "Can't exceed 255 characters",
+                "",
+                [
+                  {text: 'OK'}
+                ],
+                { cancelable: false }
+            );
+            return;
+        }
+        else{
+            this.props.updateAddress(field, newText);
+        }
     }
 
     renderOptionsDialog(){
