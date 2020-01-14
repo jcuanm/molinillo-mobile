@@ -6,7 +6,7 @@ import { DeliveryMethodStyles } from '../styles';
 export default class DeliveryMethod extends Component {
 
     render(){
-        const { selectedDeliveryMethod, shippingAddress } = this.props;
+        const { selectedDeliveryMethod } = this.props;
 
         return(
             <View>
@@ -37,6 +37,7 @@ export default class DeliveryMethod extends Component {
     getAddressString(){
         const {
             userFullName,
+            phone,
             streetAddress1,
             streetAddress2,
             city,
@@ -47,6 +48,7 @@ export default class DeliveryMethod extends Component {
 
         var aggregatedAddress = 
             userFullName + "\n" +
+            phone + "\n" +
             streetAddress1 + "\n";
         
         if(streetAddress2 !== ""){
