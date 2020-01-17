@@ -23,6 +23,8 @@ export default class ReviewOrderScreen extends Component {
     constructor(props) {
         super(props);
         this.dbHandler = new DbHandler();
+        this.maxParcelWeightInOunces = 2400; // According to UPS
+        this.maxCombinedDimensions = 108; // length + width + height
         this.stripeClient = new Stripe(StripeConfig.apiKey);
         this.order = this.props.navigation.getParam('order', {});
         this.billingInfo = this.props.navigation.getParam('billingInfo', {});
@@ -62,6 +64,7 @@ export default class ReviewOrderScreen extends Component {
     getShippingCosts(){
         const { cartItems, shippingAddress } = this.order;
         let shippingInfoRequests = [];
+        let quantities = [];
         
         // Initiating first wave of Firebase calls to get shipping info (weight, dimensions, etc.)
         for(var i = 0; i < cartItems.length; i++){
@@ -72,6 +75,7 @@ export default class ReviewOrderScreen extends Component {
             
             let request = chocolateShippingInfoRef.get();
             shippingInfoRequests.push(request);
+            quantities.push(cartItems[i].quantity);
         }
 
         // Wait until all Firebase calls resolve until doing something with the shippingInfoResults array
@@ -82,10 +86,14 @@ export default class ReviewOrderScreen extends Component {
 
                 // Making a call to Shippo for each chocolate to find out shipping rates by
                 // starting the next wave of requests to Shippo's API
-                for(var results of shippingInfoResults){
+                // for(var results of shippingInfoResults){
+                for(let i = 0; i < shippingInfoResults.length; i++){
+                    let results = shippingInfoResults[i];
+
                     if(results.exists){
+                        let quantity = quantities[i];
                         let shippingInfo = results.data();
-                        let chocolateUuid = results.id;                        
+                        let chocolateUuid = results.id;  
 
                         let request = fetch('https://api.goshippo.com/shipments/', {
                             method: 'POST',
@@ -114,34 +122,12 @@ export default class ReviewOrderScreen extends Component {
                                     country: shippingInfo.country,
                                 },
                                 metadata: shippingInfo.vendorUid + "_" + chocolateUuid,
-                                // parcels: this.getParcels(shippingInfo, cartItems[i].quantity),
-                                parcels: [
-                                    {
-                                        length: 8,
-                                        width: 4,
-                                        height: 2,
-                                        distance_unit: "in",
-                                        weight: 16,
-                                        mass_unit: "oz"
-                                    },
-                                    // {
-                                    //     length: 8,
-                                    //     width: 4,
-                                    //     height: 2,
-                                    //     distance_unit: "in",
-                                    //     weight: 16,
-                                    //     mass_unit: "oz"
-                                    // }
-                                ],
+                                parcels: this.getParcels(shippingInfo, quantity),
                                 async: false
                             })
                         });
 
                         shippoRequests.push(request);
-                    }
-                    else{
-                        console.log("There is no entry in ChocolateShippingInfo");
-                        console.log("\n\n");
                     }
                 }
 
@@ -163,17 +149,24 @@ export default class ReviewOrderScreen extends Component {
                                 let chocolatesWithShippingRates = [];
 
                                 for(var shippingCostInfo of shippingCosts){
-                                    let vendorUidAndChocolateUuid = shippingCostInfo.metadata.split("_");
-                                    let vendorUid = vendorUidAndChocolateUuid[0];
-                                    let chocolateUuid = vendorUidAndChocolateUuid[1];
+                                    try{
+                                        let vendorUidAndChocolateUuid = shippingCostInfo.metadata.split("_");
+                                        let vendorUid = vendorUidAndChocolateUuid[0];
+                                        let chocolateUuid = vendorUidAndChocolateUuid[1];
 
-                                    // Only record chocolates that we were able to get rates for
-                                    if(shippingCostInfo.rates.length > 0){
-                                        let bestShippingCost = this.getBestShippingCost(shippingCostInfo.rates);
-                                        shippingCostsPerVendor[vendorUid] = shippingCostsPerVendor[vendorUid] === undefined ? 
-                                                                                                                bestShippingCost : 
-                                                                                                                shippingCostsPerVendor[vendorUid] + bestShippingCost;
-                                        chocolatesWithShippingRates.push(chocolateUuid);
+                                        // Only record chocolates that we were able to get rates for
+                                        if(shippingCostInfo.rates.length > 0){
+                                            let bestShippingCost = this.getBestShippingCost(shippingCostInfo.rates);
+                                            shippingCostsPerVendor[vendorUid] = shippingCostsPerVendor[vendorUid] === undefined ? 
+                                                                                                                    bestShippingCost : 
+                                                                                                                    shippingCostsPerVendor[vendorUid] + bestShippingCost;
+
+                                            chocolatesWithShippingRates.push(chocolateUuid);
+                                        }
+                                    }
+                                    catch( error ){
+                                        console.log("The HTTP response returned an unanticipated response object.");
+                                        console.log(error);
                                     }
                                 }
 
@@ -183,15 +176,18 @@ export default class ReviewOrderScreen extends Component {
                                 });
                             })
                             .catch(error => {
+                                console.log("Unable to convert Shippo response objects to json format.")
                                 console.log(error);
                             });
                     })
                     .catch(error => {
+                        console.log("Unable to retrieve Shippo info.")
                         console.log(error);
                     });
                 
             })
             .catch(error => {
+                console.log("Unable to retrieve the proper documents from ChocolateShippingInfo collection.")
                 console.log(error);
             });
     }
@@ -206,14 +202,69 @@ export default class ReviewOrderScreen extends Component {
 
     getParcels(shippingInfo, quantity){
         let parcels = [];
+        let currWeight = 0;
+        let currHeight = 0;
 
+        // Ensuring that one unit of the item isn't too big already
+        if(
+            shippingInfo.weight > this.maxParcelWeightInOunces || 
+            shippingInfo.height + shippingInfo.width + shippingInfo.length > this.maxCombinedDimensions
+        ){
+            return [];
+        }
+
+        // Check if we can add one more item into the parcel. If not, we submit the current parcel
+        // and reset the parcel's current weight and dimensions. 
         for(var i = 0; i < quantity; i++){
+            if(
+                currWeight + shippingInfo.weight > this.maxParcelWeightInOunces || 
+                currHeight + shippingInfo.height + shippingInfo.width > this.maxCombinedDimensions
+            ){
+                let parcel = {
+                    length: shippingInfo.length,
+                    width: shippingInfo.width,
+                    height: currHeight,
+                    distance_unit: shippingInfo.distance_unit,
+                    weight: currWeight,
+                    mass_unit: shippingInfo.mass_unit
+                };
+
+                // If we're at the last item in the list, we reset the items to the original dimensions so 
+                // we can pick it up in the later if-statment.
+                currWeight =  i == quantity - 1 ? shippingInfo.weight : 0;
+                currHeight =  i == quantity - 1 ? shippingInfo.height : 0;
+                parcels.push(parcel);
+            }
+            else if(
+                currWeight + shippingInfo.weight == this.maxParcelWeightInOunces ||
+                currHeight + shippingInfo.height + shippingInfo.width == this.maxCombinedDimensions
+            ){
+                let parcel = {
+                    length: shippingInfo.length,
+                    width: shippingInfo.width,
+                    height: currHeight + shippingInfo.height,
+                    distance_unit: shippingInfo.distance_unit,
+                    weight: currWeight + shippingInfo.weight,
+                    mass_unit: shippingInfo.mass_unit
+                };
+
+                currHeight = 0;
+                currWeight = 0;
+                parcels.push(parcel);
+            }
+            else{
+                currHeight += shippingInfo.height;
+                currWeight += shippingInfo.weight;
+            }
+        }
+
+        if(currWeight > 0 && currHeight > 0){
             let parcel = {
                 length: shippingInfo.length,
                 width: shippingInfo.width,
-                height: shippingInfo.height,
+                height: currHeight,
                 distance_unit: shippingInfo.distance_unit,
-                weight: shippingInfo.weight,
+                weight: currWeight,
                 mass_unit: shippingInfo.mass_unit
             };
 

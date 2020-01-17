@@ -27,8 +27,8 @@ export default class DeliveryMethod extends Component {
                             </Text>
                             <Text style={DeliveryMethodStyles.deliveryMethodValue}>
                                 {DeliveryMethodDisplayText[selectedDeliveryMethod]}
-                        </Text>
-                </View>
+                            </Text>
+                        </View>
                 }
             </View>
         );
