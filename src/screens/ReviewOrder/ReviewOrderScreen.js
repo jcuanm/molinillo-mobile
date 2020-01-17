@@ -287,13 +287,17 @@ export default class ReviewOrderScreen extends Component {
     }
 
     render(){
-        const { 
+        let { 
             cartItems, 
             selectedDeliveryMethod,
             shippingAddress
         } = this.order;
 
         const { shippingCostsPerVendor, chocolatesWithShippingRates} = this.state;
+
+        if(selectedDeliveryMethod == "shipping"){
+            cartItems = this.filterOutItemsWithNoShippingCost(cartItems, chocolatesWithShippingRates);
+        }
 
         const { nameOnCard, creditCardNumber } = this.billingInfo;
         
@@ -380,6 +384,18 @@ export default class ReviewOrderScreen extends Component {
 					console.log(error);
 				});
 		}
+    }
+
+    filterOutItemsWithNoShippingCost(cartItems, chocolatesWithShippingRates){
+        let filteredCartItems = [];
+
+        for(let item of cartItems){
+            if(chocolatesWithShippingRates.indexOf(item.chocolateUuid) > -1){
+                filteredCartItems.push(item);
+            }
+        }
+
+        return filteredCartItems;
     }
     
     placeOrder(){
