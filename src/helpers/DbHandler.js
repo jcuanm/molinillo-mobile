@@ -137,6 +137,11 @@ export default class DbHandler{
                     .collection(root)
                     .doc(chocolateUuid);
                 break;
+            case 'TaxRates':
+                    ref = this.dbRef
+                        .collection(root)
+                        .doc(chocolateUuid);
+                    break;
             default:
                 ref = null; 
         }

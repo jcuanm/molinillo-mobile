@@ -30,7 +30,9 @@ export default class ReviewOrderScreen extends Component {
         this.billingInfo = this.props.navigation.getParam('billingInfo', {});
         this.state = {
             shippingCostsPerVendor: {},
+            chocolatesWithTaxRates: [],
             chocolatesWithShippingRates: [],
+            taxPerVendor: {}
         }
     }
 
@@ -54,9 +56,82 @@ export default class ReviewOrderScreen extends Component {
     })
 
     componentDidMount(){
-        if(this.order.selectedDeliveryMethod == "shipping" && this.order.shippingAddress != undefined){
+        const { selectedDeliveryMethod, shippingAddress } = this.order;
+
+        this.getTaxRates()
+        
+        if(selectedDeliveryMethod == "shipping" && shippingAddress !== undefined){
             this.getShippingCosts();
         }
+    }
+
+    getTaxRates(){
+        const { cartItems } = this.order;
+
+        let taxRatesRequests = this.getTaxRatesRequests(cartItems);
+
+        Promise
+            .all(taxRatesRequests)
+            .then(taxRatesResults => {
+                let taxRatesInfoPerChocolate = {};
+
+                for(let results of taxRatesResults){
+                    if(results.exists){
+                        let taxRateInfo = results.data();
+                        let chocolateUuid = results.id;
+                        let vendorUid = taxRateInfo.vendorUid;
+                        taxRatesInfoPerChocolate[chocolateUuid] = {
+                            taxRate: taxRateInfo.taxRate,
+                            vendorUid: vendorUid
+                        };
+                    }
+                }
+
+                let chocolatesWithTaxRates = [];
+                let taxPerVendor = {};
+
+                for(let item of cartItems){
+                    let chocolateUuid = item.chocolateUuid;
+
+                    if(taxRatesInfoPerChocolate[chocolateUuid] !== undefined){
+                        let taxRate = taxRatesInfoPerChocolate[chocolateUuid].taxRate;
+                        let vendorUid = taxRatesInfoPerChocolate[chocolateUuid].vendorUid;
+                        let subtotal = item.price * item.quantity;
+                        let totalTax = subtotal * taxRate;
+
+                        taxPerVendor[vendorUid] = taxPerVendor[vendorUid] === undefined ? 
+                                                                totalTax : 
+                                                                taxPerVendor[vendorUid] + totalTax;
+                        chocolatesWithTaxRates.push(chocolateUuid);
+                    }
+                }
+
+                this.setState({ 
+                    taxPerVendor: taxPerVendor,
+                    chocolatesWithTaxRates: chocolatesWithTaxRates
+                });
+            })
+            .catch(error => {
+                console.log("Error retrieving tax rates.");
+                console.log(error);
+            });
+    }
+
+    getTaxRatesRequests(cartItems){
+        let taxRatesRequests = [];
+
+        for(let item of cartItems){
+            let taxRatesRef = this.dbHandler.getRef(
+                "TaxRates",
+                barcode=null,
+                chocolateUuid=item.chocolateUuid
+            );
+            
+            let request = taxRatesRef.get();
+            taxRatesRequests.push(request);
+        }
+
+        return taxRatesRequests;
     }
 
     // This function makes waves of HTTP requests to Firebase and Shippo and waits for each request in each
@@ -131,7 +206,7 @@ export default class ReviewOrderScreen extends Component {
                     }
                 }
 
-                // Wait until all Shippo requests resolve before doing something with the responses array
+                // Wait until all Shippo requests resolve before processing them in the responses array
                 Promise
                     .all(shippoRequests)
                     .then(responses => {
@@ -294,6 +369,8 @@ export default class ReviewOrderScreen extends Component {
         } = this.order;
 
         const { shippingCostsPerVendor, chocolatesWithShippingRates} = this.state;
+
+        console.log(this.state);
 
         if(selectedDeliveryMethod == "shipping"){
             cartItems = this.filterOutItemsWithNoShippingCost(cartItems, chocolatesWithShippingRates);
