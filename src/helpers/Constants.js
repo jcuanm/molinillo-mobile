@@ -4,13 +4,13 @@ export const Warnings = {
     ConfirmDeletion : "Are you sure you want to delete this item?",
     ErrorGettingImage : "An error occurred when we attempted to get your image",
     PasswordsDontMatch : "Passwords do not match", 
-}
+};
 
 export const PrivacyPolicyUrl = "https://app.termly.io/document/privacy-policy/21cb7adf-4c06-44f1-8af7-7e523f004ef7";
 
 export const StringConcatenations = {
     Prefix: "BarcodeType_",
-}
+};
 
 export const DeliveryMethodDisplayText = {
     "pickup": "Pickup",
@@ -20,7 +20,7 @@ export const DeliveryMethodDisplayText = {
 export const Colors = {
     Primary: "#4B006E",
     Secondary: "white"
-}
+};
 
 export const Months = [
     "January",
@@ -35,12 +35,12 @@ export const Months = [
     "October",
     "November",
     "December"
-]
+];
 
 export const OurStoryText = 
     `\"During my senior year at Harvard University, I took Professor Carla Martin’s Chocolate Class: Chocolate, Culture, and Politics of Food, which forever changed the way I see fine chocolate. I learned not only about the wonders of chocolate, such as its ancient and rich history and the nuanced ways of appraising it, but also about the ugly truths hiding within the cacao industry’s supply chain today: child labor, wage-shortening, and other forms of exploitation and injustice. As a consumer, I wanted to become more intentional about where I purchased chocolate, but didn’t know how – especially when these problems felt so far away in countries such as Mexico, Coitre Voir, and Nigeria.
 
-So I set out to empower myself (and others) to make more informed decisions about the chocolate we consume, and this was the beginning of Molinillo. At Molinillo, our mission is to create transparency around ethically sourced chocolate and a fairer world for the cacao farmers and workers who make our lives more delicious.\"`
+So I set out to empower myself (and others) to make more informed decisions about the chocolate we consume, and this was the beginning of Molinillo. At Molinillo, our mission is to create transparency around ethically sourced chocolate and a fairer world for the cacao farmers and workers who make our lives more delicious.\"`;
 
 export const CountryCodeMappings = {
     "AFGHANISTAN": "AF",
@@ -292,7 +292,7 @@ export const CountryCodeMappings = {
     "YEMEN": "YE",
     "ZAMBIA": "ZM",
     "ZIMBABWE": "ZW"
-}
+};
 
 
 export const dialogOptionsDatasets = {
@@ -555,4 +555,4 @@ export const dialogOptionsDatasets = {
         { key: "ZAMBIA"},
         { key: "ZIMBABWE"},
     ]
-}
+};
