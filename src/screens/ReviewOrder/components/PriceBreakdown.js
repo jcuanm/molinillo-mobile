@@ -8,12 +8,14 @@ export default class PriceBreakdown extends Component {
         const { 
             cartItems, 
             selectedDeliveryMethod, 
-            shippingCostsPerVendor
+            shippingCostsPerVendor,
+            taxPerVendor
         } = this.props;
 
-        const totalShippingCosts = this.calculateTotalShippingCosts(shippingCostsPerVendor);
+        const totalShippingCosts = this.calculateTotal(shippingCostsPerVendor);
+        const totalTax = this.calculateTotal(taxPerVendor);
         const subtotal = this.calculateSubTotal(cartItems);
-        const finalTotal = subtotal + totalShippingCosts;
+        const finalTotal = subtotal + totalShippingCosts + totalTax;
         
         return(
             <View style={PriceBreakdownStyles.container}> 
@@ -59,7 +61,7 @@ export default class PriceBreakdown extends Component {
                         Estimated tax:
                     </Text>
                     <Text style={PriceBreakdownStyles.calculationAmount}>
-                        $Undefined
+                        ${totalTax.toFixed(2)}
                     </Text>
                 </View>
 
@@ -101,12 +103,12 @@ export default class PriceBreakdown extends Component {
         return total;
     }
 
-    calculateTotalShippingCosts(shippingCostsPerVendor){
+    calculateTotal(vendorCosts){
         let total = 0;
 
-        if(Object.keys(shippingCostsPerVendor).length > 0){
-            for(var vendorUid in shippingCostsPerVendor){
-                total += shippingCostsPerVendor[vendorUid];
+        if(Object.keys(vendorCosts).length > 0){
+            for(var vendorUid in vendorCosts){
+                total += vendorCosts[vendorUid];
             }
         }
         return total;

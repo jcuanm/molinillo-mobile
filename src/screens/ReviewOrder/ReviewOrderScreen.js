@@ -368,9 +368,11 @@ export default class ReviewOrderScreen extends Component {
             shippingAddress
         } = this.order;
 
-        const { shippingCostsPerVendor, chocolatesWithShippingRates} = this.state;
-
-        console.log(this.state);
+        const { 
+            shippingCostsPerVendor, 
+            chocolatesWithShippingRates,
+            taxPerVendor
+        } = this.state;
 
         if(selectedDeliveryMethod == "shipping"){
             cartItems = this.filterOutItemsWithNoShippingCost(cartItems, chocolatesWithShippingRates);
@@ -400,6 +402,7 @@ export default class ReviewOrderScreen extends Component {
                 <PriceBreakdown 
                     cartItems={cartItems}
                     shippingCostsPerVendor={shippingCostsPerVendor}
+                    taxPerVendor={taxPerVendor}
                     selectedDeliveryMethod={selectedDeliveryMethod}
                 />
 
