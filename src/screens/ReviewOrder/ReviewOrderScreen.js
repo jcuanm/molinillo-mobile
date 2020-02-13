@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { 
-    Alert,
     FlatList, 
     Linking,
     ScrollView, 
@@ -24,7 +23,7 @@ export default class ReviewOrderScreen extends Component {
         super(props);
         this.dbHandler = new DbHandler();
         this.maxParcelWeightInOunces = 2400; // According to UPS
-        this.maxCombinedDimensions = 108; // length + width + height
+        this.maxCombinedDimensions = 108; // length + width + height (According to UPS)
         this.stripeClient = new Stripe(StripeConfig.apiKey);
         this.order = this.props.navigation.getParam('order', {});
         this.billingInfo = this.props.navigation.getParam('billingInfo', {});
@@ -32,7 +31,9 @@ export default class ReviewOrderScreen extends Component {
             shippingCostsPerVendor: {},
             chocolatesWithTaxRates: [],
             chocolatesWithShippingRates: [],
-            taxPerVendor: {}
+            taxPerVendor: {},
+            customerPurchaseRateRatio: 0,
+            customerPurchaseRateDollars: 0
         }
     }
 
@@ -58,11 +59,33 @@ export default class ReviewOrderScreen extends Component {
     componentDidMount(){
         const { selectedDeliveryMethod, shippingAddress } = this.order;
 
-        this.getTaxRates()
+        this.getTaxRates();
+        this.getCustomerPurchaseRates();
         
         if(selectedDeliveryMethod == "shipping" && shippingAddress !== undefined){
             this.getShippingCosts();
         }
+    }
+
+    getCustomerPurchaseRates(){
+        let miscValuesCommerceRef = this.dbHandler.getRef("Commerce");
+
+        miscValuesCommerceRef
+            .get()
+            .then(results => {
+                if(results.exists){
+                    const { customerPurchaseRateDollars, customerPurchaseRateRatio } = results.data();
+
+                    this.setState({
+                        customerPurchaseRateDollars: customerPurchaseRateDollars,
+                        customerPurchaseRateRatio: customerPurchaseRateRatio
+                    });
+                }
+            })
+            .catch(error => {
+                console.log("Error getting the Commerce doc from the MiscValues collection");
+                console.log(error);
+            });
     }
 
     getTaxRates(){
@@ -349,18 +372,6 @@ export default class ReviewOrderScreen extends Component {
         return parcels;
     }
 
-    // Navigate away from the page and alert the user
-    handleShippingCostNotFound(){     
-        Alert.alert(
-            "Shipping is not available for this order.",
-            "Try picking it up instead!",
-            [{text: 'OK'}],
-            { cancelable: false }
-        );
-
-        this.props.navigation.popToTop();
-    }
-
     render(){
         let { 
             cartItems, 
@@ -371,7 +382,9 @@ export default class ReviewOrderScreen extends Component {
         const { 
             shippingCostsPerVendor, 
             chocolatesWithShippingRates,
-            taxPerVendor
+            taxPerVendor,
+            customerPurchaseRateDollars,
+            customerPurchaseRateRatio
         } = this.state;
 
         if(selectedDeliveryMethod == "shipping"){
@@ -404,6 +417,8 @@ export default class ReviewOrderScreen extends Component {
                     shippingCostsPerVendor={shippingCostsPerVendor}
                     taxPerVendor={taxPerVendor}
                     selectedDeliveryMethod={selectedDeliveryMethod}
+                    customerPurchaseRateDollars={customerPurchaseRateDollars}
+                    customerPurchaseRateRatio={customerPurchaseRateRatio}
                 />
 
                 <Text style={ReviewOrderScreenStyles.policyText}>

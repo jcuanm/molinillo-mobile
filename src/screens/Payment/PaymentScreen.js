@@ -21,6 +21,7 @@ export default class PaymentScreen extends React.Component {
         this.minCreditCardLength = 4;
 
         this.state = {
+            // Card Info
             nameOnCard: "",
             creditCardNumber: "",
             cvc: "",
@@ -31,6 +32,7 @@ export default class PaymentScreen extends React.Component {
             useShippingAddress: false,
             streetAddress1: "",
             streetAddress2: "",
+            phone: "",
             city: "",
             state: "",
             zipcode: "",
@@ -66,6 +68,7 @@ export default class PaymentScreen extends React.Component {
             useShippingAddress: !useShippingAddress,
             streetAddress1: shippingAddress.streetAddress1,
             streetAddress2: shippingAddress.streetAddress2,
+            phone: shippingAddress.phone,
             city: shippingAddress.city,
             state: shippingAddress.state,
             zipcode: shippingAddress.zipcode,
@@ -92,6 +95,7 @@ export default class PaymentScreen extends React.Component {
             // Billing address info
             streetAddress1,
             streetAddress2,
+            phone,
             city,
             state,
             zipcode,
@@ -118,6 +122,7 @@ export default class PaymentScreen extends React.Component {
                         selectedDeliveryMethod={selectedDeliveryMethod}
                         streetAddress1={streetAddress1}
                         streetAddress2={streetAddress2}
+                        phone={phone}
                         city={city}
                         state={state}
                         zipcode={zipcode}
@@ -162,6 +167,7 @@ export default class PaymentScreen extends React.Component {
 
     isVerifiedToProceed(){
         const {
+            // Card Info
             nameOnCard,
             creditCardNumber,
             cvc,
@@ -170,6 +176,7 @@ export default class PaymentScreen extends React.Component {
 
             // Billing Address info
             streetAddress1,
+            phone,
             city,
             state,
             zipcode,
@@ -182,6 +189,7 @@ export default class PaymentScreen extends React.Component {
             creditCardNumber.trim() !== "" &&
             creditCardNumber.trim().length >= this.minCreditCardLength &&
             cvc.trim() !== "" &&
+            phone.trim() !== "" &&
             expirationMonth.trim() !== "" &&
             expirationYear.trim() !== "" &&
             streetAddress1.trim() !== "" &&
