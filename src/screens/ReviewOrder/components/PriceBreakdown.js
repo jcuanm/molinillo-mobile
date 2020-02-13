@@ -9,13 +9,16 @@ export default class PriceBreakdown extends Component {
             cartItems, 
             selectedDeliveryMethod, 
             shippingCostsPerVendor,
-            taxPerVendor
+            taxPerVendor,
+            customerPurchaseRateDollars,
+            customerPurchaseRateRatio
         } = this.props;
 
         const totalShippingCosts = this.calculateTotal(shippingCostsPerVendor);
         const totalTax = this.calculateTotal(taxPerVendor);
         const subtotal = this.calculateSubTotal(cartItems);
-        const finalTotal = subtotal + totalShippingCosts + totalTax;
+        const serviceFee = (subtotal * customerPurchaseRateRatio) + customerPurchaseRateDollars;
+        const finalTotal = subtotal + totalShippingCosts + totalTax + serviceFee;
         
         return(
             <View style={PriceBreakdownStyles.container}> 
@@ -71,7 +74,7 @@ export default class PriceBreakdown extends Component {
                         Service fee:
                     </Text>
                     <Text style={PriceBreakdownStyles.calculationAmount}>
-                        $Undefined
+                        ${serviceFee.toFixed(2)}
                     </Text>
                 </View>
 

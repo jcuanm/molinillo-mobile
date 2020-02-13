@@ -52,7 +52,8 @@ export default class BillingAddressInput extends Component {
             city,
             state,
             zipcode,
-            country
+            country,
+            phone
         } = this.props;
 
 		return (
@@ -92,6 +93,15 @@ export default class BillingAddressInput extends Component {
                         clearButtonMode={"always"}
                         style={BillingAddressInputStyles.inputBox} 
                         onChangeText={newText => this.onChangeText("streetAddress2", newText)}
+                    />
+                    <TextInput 
+                        value={phone}
+                        maxLength={255}
+                        blurOnSubmit
+                        placeholder={"Phone number"}
+                        clearButtonMode={"always"}
+                        style={BillingAddressInputStyles.inputBox} 
+                        onChangeText={newText => this.onChangeText("phone", newText)}
                     />
                     <TextInput 
                         value={city}

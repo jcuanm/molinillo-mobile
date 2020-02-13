@@ -138,10 +138,15 @@ export default class DbHandler{
                     .doc(chocolateUuid);
                 break;
             case 'TaxRates':
-                    ref = this.dbRef
-                        .collection(root)
-                        .doc(chocolateUuid);
+                ref = this.dbRef
+                    .collection(root)
+                    .doc(chocolateUuid);
                     break;
+            case 'Commerce':
+                ref = this.dbRef
+                    .collection('MiscValues')
+                    .doc(root);
+                break;
             default:
                 ref = null; 
         }
