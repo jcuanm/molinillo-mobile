@@ -32,8 +32,9 @@ export default class ReviewOrderScreen extends Component {
             chocolatesWithTaxRates: [],
             chocolatesWithShippingRates: [],
             taxPerVendor: {},
-            customerPurchaseRateRatio: 0,
-            customerPurchaseRateDollars: 0
+            serviceFeePercent: 0,
+            serviceFeeDollars: 0,
+            vendorCommissionPercent: 0
         }
     }
 
@@ -60,25 +61,30 @@ export default class ReviewOrderScreen extends Component {
         const { selectedDeliveryMethod, shippingAddress } = this.order;
 
         this.getTaxRates();
-        this.getCustomerPurchaseRates();
+        this.getCommissionRates();
         
         if(selectedDeliveryMethod == "shipping" && shippingAddress !== undefined){
             this.getShippingCosts();
         }
     }
 
-    getCustomerPurchaseRates(){
+    getCommissionRates(){
         let miscValuesCommerceRef = this.dbHandler.getRef("Commerce");
 
         miscValuesCommerceRef
             .get()
             .then(results => {
                 if(results.exists){
-                    const { customerPurchaseRateDollars, customerPurchaseRateRatio } = results.data();
+                    const { 
+                        serviceFeeDollars, 
+                        serviceFeePercent,
+                        vendorCommissionPercent
+                    } = results.data();
 
                     this.setState({
-                        customerPurchaseRateDollars: customerPurchaseRateDollars,
-                        customerPurchaseRateRatio: customerPurchaseRateRatio
+                        serviceFeeDollars: serviceFeeDollars,
+                        serviceFeePercent: serviceFeePercent,
+                        vendorCommissionPercent: vendorCommissionPercent
                     });
                 }
             })
@@ -383,8 +389,8 @@ export default class ReviewOrderScreen extends Component {
             shippingCostsPerVendor, 
             chocolatesWithShippingRates,
             taxPerVendor,
-            customerPurchaseRateDollars,
-            customerPurchaseRateRatio
+            serviceFeeDollars,
+            serviceFeePercent
         } = this.state;
 
         if(selectedDeliveryMethod == "shipping"){
@@ -417,8 +423,8 @@ export default class ReviewOrderScreen extends Component {
                     shippingCostsPerVendor={shippingCostsPerVendor}
                     taxPerVendor={taxPerVendor}
                     selectedDeliveryMethod={selectedDeliveryMethod}
-                    customerPurchaseRateDollars={customerPurchaseRateDollars}
-                    customerPurchaseRateRatio={customerPurchaseRateRatio}
+                    serviceFeeDollars={serviceFeeDollars}
+                    serviceFeePercent={serviceFeePercent}
                 />
 
                 <Text style={ReviewOrderScreenStyles.policyText}>
@@ -432,7 +438,7 @@ export default class ReviewOrderScreen extends Component {
                 <RNSlidingButton
                     style={ReviewOrderScreenStyles.finalizeSlider}
                     height={40}
-                    onSlidingSuccess={() => this.placeOrder()}
+                    onSlidingSuccess={() => this.placeOrder(cartItems)}
                     slideDirection={SlideDirection.RIGHT}
                 >
                     <Text style={ReviewOrderScreenStyles.finalizeText}>
@@ -493,7 +499,124 @@ export default class ReviewOrderScreen extends Component {
         return filteredCartItems;
     }
     
-    placeOrder(){
-        console.log("Place order");
+    placeOrder(cartItems){
+        /*
+            Order
+
+            vendorUid
+            producerName
+            userId
+            vendorAddress
+            timeOrderExecuted
+            phone
+            selectedDeliveryType
+            tax
+            deliveryAddress
+            shippingCost
+            subtotal
+            items
+                confectionName
+                chocolateUuid
+                barcodeData
+                barcodeType
+                price
+                quantity
+                imageDownloadUrl
+            vendorCommissionPercentAmount
+
+
+            stripeCustomerId
+        */
+
+        let vendorInfo = this.getVendorInfo(cartItems);
+        const { selectedDeliveryMethod, shippingAddress } = this.order;
+        
+        for(let vendorUid in vendorInfo){
+            let subtotal = this.calculateVendorSubTotal(vendorInfo[vendorUid].cartItems);
+            let tax = this.state.taxPerVendor[vendorUid];
+            let shippingCost = this.state.shippingCostsPerVendor[vendorUid] ? selectedDeliveryMethod == "shipping" : 0;
+            let orderTotal = subtotal + tax + shippingCost;
+
+            let orderPerVendor = {
+                vendorUid: vendorUid,
+                userId: vendorInfo[vendorUid].userId,
+                producerName: vendorInfo[vendorUid].producerName,
+                vendorAddress: vendorInfo[vendorUid].vendorAddress,
+                timeOrderExecuted: new Date(),
+                phone: this.billingInfo.phone,
+                selectedDeliveryMethod: selectedDeliveryMethod,
+                tax: tax,
+                shippingAddress: this.getAddressString(shippingAddress) ? selectedDeliveryMethod == "shipping": "",
+                shippingCost: shippingCost,
+                subtotal: subtotal,
+                cartItems: JSON.stringify(vendorInfo[vendorUid].cartItems),
+                vendorCommission: this.state.vendorCommissionPercent * orderTotal
+            };
+        }
+
+        
+        // Add to Orders collection
+        let ordersRef = this.dbHandler.getRef("Orders");
+        
+
+        // Clear shopping cart
+
+    }
+
+    getVendorInfo(cartItems){
+        let vendorInfo = {};
+
+        for(var item of cartItems){
+            if(item.vendorUid in vendorInfo){
+                vendorInfo[item.vendorUid].cartItems.push(item);
+            }
+            else{
+                vendorInfo[item.vendorUid] = {
+                    producerName: item.producerName,
+                    userId: item.userId,
+                    vendorAddress: item.vendorAddress,
+                    cartItems: [item]
+                };
+            }
+        }
+
+        return vendorInfo;
+    }
+
+    getAddressString(shippingAddress){
+        const {
+            streetAddress1,
+            streetAddress2,
+            city,
+            state,
+            zipcode,
+            country,
+        } = shippingAddress;
+
+        var aggregatedAddress = streetAddress1 + " ";
+        
+        if(streetAddress2 !== ""){
+            aggregatedAddress =  aggregatedAddress + streetAddress2 + " ";
+        }
+
+        aggregatedAddress = 
+            aggregatedAddress + 
+            city + ", " +
+            state + " " +
+            zipcode + ", " +
+            country;
+        
+        return aggregatedAddress;
+    }
+
+    calculateVendorSubTotal(cartItems){
+        let total = 0;
+
+        for(var i = 0; i < cartItems.length; i++){
+            let { price, quantity } = cartItems[i];
+            let itemTotal = price * quantity;
+            total += itemTotal;
+        }
+        return total;
     }
 }
