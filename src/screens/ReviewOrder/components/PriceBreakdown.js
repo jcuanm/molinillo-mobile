@@ -10,14 +10,14 @@ export default class PriceBreakdown extends Component {
             selectedDeliveryMethod, 
             shippingCostsPerVendor,
             taxPerVendor,
-            customerPurchaseRateDollars,
-            customerPurchaseRateRatio
+            serviceFeeDollars,
+            serviceFeePercent
         } = this.props;
 
         const totalShippingCosts = this.calculateTotal(shippingCostsPerVendor);
         const totalTax = this.calculateTotal(taxPerVendor);
         const subtotal = this.calculateSubTotal(cartItems);
-        const serviceFee = (subtotal * customerPurchaseRateRatio) + customerPurchaseRateDollars;
+        const serviceFee = (subtotal * serviceFeePercent) + serviceFeeDollars;
         const finalTotal = subtotal + totalShippingCosts + totalTax + serviceFee;
         
         return(
