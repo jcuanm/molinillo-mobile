@@ -16,6 +16,7 @@ import ReviewItem from './components/ReviewItem';
 import DbHandler from '../../helpers/DbHandler';
 import PaymentMethod from './components/PaymentMethod';
 import { RNSlidingButton, SlideDirection } from 'rn-sliding-button';
+const uuidv4 = require('uuid/v4');
 
 export default class ReviewOrderScreen extends Component {
     constructor(props) {
@@ -500,9 +501,7 @@ export default class ReviewOrderScreen extends Component {
     placeOrder(cartItems){
         this.addToOrdersCollection(cartItems);
 
-        // Add to Orders collection
-        let ordersRef = this.dbHandler.getRef("Orders");
-        
+        // Add to Orders collection        
 
         // Clear shopping cart
 
@@ -611,16 +610,28 @@ export default class ReviewOrderScreen extends Component {
                 Promise
                     .all(requests)
                     .then(jsonResponses => {
-                        let ordersRef = this.dbHandler.getRef("Orders");
+                        let batchCursor = this.dbHandler.dbRef.batch();
+                        let orderUuid = uuidv4();
+                        let ordersRef = this.dbHandler.getRef("Orders", barcode=null, chocolateUuid=null, commentUuid=null, orderUuid=orderUuid);
 
                         for(var i = 0; i < jsonResponses.length; i++){
                             let stripeCustomerID = jsonResponses[i].id;
                             let completeOrder = {
                                 ...ordersPerVendor[i],
-                                stripeCustomerID: stripeCustomerID
-                            }
-                            console.log(completeOrder);
+                                stripeCustomerID: stripeCustomerID,
+                                orderUuid: orderUuid
+                            };
+                            
+                            batchCursor.set(ordersRef, completeOrder);
                         }
+
+                        batchCursor
+                            .commit()
+                            .then( _ => {})
+                            .catch(error => {
+                                console.log("Failed to commit order");
+                                console.log(error);
+                            });
                     })
                     .catch(error => {
                         console.log("Error converting Stripe response to JSON");

@@ -75,7 +75,7 @@ export default class DbHandler{
         return handleFailureCallback({ params: callbackParams});
     }
 
-    getRef(root, barcode=null, chocolateUuid=null, commentUuid=null){
+    getRef(root, barcode=null, chocolateUuid=null, commentUuid=null, orderUuid=null){
         var ref;
         switch(root){
             case StringConcatenations.Prefix:
@@ -148,9 +148,10 @@ export default class DbHandler{
                     .doc(root);
                 break;
             case 'Orders':
+                    console.log("CACHOW", orderUuid);
                     ref = this.dbRef
                         .collection(root)
-                        .doc(uuidv4());
+                        .doc(orderUuid);
                     break;
             default:
                 ref = null; 
