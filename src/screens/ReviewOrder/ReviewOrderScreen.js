@@ -7,7 +7,6 @@ import {
     TouchableOpacity
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Stripe from 'react-native-stripe-api';
 import { ShippoConfig, StripeConfig } from '../../../assets/Config';
 import { Colors, PrivacyPolicyUrl } from '../../helpers/Constants';
 import { ReviewOrderScreenStyles } from './styles';
@@ -24,7 +23,6 @@ export default class ReviewOrderScreen extends Component {
         this.dbHandler = new DbHandler();
         this.maxParcelWeightInOunces = 2400; // According to UPS
         this.maxCombinedDimensions = 108; // length + width + height (According to UPS)
-        this.stripeClient = new Stripe(StripeConfig.apiKey);
         this.order = this.props.navigation.getParam('order', {});
         this.billingInfo = this.props.navigation.getParam('billingInfo', {});
         this.state = {
@@ -500,61 +498,8 @@ export default class ReviewOrderScreen extends Component {
     }
     
     placeOrder(cartItems){
-        /*
-            Order
+        this.addToOrdersCollection(cartItems);
 
-            vendorUid
-            producerName
-            userId
-            vendorAddress
-            timeOrderExecuted
-            phone
-            selectedDeliveryType
-            tax
-            deliveryAddress
-            shippingCost
-            subtotal
-            items
-                confectionName
-                chocolateUuid
-                barcodeData
-                barcodeType
-                price
-                quantity
-                imageDownloadUrl
-            vendorCommissionPercentAmount
-
-
-            stripeCustomerId
-        */
-
-        let vendorInfo = this.getVendorInfo(cartItems);
-        const { selectedDeliveryMethod, shippingAddress } = this.order;
-        
-        for(let vendorUid in vendorInfo){
-            let subtotal = this.calculateVendorSubTotal(vendorInfo[vendorUid].cartItems);
-            let tax = this.state.taxPerVendor[vendorUid];
-            let shippingCost = this.state.shippingCostsPerVendor[vendorUid] ? selectedDeliveryMethod == "shipping" : 0;
-            let orderTotal = subtotal + tax + shippingCost;
-
-            let orderPerVendor = {
-                vendorUid: vendorUid,
-                userId: vendorInfo[vendorUid].userId,
-                producerName: vendorInfo[vendorUid].producerName,
-                vendorAddress: vendorInfo[vendorUid].vendorAddress,
-                timeOrderExecuted: new Date(),
-                phone: this.billingInfo.phone,
-                selectedDeliveryMethod: selectedDeliveryMethod,
-                tax: tax,
-                shippingAddress: this.getAddressString(shippingAddress) ? selectedDeliveryMethod == "shipping": "",
-                shippingCost: shippingCost,
-                subtotal: subtotal,
-                cartItems: JSON.stringify(vendorInfo[vendorUid].cartItems),
-                vendorCommission: this.state.vendorCommissionPercent * orderTotal
-            };
-        }
-
-        
         // Add to Orders collection
         let ordersRef = this.dbHandler.getRef("Orders");
         
@@ -619,4 +564,88 @@ export default class ReviewOrderScreen extends Component {
         }
         return total;
     }
+
+    addToOrdersCollection(cartItems){
+        let vendorInfo = this.getVendorInfo(cartItems);
+        const { selectedDeliveryMethod, shippingAddress } = this.order;
+        let requests = [];
+        let ordersPerVendor = [];
+       
+        for(let vendorUid in vendorInfo){
+            let subtotal = this.calculateVendorSubTotal(vendorInfo[vendorUid].cartItems);
+            let tax = this.state.taxPerVendor[vendorUid];
+            let shippingCost = this.state.shippingCostsPerVendor[vendorUid] ? selectedDeliveryMethod == "shipping" : 0;
+            let orderTotal = subtotal + tax + shippingCost;
+            let request = this.makePOSTRequest("https://api.stripe.com/v1/customers", "description=xxxxxxx", apiKey=StripeConfig.apiKey);
+
+            let orderPerVendor = {
+                vendorUid: vendorUid,
+                userId: vendorInfo[vendorUid].userId,
+                producerName: vendorInfo[vendorUid].producerName,
+                vendorAddress: vendorInfo[vendorUid].vendorAddress,
+                timeOrderExecuted: new Date(),
+                phone: this.billingInfo.phone,
+                selectedDeliveryMethod: selectedDeliveryMethod,
+                tax: tax,
+                shippingAddress: this.getAddressString(shippingAddress) ? selectedDeliveryMethod == "shipping": "",
+                shippingCost: shippingCost,
+                subtotal: subtotal,
+                cartItems: JSON.stringify(vendorInfo[vendorUid].cartItems),
+                orderTotal: orderTotal,
+                vendorCommission: this.state.vendorCommissionPercent * orderTotal
+            };
+
+            requests.push(request);
+            ordersPerVendor.push(orderPerVendor);
+       }
+
+        Promise
+            .all(requests)
+            .then(responses => {
+                let requests = [];
+
+                for(var response of responses){
+                    requests.push(response.json());
+                }
+
+                Promise
+                    .all(requests)
+                    .then(jsonResponses => {
+                        let ordersRef = this.dbHandler.getRef("Orders");
+
+                        for(var i = 0; i < jsonResponses.length; i++){
+                            let stripeCustomerID = jsonResponses[i].id;
+                            let completeOrder = {
+                                ...ordersPerVendor[i],
+                                stripeCustomerID: stripeCustomerID
+                            }
+                            console.log(completeOrder);
+                        }
+                    })
+                    .catch(error => {
+                        console.log("Error converting Stripe response to JSON");
+                        console.log(error);
+                    });
+            })
+            .catch(error =>{
+                console.log("Error making POST request to Stripe API.");
+                console.log(error);
+            });
+    }
+
+    makePOSTRequest(url, postBody, apiKey=""){
+        return(
+            fetch(url, {    
+               method: 'POST',    
+               headers: {      
+                   Accept: 'application/json',      
+                   'Content-Type': 'application/x-www-form-urlencoded',    
+                   Authorization: "Bearer " + apiKey 
+               },   
+               body: postBody
+           })
+        );
+    }
+
+
 }
