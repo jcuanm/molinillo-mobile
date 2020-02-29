@@ -500,11 +500,8 @@ export default class ReviewOrderScreen extends Component {
     
     placeOrder(cartItems){
         this.addToOrdersCollection(cartItems);
-
-        // Add to Orders collection        
-
-        // Clear shopping cart
-
+        this.props.navigation.popToTop();
+        this.props.navigation.navigate("SearchScreen");
     }
 
     getVendorInfo(cartItems){
@@ -627,7 +624,9 @@ export default class ReviewOrderScreen extends Component {
 
                         batchCursor
                             .commit()
-                            .then( _ => {})
+                            .then( _ => {
+                                this.clearShoppingCart();
+                            })
                             .catch(error => {
                                 console.log("Failed to commit order");
                                 console.log(error);
@@ -658,5 +657,24 @@ export default class ReviewOrderScreen extends Component {
         );
     }
 
+    clearShoppingCart(){
+        let cartRef = this.dbHandler.dbRef.collection("Cart");
 
+        cartRef
+            .where("userId", "==", this.dbHandler.currUser.uid)
+            .get()
+            .then(results => {
+                let batchRef = this.dbHandler.dbRef.batch();
+
+                results.forEach(doc => {
+                    batchRef.delete(doc.ref);
+                });
+
+                return batchRef.commit()
+            })
+            .then(() => {})
+            .catch(error =>{
+                console.log(error);
+            });
+    }
 }
