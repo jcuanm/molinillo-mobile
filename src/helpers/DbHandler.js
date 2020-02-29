@@ -148,7 +148,6 @@ export default class DbHandler{
                     .doc(root);
                 break;
             case 'Orders':
-                    console.log("CACHOW", orderUuid);
                     ref = this.dbRef
                         .collection(root)
                         .doc(orderUuid);
