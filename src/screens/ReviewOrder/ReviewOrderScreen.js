@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { 
+    Alert,
     FlatList, 
     Linking,
     ScrollView, 
@@ -502,6 +503,13 @@ export default class ReviewOrderScreen extends Component {
         this.addToOrdersCollection(cartItems);
         this.props.navigation.popToTop();
         this.props.navigation.navigate("SearchScreen");
+
+        Alert.alert(
+            "Your order request has been placed!",
+            "Once the vendor confirms the order, we will charge your card and notify you.",
+            [{text: 'OK'}],
+            { cancelable: false }
+        );
     }
 
     getVendorInfo(cartItems){
@@ -628,6 +636,13 @@ export default class ReviewOrderScreen extends Component {
                                 this.clearShoppingCart();
                             })
                             .catch(error => {
+                                Alert.alert(
+                                    "There was an error processing your order",
+                                    "",
+                                    [{text: 'OK'}],
+                                    { cancelable: false }
+                                );
+
                                 console.log("Failed to commit order");
                                 console.log(error);
                             });
@@ -670,11 +685,7 @@ export default class ReviewOrderScreen extends Component {
                     batchRef.delete(doc.ref);
                 });
 
-                return batchRef.commit()
-            })
-            .then(() => {})
-            .catch(error =>{
-                console.log(error);
+                batchRef.commit()
             });
     }
 }
