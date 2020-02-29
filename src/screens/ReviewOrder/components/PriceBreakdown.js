@@ -14,11 +14,13 @@ export default class PriceBreakdown extends Component {
             serviceFeePercent
         } = this.props;
 
+        const decimalPlaces = 2;
+
         const totalShippingCosts = this.calculateTotal(shippingCostsPerVendor);
-        const totalTax = this.calculateTotal(taxPerVendor);
+        const totalTax = this.round(this.calculateTotal(taxPerVendor), decimalPlaces);
         const subtotal = this.calculateSubTotal(cartItems);
-        const serviceFee = (subtotal * serviceFeePercent) + serviceFeeDollars;
-        const finalTotal = subtotal + totalShippingCosts + totalTax + serviceFee;
+        const serviceFee = this.round((subtotal * serviceFeePercent) + serviceFeeDollars, decimalPlaces);
+        const finalTotal = this.round(subtotal + totalShippingCosts + totalTax + serviceFee, decimalPlaces);
         
         return(
             <View style={PriceBreakdownStyles.container}> 
@@ -115,5 +117,9 @@ export default class PriceBreakdown extends Component {
             }
         }
         return total;
+    }
+
+    round(value, decimals) {
+        return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
     }
 }
