@@ -71,3 +71,4 @@ Before deploying, make sure you increment the `buildNumber` in `app.json`! In or
 
 # Instructions for both Android and iOS 
 Let Expo handle everything; don't manually create any keys of any kind.
+# molinillo_scripts
