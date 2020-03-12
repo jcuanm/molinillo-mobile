@@ -578,7 +578,7 @@ export default class ReviewOrderScreen extends Component {
         for(let vendorUid in vendorInfo){
             let subtotal = this.calculateVendorSubTotal(vendorInfo[vendorUid].cartItems);
             let tax = this.state.taxPerVendor[vendorUid];
-            let shippingCost = this.state.shippingCostsPerVendor[vendorUid] ? selectedDeliveryMethod == "shipping" : 0;
+            let shippingCost = selectedDeliveryMethod == "shipping" ? this.state.shippingCostsPerVendor[vendorUid] : 0;
             let orderTotal = subtotal + tax + shippingCost;
             let request = this.makePOSTRequest("https://api.stripe.com/v1/customers", "description=xxxxxxx", apiKey=StripeConfig.apiKey);
 
@@ -591,12 +591,12 @@ export default class ReviewOrderScreen extends Component {
                 phone: this.billingInfo.phone,
                 selectedDeliveryMethod: selectedDeliveryMethod,
                 tax: tax,
-                shippingAddress: this.getAddressString(shippingAddress) ? selectedDeliveryMethod == "shipping": "",
+                shippingAddress: selectedDeliveryMethod == "shipping" ? this.getAddressString(shippingAddress) : "",
                 shippingCost: shippingCost,
                 subtotal: subtotal,
                 cartItems: JSON.stringify(vendorInfo[vendorUid].cartItems),
                 orderTotal: orderTotal,
-                vendorCommission: this.state.vendorCommissionPercent * orderTotal
+                vendorCommission: this.round(this.state.vendorCommissionPercent * orderTotal, 2)
             };
 
             requests.push(request);
@@ -687,5 +687,9 @@ export default class ReviewOrderScreen extends Component {
 
                 batchRef.commit()
             });
+    }
+
+    round(value, decimals) {
+        return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
     }
 }
