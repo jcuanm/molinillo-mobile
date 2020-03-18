@@ -27,6 +27,8 @@ export default class ReviewOrderScreen extends Component {
         this.maxCombinedDimensions = 108; // length + width + height (According to UPS)
         this.order = this.props.navigation.getParam('order', {});
         this.billingInfo = this.props.navigation.getParam('billingInfo', {});
+        this.decimalPlaces = 2;
+
         this.state = {
             shippingCostsPerVendor: {},
             chocolatesWithTaxRates: [],
@@ -129,8 +131,8 @@ export default class ReviewOrderScreen extends Component {
                         let totalTax = subtotal * taxRate;
 
                         taxPerVendor[vendorUid] = taxPerVendor[vendorUid] === undefined ? 
-                                                                totalTax : 
-                                                                taxPerVendor[vendorUid] + totalTax;
+                                                                this.round(totalTax, this.decimalPlaces) : 
+                                                                this.round(taxPerVendor[vendorUid] + totalTax, this.decimalPlaces);
                         chocolatesWithTaxRates.push(chocolateUuid);
                     }
                 }
@@ -579,8 +581,10 @@ export default class ReviewOrderScreen extends Component {
             let subtotal = this.calculateVendorSubTotal(vendorInfo[vendorUid].cartItems);
             let tax = this.state.taxPerVendor[vendorUid];
             let shippingCost = selectedDeliveryMethod == "shipping" ? this.state.shippingCostsPerVendor[vendorUid] : 0;
-            let orderTotal = subtotal + tax + shippingCost;
-            let request = this.makePOSTRequest("https://api.stripe.com/v1/customers", "description=xxxxxxx", apiKey=StripeConfig.apiKey);
+            let serviceFee = this.round((subtotal * this.state.serviceFeePercent) + this.state.serviceFeeDollars, this.decimalPlaces);
+            let orderTotal = subtotal + tax + shippingCost + serviceFee;
+            let request = this.makePOSTRequest("https://api.stripe.com/v1/customers", "description=" + vendorInfo[vendorUid].userId, apiKey=StripeConfig.apiKey);
+            
 
             let orderPerVendor = {
                 vendorUid: vendorUid,
@@ -592,11 +596,12 @@ export default class ReviewOrderScreen extends Component {
                 selectedDeliveryMethod: selectedDeliveryMethod,
                 tax: tax,
                 shippingAddress: selectedDeliveryMethod == "shipping" ? this.getAddressString(shippingAddress) : "",
+                serviceFee: serviceFee,
                 shippingCost: shippingCost,
                 subtotal: subtotal,
                 cartItems: JSON.stringify(vendorInfo[vendorUid].cartItems),
-                orderTotal: orderTotal,
-                vendorCommission: this.round(this.state.vendorCommissionPercent * orderTotal, 2)
+                orderTotal: this.round(orderTotal, this.decimalPlaces),
+                vendorCommission: this.round((this.state.vendorCommissionPercent * orderTotal) - serviceFee, this.decimalPlaces)
             };
 
             requests.push(request);
