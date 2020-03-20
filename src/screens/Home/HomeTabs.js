@@ -33,7 +33,7 @@ export default HomeTabs = createMaterialBottomTabNavigator(
       navigationOptions : {
         tabLabel: "Orders",
         tabBarIcon: ({ tintColor }) => (    
-          <Ionicons color={tintColor} size={28} name='md-cube'/>  
+          <Ionicons color={tintColor} size={24} name='md-cube'/>  
         ),  
       }
     },

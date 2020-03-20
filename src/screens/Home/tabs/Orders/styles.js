@@ -1,6 +1,6 @@
 import { Dimensions, StyleSheet } from 'react-native';
 
-export const CartScreenStyles = StyleSheet.create({
+export const OrderScreenStyles = StyleSheet.create({
     container: {
         flex: 1
     },
@@ -14,23 +14,10 @@ export const CartScreenStyles = StyleSheet.create({
     headerImage: {
         height:40, 
         width:40
-    },
-    proceedToCheckoutButton: {
-        width: Dimensions.get('window').width - 20,
-        height: 40,
-        backgroundColor: "gold",
-        margin: 10,
-        marginTop: 25,
-        alignSelf:"center",
-        justifyContent: "center"
-    },
-    proceedToCheckoutText: {
-        textAlign: "center",
-        fontWeight: 'bold'
     }
 });
 
-export const CartItemStyles = StyleSheet.create({
+export const OrderStyles = StyleSheet.create({
     container: {
         paddingBottom: 10,
         flexDirection:"row",
@@ -42,51 +29,20 @@ export const CartItemStyles = StyleSheet.create({
         alignItems: "center",
         justifyContent:"center"
     },
-    chocolateImage: {
-        width: 120, 
-        height: 120,
+    orderInfoContainer: {
         flex:1
     },
-    itemInfoContainer: {
-        flex:1
-    },
-    listingTitle: {
+    orderInfoSubtitle: {
         fontWeight:"bold"
     },
-    listingSubtitle: {
-        fontSize: 12, 
-        fontWeight: 'bold'
+    incomeTitle: {
+        fontSize: 25, 
+        textAlign: 'center', 
+        fontWeight: 'bold', 
+        color: 'green'
     },
-    quantityChangerContainer:{
-        flexDirection:"row", 
-        marginTop:20
-    },
-    quantityChangerSymbol: {
-        textAlign:"center", 
-    },
-    producerName: {
-        fontWeight:"bold"
-    },
-    quantityTextContainer: {
-        justifyContent:"center", 
-        borderColor:"grey", 
-        borderWidth:1, 
-        backgroundColor:"white", 
-        width:60, 
-        height:30
-    },
-    quantityText: {
-        textAlign:"center"
-    },
-    quantityChangerButton:{
-        justifyContent:"center",  
-        borderColor:"grey", 
-        borderWidth:1, 
-        backgroundColor:"white", 
-        width:30, 
-        height:30
-    },
-    trashIcon: {
-        marginRight:15
+    incomeAmount: {
+        fontSize: 25, 
+        textAlign: 'center'
     }
 });

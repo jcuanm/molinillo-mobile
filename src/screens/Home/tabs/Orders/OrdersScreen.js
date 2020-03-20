@@ -3,7 +3,6 @@ import {
     FlatList, 
     Image,
     ScrollView, 
-    Text,
     TouchableOpacity,
     View 
 } from 'react-native';
@@ -12,81 +11,48 @@ import DbHandler from '../../../../helpers/DbHandler';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import { Ionicons } from '@expo/vector-icons';
-import CartItem from "./components/CartItem";
+import Order from "./components/Order";
 import { Colors } from '../../../../helpers/Constants';
-import { CartScreenStyles } from './styles';
-import Barcode from '../../../../helpers/Barcode';
-import { StringConcatenations } from '../../../../helpers/Constants';
+import { OrderScreenStyles } from './styles';
 
 export default class OrdersScreen extends Component {
     constructor(props) {
         super(props);
         this.dbHandler = new DbHandler();
-        this.getUserCartItems = this.getUserCartItems.bind(this); 
+        this.getUserOrders = this.getUserOrders.bind(this); 
 
         props.navigation.setParams({
             onTabFocus: this.handleTabFocus
         });
 
         this.state = {
-            cartItems: []
+            orders: []
         }
     }
 
     componentDidMount() {
         this.didFocusListener = this.props.navigation.addListener(
           'didFocus',
-          () => { this.getUserCartItems() },
+          () => { this.getUserOrders() },
         );
     }
     
-    getUserCartItems(){
-        let cartRef = firebase.firestore().collection("Cart");
-        let query = cartRef.where("userId", "==", this.dbHandler.currUser.uid);
+    getUserOrders(){
+        let ordersRef = firebase.firestore().collection("Orders");
+        let query = ordersRef.where("vendorUid", "==", this.dbHandler.currUser.uid);
 
         query 
             .get()
             .then(results => {
-                let cartItems = [];
+                let orders = [];
+                
                 if(results.size > 0){
                     results.forEach(doc => {
-
-                        const { 
-                            barcodeData, 
-                            barcodeType, 
-                            chocolateUuid 
-                        } = doc.data();
-                
-                        let barcode = new Barcode(barcodeType, barcodeData);
-                        let barcodeTypeRef = this.dbHandler.getRef(
-                            StringConcatenations.Prefix, 
-                            barcode,
-                            chocolateUuid);
-
-                        // Getting the price of each item
-                        barcodeTypeRef
-                            .get()
-                            .then(result => {
-                                let price = result.data().price;
-
-                                if(result.exists && price > 0){
-                                    let item = {
-                                        ...doc.data(),
-                                        price: price
-                                    }
-                                    this.setState({cartItems: [...this.state.cartItems, item]});
-                                }
-                            })
-                            .catch(error => {
-                                console.log(error);
-                            });
+                        orders.push(doc.data());
                     }); 
 
-                    this.setState({cartItems: cartItems})
+                    this.setState({orders: orders})
                 }
-                else{
-                    this.setState({cartItems: []});
-                }  
             })
             .catch(error => {
                 console.log(error);
@@ -94,7 +60,7 @@ export default class OrdersScreen extends Component {
     }
 
     static navigationOptions = ({ navigation }) => ({
-        title: "My Cart",
+        title: "Orders",
         headerStyle: {
             backgroundColor: Colors.Primary,
         },
@@ -104,10 +70,10 @@ export default class OrdersScreen extends Component {
         headerLeft: (
             <TouchableOpacity
                 onPress={() => navigation.navigate("SearchScreen")} 
-                style={CartScreenStyles.headerButton} 
+                style={OrderScreenStyles.headerButton} 
             >
                 <Image 
-                    style={CartScreenStyles.headerImage}
+                    style={OrderScreenStyles.headerImage}
                     source={require('../../../../../assets/images/logo.png')}
                 />
             </TouchableOpacity>
@@ -115,30 +81,17 @@ export default class OrdersScreen extends Component {
     })
 
     render(){
-        const { cartItems } = this.state;
+        const { orders } = this.state;
+
         return(
-            <View style={CartScreenStyles.container}>
+            <View style={OrderScreenStyles.container}>
                 <ScrollView>
                     <FlatList
-                        data={cartItems}
+                        data={orders}
                         scrollEnabled={true}
-                        renderItem={({_, index}) => this.renderItem(cartItems[index])}
+                        renderItem={({_, index}) => this.renderOrder(orders[index])}
                         keyExtractor={(_, index) => index.toString()}
                     /> 
-
-                    {
-                        this.state.cartItems.length > 0 ?
-                            <TouchableOpacity 
-                                onPress={() => this.props.navigation.navigate("DeliveryMethodScreen", { cartItems: cartItems }) }
-                                style={CartScreenStyles.proceedToCheckoutButton}
-                            >
-                                <Text style={CartScreenStyles.proceedToCheckoutText}>
-                                    Proceed to checkout
-                                </Text>
-                            </TouchableOpacity>
-                        :
-                            null
-                    }
                 </ScrollView>
 
                 <ActionButton
@@ -150,29 +103,25 @@ export default class OrdersScreen extends Component {
         );
     }
 
-    renderItem(item){
+    renderOrder(order){
         const { 
-            imageDownloadUrl,
-            producerName,
-            confectionName,
-            quantity, 
-            chocolateUuid,
-            barcodeType,
-            barcodeData,
-            price
-        } = item;
+            orderTotal, 
+            serviceFee,
+            vendorCommission,
+            selectedDeliveryMethod,
+            vendorAddress,
+            shippingAddress
+        } = order;
+        
+        let income = orderTotal - serviceFee - vendorCommission;
 
         return(
-            <CartItem 
-                getUserCartItems={this.getUserCartItems}
-                chocolateUuid={chocolateUuid}
-                imageDownloadUrl={imageDownloadUrl}
-                producerName={producerName}
-                confectionName={confectionName}
-                quantity={quantity} 
-                barcodeData={barcodeData}
-                barcodeType={barcodeType}
-                price={price}
+            <Order 
+                selectedDeliveryMethod={selectedDeliveryMethod}
+                vendorAddress={vendorAddress}
+                shippingAddress={shippingAddress}
+                income={income.toFixed(2)}
+                order={order} 
             />
         );
     }
