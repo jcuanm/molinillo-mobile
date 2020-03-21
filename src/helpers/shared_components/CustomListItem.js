@@ -39,9 +39,8 @@ export default class CustomListItem extends Component {
                 onPress={ () => { 
                     navigate(
                         "DetailScreen",
-                        { 
-                            results : results
-                        });
+                        { results : results }
+                    );
                 
                     this.updateSearchClickMetaData(results, parentScreen);
                 }}

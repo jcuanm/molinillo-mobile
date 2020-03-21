@@ -621,11 +621,12 @@ export default class ReviewOrderScreen extends Component {
                     .all(requests)
                     .then(jsonResponses => {
                         let batchCursor = this.dbHandler.dbRef.batch();
-                        let orderUuid = uuidv4();
-                        let ordersRef = this.dbHandler.getRef("Orders", barcode=null, chocolateUuid=null, commentUuid=null, orderUuid=orderUuid);
-
+                        
                         for(var i = 0; i < jsonResponses.length; i++){
+                            let orderUuid = uuidv4();
+                            let ordersRef = this.dbHandler.getRef("Orders", barcode=null, chocolateUuid=null, commentUuid=null, orderUuid=orderUuid);
                             let stripeCustomerID = jsonResponses[i].id;
+
                             let completeOrder = {
                                 ...ordersPerVendor[i],
                                 stripeCustomerID: stripeCustomerID,
