@@ -117,6 +117,7 @@ export default class OrdersScreen extends Component {
 
         return(
             <Order 
+                navigate={this.props.navigation.navigate}
                 selectedDeliveryMethod={selectedDeliveryMethod}
                 vendorAddress={vendorAddress}
                 shippingAddress={shippingAddress}

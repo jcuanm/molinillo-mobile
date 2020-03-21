@@ -6,6 +6,8 @@ import AddChocolateScreen from '../../screens/AddChocolate/AddChocolateScreen';
 import DeliveryMethodScreen from '../../screens/DeliveryMethod/DeliveryMethodScreen';
 import ReviewOrderScreen from '../../screens/ReviewOrder/ReviewOrderScreen';
 import PaymentScreen from '../../screens/Payment/PaymentScreen';
+import VendorConfirmationScreen from '../../screens/VendorConfirmation/VendorConfirmationScreen';
+
 
 export default createStackNavigator({
     OrdersScreen,
@@ -14,5 +16,6 @@ export default createStackNavigator({
     AddChocolateScreen,
     DeliveryMethodScreen,
     ReviewOrderScreen,
-    PaymentScreen
+    PaymentScreen,
+    VendorConfirmationScreen
 });
