@@ -10,6 +10,7 @@ export default class Order extends Component {
     render(){
         const { 
             income, 
+            navigate,
             order,
             vendorAddress,
             shippingAddress,
@@ -17,7 +18,10 @@ export default class Order extends Component {
         } = this.props;
 
         return(
-            <TouchableOpacity style={OrderStyles.container} >
+            <TouchableOpacity 
+                onPress={() => navigate("VendorConfirmationScreen", { order: order, income: income})}
+                style={OrderStyles.container} 
+            >
                 <View style={OrderStyles.orderInfoContainer}>
                     <Text style={OrderStyles.incomeTitle}>Income</Text>
                     <Text style={OrderStyles.incomeAmount}>${income}</Text>
