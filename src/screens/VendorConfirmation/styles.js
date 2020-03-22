@@ -34,6 +34,19 @@ export const VendorConfirmationScreenStyles = StyleSheet.create({
         marginRight: screenMargin,
         marginTop: 50,
         fontSize:12,
+    },
+    buttonsContainer: {
+        flexDirection:'row'
+    },
+    acknowledgeButton: {
+        flex:1,
+        margin: 10,
+        padding: 5
+    },
+    acknowledgeButtonText: {
+        color: "white",
+        textAlign:"center",
+        fontWeight: "bold"
     }
 });
 
@@ -47,7 +60,6 @@ export const DeliveryMethodStyles = StyleSheet.create({
         justifyContent:"center"
     },
     deliveryMethodTitle:{
-        
         flex:2,
         fontWeight:"bold",
         color: Colors.Secondary
