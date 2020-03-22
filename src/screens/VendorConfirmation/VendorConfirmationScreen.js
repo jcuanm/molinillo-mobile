@@ -93,17 +93,21 @@ export default class VendorConfirmationScreen extends Component {
                             privacy policy
                     </Text> and terms of use. All sales are final after being placed.
                 </Text>
-{/*
-                <RNSlidingButton
-                    style={VendorConfirmationScreenStyles.finalizeSlider}
-                    height={40}
-                    onSlidingSuccess={() => this.placeOrder(cartItems)}
-                    slideDirection={SlideDirection.RIGHT}
-                >
-                    <Text style={VendorConfirmationScreenStyles.finalizeText}>
-                        Slide right to place order >
-                    </Text>
-                </RNSlidingButton> */}
+
+                <View style={VendorConfirmationScreenStyles.buttonsContainer}>
+                    <TouchableOpacity style={[VendorConfirmationScreenStyles.acknowledgeButton, {backgroundColor:'green'}]}>
+                        <Text style={VendorConfirmationScreenStyles.acknowledgeButtonText}>
+                            Confirm
+                        </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={[VendorConfirmationScreenStyles.acknowledgeButton, {backgroundColor:'red'}]}>
+                        <Text style={VendorConfirmationScreenStyles.acknowledgeButtonText}>
+                            Cancel
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+
             </ScrollView>
         );
     }
