@@ -53,6 +53,9 @@ export default class OrdersScreen extends Component {
 
                     this.setState({orders: orders})
                 }
+                else{
+                    this.setState({orders : []});
+                }
             })
             .catch(error => {
                 console.log(error);

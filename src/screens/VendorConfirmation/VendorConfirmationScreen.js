@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { StripeConfig } from '../../../assets/Config';
+import Dialog from "react-native-dialog";
 import { Colors, PrivacyPolicyUrl } from '../../helpers/Constants';
 import { VendorConfirmationScreenStyles } from './styles';
 import PriceBreakdown from './components/PriceBreakdown';
@@ -25,6 +26,11 @@ export default class VendorConfirmationScreen extends Component {
         this.order = this.props.navigation.getParam('order', {});
         this.income = this.props.navigation.getParam('income', {});
         this.decimalPlaces = 2;
+
+        this.state = {
+            isDialogVisible: false,
+            reason: ''
+        }
     }
 
     static navigationOptions = ({ navigation }) => ({
@@ -56,7 +62,8 @@ export default class VendorConfirmationScreen extends Component {
             subtotal,
             shippingCost,
             tax,
-            vendorCommission
+            vendorCommission,
+            orderUuid
         } = this.order;
 
         cartItems = JSON.parse(cartItems);
@@ -101,15 +108,59 @@ export default class VendorConfirmationScreen extends Component {
                         </Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={[VendorConfirmationScreenStyles.acknowledgeButton, {backgroundColor:'red'}]}>
+                    <TouchableOpacity 
+                        onPress={() => this.setState({ isDialogVisible: true })} 
+                        style={[VendorConfirmationScreenStyles.acknowledgeButton, {backgroundColor:'red'}]}
+                    >
                         <Text style={VendorConfirmationScreenStyles.acknowledgeButtonText}>
                             Cancel
                         </Text>
                     </TouchableOpacity>
                 </View>
 
+                {/* Pop-up dialog box for order cancellation */}
+                <Dialog.Container visible={this.state.isDialogVisible}>
+                    <Dialog.Title>Order Cancellation Reason</Dialog.Title>
+                    <Dialog.Description>
+                       Will be sent to the customer upon submission
+                    </Dialog.Description>
+                    <Dialog.Input onChangeText={text => this.setState({reason: text})}></Dialog.Input>
+                    <Dialog.Button label="Confirm" onPress={() => this.cancelOrder(orderUuid)} />
+                    <Dialog.Button label="Cancel" onPress={() => this.setState({isDialogVisible: false})} />
+                </Dialog.Container>
+
             </ScrollView>
         );
+    }
+
+    confirmOrder(){
+
+    }
+
+    cancelOrder(orderUuid){
+        //TODO: Email user with the reason for cancellation
+        console.log(this.state.reason);
+
+        let orderRef = this.dbHandler.getRef("Orders", barcode=null, chocolateUuid=null, commentUuid=null, orderUuid=orderUuid);
+
+        orderRef
+            .delete()
+            .then(_ => {
+                this.props.navigation.popToTop();
+                this.props.navigation.navigate("SearchScreen");
+            })
+            .catch(error => {
+                console.log(error);
+
+                Alert.alert(
+                    "There was an error connecting to the database.",
+                    "Please try again later.",
+                    [{text: 'OK'}],
+                    { cancelable: false }
+                );
+            });
+        
+        this.setState({isDialogVisible: false});
     }
 
     renderItem(item){
