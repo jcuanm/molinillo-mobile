@@ -102,7 +102,10 @@ export default class VendorConfirmationScreen extends Component {
                 </Text>
 
                 <View style={VendorConfirmationScreenStyles.buttonsContainer}>
-                    <TouchableOpacity style={[VendorConfirmationScreenStyles.acknowledgeButton, {backgroundColor:'green'}]}>
+                    <TouchableOpacity 
+                        onPress={() => this.confirmOrder(orderUuid)}
+                        style={[VendorConfirmationScreenStyles.acknowledgeButton, {backgroundColor:'green'}]}
+                    >
                         <Text style={VendorConfirmationScreenStyles.acknowledgeButtonText}>
                             Confirm
                         </Text>
@@ -113,14 +116,14 @@ export default class VendorConfirmationScreen extends Component {
                         style={[VendorConfirmationScreenStyles.acknowledgeButton, {backgroundColor:'red'}]}
                     >
                         <Text style={VendorConfirmationScreenStyles.acknowledgeButtonText}>
-                            Cancel
+                            Decline
                         </Text>
                     </TouchableOpacity>
                 </View>
 
                 {/* Pop-up dialog box for order cancellation */}
                 <Dialog.Container visible={this.state.isDialogVisible}>
-                    <Dialog.Title>Order Cancellation Reason</Dialog.Title>
+                    <Dialog.Title>Order Decline Reason</Dialog.Title>
                     <Dialog.Description>
                        Will be sent to the customer upon submission
                     </Dialog.Description>
@@ -133,14 +136,18 @@ export default class VendorConfirmationScreen extends Component {
         );
     }
 
-    confirmOrder(){
+    confirmOrder(orderUuid){
 
     }
 
     cancelOrder(orderUuid){
         //TODO: Email user with the reason for cancellation
-        console.log(this.state.reason);
+        this.deleteOrder(orderUuid);
+        
+        this.setState({isDialogVisible: false});
+    }
 
+    deleteOrder(orderUuid){
         let orderRef = this.dbHandler.getRef("Orders", barcode=null, chocolateUuid=null, commentUuid=null, orderUuid=orderUuid);
 
         orderRef
@@ -159,8 +166,6 @@ export default class VendorConfirmationScreen extends Component {
                     { cancelable: false }
                 );
             });
-        
-        this.setState({isDialogVisible: false});
     }
 
     renderItem(item){
