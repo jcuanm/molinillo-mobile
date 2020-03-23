@@ -18,6 +18,7 @@ import DbHandler from '../../helpers/DbHandler';
 import PaymentMethod from './components/PaymentMethod';
 import { RNSlidingButton, SlideDirection } from 'rn-sliding-button';
 const uuidv4 = require('uuid/v4');
+var stripe = require('stripe-client')(StripeConfig.apiKey);
 
 export default class ReviewOrderScreen extends Component {
     constructor(props) {
@@ -502,7 +503,7 @@ export default class ReviewOrderScreen extends Component {
     }
     
     placeOrder(cartItems){
-        this.addToOrdersCollection(cartItems);
+        this.createStripeCustomer(cartItems);
         this.props.navigation.popToTop();
         this.props.navigation.navigate("SearchScreen");
 
@@ -571,20 +572,87 @@ export default class ReviewOrderScreen extends Component {
         return total;
     }
 
-    addToOrdersCollection(cartItems){
+    createStripeCustomer(cartItems){
+        const {
+            creditCardNumber,
+            expirationMonth,
+            expirationYear,
+            cvc,
+            nameOnCard,
+            city,
+            country,
+            streetAddress1,
+            streetAddress2,
+            state,
+            zipcode
+        } = this.billingInfo;
+
+        let cardInfo = {
+            card: {
+                number: creditCardNumber,
+                exp_month: expirationMonth,
+                exp_year: expirationYear,
+                cvc: cvc,
+                name: nameOnCard,
+                address_line1: streetAddress1,
+                address_line2: streetAddress2,
+                address_city: city,
+                address_zip: zipcode,
+                address_state: state,
+                address_country: country
+            }
+        };
+
+        // Create Stripe token
+        stripe
+            .createToken(cardInfo)
+            .then(token => {
+                
+                // Use Stripe token to create a customer to charge later
+                let request = this.makePOSTRequest(
+                    "https://api.stripe.com/v1/customers", 
+                    this.getPostBody(token.id), 
+                    apiKey=StripeConfig.apiKey
+                );
+
+                request
+                    .then(response => {
+                        let jsonRequest = response.json();
+
+                        // Add transaction metadata to Orders collection if Stripe processes successful
+                        jsonRequest
+                            .then(customer => {
+                                this.addToOrdersCollection(cartItems, customer.id)
+                            })
+                            .catch(error => {
+                                console.log("Error converting response to JSON object.");
+                                console.log(error);
+                            });
+                    })
+                    .catch(error => {
+                        console.log("Error trying to create Stripe customer object.");
+                        console.log(error);
+                    })
+
+            })
+            .catch(error => {
+                console.log("Error retrieving Stripe token.")
+                console.log(error);
+            });
+    }
+
+    addToOrdersCollection(cartItems, stripeCustomerId){
         let vendorInfo = this.getVendorInfo(cartItems);
         const { selectedDeliveryMethod, shippingAddress } = this.order;
-        let requests = [];
         let ordersPerVendor = [];
        
+        // Collect order metadata for each vendor included in the transaction
         for(let vendorUid in vendorInfo){
             let subtotal = this.calculateVendorSubTotal(vendorInfo[vendorUid].cartItems);
             let tax = this.state.taxPerVendor[vendorUid];
             let shippingCost = selectedDeliveryMethod == "shipping" ? this.state.shippingCostsPerVendor[vendorUid] : 0;
             let serviceFee = this.round((subtotal * this.state.serviceFeePercent) + this.state.serviceFeeDollars, this.decimalPlaces);
-            let orderTotal = subtotal + tax + shippingCost + serviceFee;
-            let request = this.makePOSTRequest("https://api.stripe.com/v1/customers", "description=" + vendorInfo[vendorUid].userId, apiKey=StripeConfig.apiKey);
-            
+            let orderTotal = subtotal + tax + shippingCost + serviceFee; 
 
             let orderPerVendor = {
                 vendorUid: vendorUid,
@@ -594,6 +662,8 @@ export default class ReviewOrderScreen extends Component {
                 timeOrderExecuted: new Date(),
                 phone: this.billingInfo.phone,
                 selectedDeliveryMethod: selectedDeliveryMethod,
+                stripeCustomerId: stripeCustomerId,
+                orderUuid: uuidv4(),
                 tax: tax,
                 shippingAddress: selectedDeliveryMethod == "shipping" ? this.getAddressString(shippingAddress) : "",
                 serviceFee: serviceFee,
@@ -604,62 +674,33 @@ export default class ReviewOrderScreen extends Component {
                 vendorCommission: this.round((this.state.vendorCommissionPercent * orderTotal) - serviceFee, this.decimalPlaces)
             };
 
-            requests.push(request);
             ordersPerVendor.push(orderPerVendor);
        }
 
-        Promise
-            .all(requests)
-            .then(responses => {
-                let requests = [];
-
-                for(var response of responses){
-                    requests.push(response.json());
-                }
-
-                Promise
-                    .all(requests)
-                    .then(jsonResponses => {
-                        let batchCursor = this.dbHandler.dbRef.batch();
+       // Batch insert the orders into Firesbase
+       let batchCursor = this.dbHandler.dbRef.batch();
                         
-                        for(var i = 0; i < jsonResponses.length; i++){
-                            let orderUuid = uuidv4();
-                            let ordersRef = this.dbHandler.getRef("Orders", barcode=null, chocolateUuid=null, commentUuid=null, orderUuid=orderUuid);
-                            let stripeCustomerID = jsonResponses[i].id;
+        for(var i = 0; i < ordersPerVendor.length; i++){
+            let orderUuid = ordersPerVendor[i].orderUuid;
+            let ordersRef = this.dbHandler.getRef("Orders", barcode=null, chocolateUuid=null, commentUuid=null, orderUuid=orderUuid);
 
-                            let completeOrder = {
-                                ...ordersPerVendor[i],
-                                stripeCustomerID: stripeCustomerID,
-                                orderUuid: orderUuid
-                            };
-                            
-                            batchCursor.set(ordersRef, completeOrder);
-                        }
+            batchCursor.set(ordersRef, ordersPerVendor[i]);
+        }
 
-                        batchCursor
-                            .commit()
-                            .then( _ => {
-                                this.clearShoppingCart();
-                            })
-                            .catch(error => {
-                                Alert.alert(
-                                    "There was an error processing your order",
-                                    "",
-                                    [{text: 'OK'}],
-                                    { cancelable: false }
-                                );
-
-                                console.log("Failed to commit order");
-                                console.log(error);
-                            });
-                    })
-                    .catch(error => {
-                        console.log("Error converting Stripe response to JSON");
-                        console.log(error);
-                    });
+        batchCursor
+            .commit()
+            .then( _ => {
+                this.clearShoppingCart();
             })
-            .catch(error =>{
-                console.log("Error making POST request to Stripe API.");
+            .catch(error => {
+                Alert.alert(
+                    "There was an error processing your order",
+                    "",
+                    [{text: 'OK'}],
+                    { cancelable: false }
+                );
+
+                console.log("Failed to commit order");
                 console.log(error);
             });
     }
@@ -676,6 +717,10 @@ export default class ReviewOrderScreen extends Component {
                body: postBody
            })
         );
+    }
+
+    getPostBody(tokenId){
+        return("description=" + "customer_" + this.dbHandler.currUser.uid + "&" + "source=" + tokenId);
     }
 
     clearShoppingCart(){
