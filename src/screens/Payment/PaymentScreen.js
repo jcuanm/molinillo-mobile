@@ -152,7 +152,21 @@ export default class PaymentScreen extends React.Component {
                 }
             );
         }
-        else{
+    }
+
+    isVerifiedToProceed(){
+        if(!this.isValidExpirationDate()){
+            Alert.alert(
+                "Invalid expiration date.",
+                "According to the date, this card is expired. Please use another card.",
+                [{text: 'OK'}],
+                { cancelable: false }
+            );
+
+            return false;
+        }
+
+        if(!this.areRequiredFieldsCompleted()){
             Alert.alert(
                 "You must fill in the required fields",
                 "",
@@ -161,11 +175,24 @@ export default class PaymentScreen extends React.Component {
                 ],
                 { cancelable: false }
             );
-            return;
+
+            return false;
         }
+
+        return true;
     }
 
-    isVerifiedToProceed(){
+    isValidExpirationDate(){
+        const { expirationMonth, expirationYear } = this.state;
+
+        let today = new Date();
+        let currMonth = today.getMonth();
+        let currYear = today.getFullYear();
+
+        return (parseInt(expirationYear) > currYear) || (parseInt(expirationYear) == currYear && parseInt(expirationMonth) - 1 >= currMonth); 
+    }
+
+    areRequiredFieldsCompleted(){
         const {
             // Card Info
             nameOnCard,
@@ -183,7 +210,7 @@ export default class PaymentScreen extends React.Component {
             country,
         } = this.state;
 
-        // Ensure required fields are filled in
+
         return (
             nameOnCard.trim() !== "" &&
             creditCardNumber.trim() !== "" &&
