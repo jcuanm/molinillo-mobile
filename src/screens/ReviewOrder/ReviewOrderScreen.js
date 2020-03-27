@@ -622,7 +622,7 @@ export default class ReviewOrderScreen extends Component {
                         // Add transaction metadata to Orders collection if Stripe processes successful
                         jsonRequest
                             .then(customer => {
-                                this.addToOrdersCollection(cartItems, customer.id)
+                                this.addToOrdersCollection(cartItems, customer.id);
                             })
                             .catch(error => {
                                 console.log("Error converting response to JSON object.");
@@ -632,7 +632,7 @@ export default class ReviewOrderScreen extends Component {
                     .catch(error => {
                         console.log("Error trying to create Stripe customer object.");
                         console.log(error);
-                    })
+                    });
 
             })
             .catch(error => {

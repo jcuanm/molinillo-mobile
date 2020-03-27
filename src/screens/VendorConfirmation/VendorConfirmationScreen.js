@@ -17,7 +17,6 @@ import PriceBreakdown from './components/PriceBreakdown';
 import DeliveryMethod from './components/DeliveryMethod';
 import ReviewItem from './components/ReviewItem';
 import DbHandler from '../../helpers/DbHandler';
-const uuidv4 = require('uuid/v4');
 
 export default class VendorConfirmationScreen extends Component {
     constructor(props) {
@@ -63,7 +62,9 @@ export default class VendorConfirmationScreen extends Component {
             shippingCost,
             tax,
             vendorCommission,
-            orderUuid
+            orderUuid,
+            stripeCustomerId,
+            orderTotal
         } = this.order;
 
         cartItems = JSON.parse(cartItems);
@@ -103,7 +104,7 @@ export default class VendorConfirmationScreen extends Component {
 
                 <View style={VendorConfirmationScreenStyles.buttonsContainer}>
                     <TouchableOpacity 
-                        onPress={() => this.confirmOrder(orderUuid)}
+                        onPress={() => this.confirmOrder(orderUuid, stripeCustomerId, orderTotal)}
                         style={[VendorConfirmationScreenStyles.acknowledgeButton, {backgroundColor:'green'}]}
                     >
                         <Text style={VendorConfirmationScreenStyles.acknowledgeButtonText}>
@@ -128,7 +129,7 @@ export default class VendorConfirmationScreen extends Component {
                        Will be sent to the customer upon submission
                     </Dialog.Description>
                     <Dialog.Input onChangeText={text => this.setState({reason: text})}></Dialog.Input>
-                    <Dialog.Button label="Confirm" onPress={() => this.cancelOrder(orderUuid)} />
+                    <Dialog.Button label="Confirm" onPress={() => this.declineOrder(orderUuid)} />
                     <Dialog.Button label="Cancel" onPress={() => this.setState({isDialogVisible: false})} />
                 </Dialog.Container>
 
@@ -136,11 +137,36 @@ export default class VendorConfirmationScreen extends Component {
         );
     }
 
-    confirmOrder(orderUuid){
+    confirmOrder(orderUuid, stripeCustomerId, orderTotal){
+        
+        // Charge the customer
+        request = this.makePOSTRequest(
+            "https://api.stripe.com/v1/charges", 
+            this.getPostBody(orderTotal, stripeCustomerId), 
+            apikey=StripeConfig.apiKey
+        );
 
+        request
+            .then(response => {
+                let jsonRequest = response.json();
+
+                // Delete order if successful
+                jsonRequest
+                    .then(transaction => {
+                        this.deleteOrder(orderUuid);
+                    })
+                    .catch(error => {
+                        console.log("Error converting response to JSON object.");
+                        console.log(error);
+                    });
+            })
+            .catch(error => {
+                console.log("Error trying to create Stripe customer object.");
+                console.log(error);
+            });
     }
 
-    cancelOrder(orderUuid){
+    declineOrder(orderUuid){
         //TODO: Email user with the reason for cancellation
         this.deleteOrder(orderUuid);
         
@@ -153,8 +179,7 @@ export default class VendorConfirmationScreen extends Component {
         orderRef
             .delete()
             .then(_ => {
-                this.props.navigation.popToTop();
-                this.props.navigation.navigate("SearchScreen");
+                this.props.navigation.navigate("OrdersScreen");
             })
             .catch(error => {
                 console.log(error);
@@ -204,5 +229,23 @@ export default class VendorConfirmationScreen extends Component {
 					console.log(error);
 				});
 		}
+    }
+
+    makePOSTRequest(url, postBody, apiKey=""){
+        return(
+            fetch(url, {    
+               method: 'POST',    
+               headers: {      
+                   Accept: 'application/json',      
+                   'Content-Type': 'application/x-www-form-urlencoded',    
+                   Authorization: "Bearer " + apiKey 
+               },   
+               body: postBody
+           })
+        );
+    }
+
+    getPostBody(orderTotal, stripeCustomerId){
+        return "customer=" + stripeCustomerId + "&" + "amount=" + (orderTotal * 100) + "&currency=usd";
     }
 }
