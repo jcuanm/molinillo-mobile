@@ -47,8 +47,8 @@ export default class Commerce extends Component {
             <View style={CommerceStyles.border}>
                 <View style={CommerceStyles.container}>
                     <View style={CommerceStyles.column} >
-                        <Text style={CommerceStyles.inStockText}>
-                            In Stock
+                        <Text style={CommerceStyles.purchaseText}>
+                            Purchase
                         </Text>
                         <Text style={CommerceStyles.priceValue}> 
                             ${this.props.price.toFixed(2)}

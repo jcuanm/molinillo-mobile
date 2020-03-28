@@ -132,7 +132,7 @@ export const CommerceStyles = StyleSheet.create({
         fontWeight:'bold', 
         paddingBottom: 3
     },
-    inStockText: {
+    purchaseText: {
         color:"green", 
         fontSize:14, 
         paddingBottom:3
