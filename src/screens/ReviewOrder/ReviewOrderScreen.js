@@ -441,7 +441,7 @@ export default class ReviewOrderScreen extends Component {
                 <RNSlidingButton
                     style={ReviewOrderScreenStyles.finalizeSlider}
                     height={40}
-                    onSlidingSuccess={() => this.placeOrder(cartItems)}
+                    onSlidingSuccess={() => this.createStripeCustomer(cartItems)}
                     slideDirection={SlideDirection.RIGHT}
                 >
                     <Text style={ReviewOrderScreenStyles.finalizeText}>
@@ -500,19 +500,6 @@ export default class ReviewOrderScreen extends Component {
         }
 
         return filteredCartItems;
-    }
-    
-    placeOrder(cartItems){
-        this.createStripeCustomer(cartItems);
-        this.props.navigation.popToTop();
-        this.props.navigation.navigate("SearchScreen");
-
-        Alert.alert(
-            "Your order request has been placed!",
-            "Once the vendor confirms the order, we will charge your card and notify you.",
-            [{text: 'OK'}],
-            { cancelable: false }
-        );
     }
 
     getVendorInfo(cartItems){
@@ -573,72 +560,87 @@ export default class ReviewOrderScreen extends Component {
     }
 
     createStripeCustomer(cartItems){
-        const {
-            creditCardNumber,
-            expirationMonth,
-            expirationYear,
-            cvc,
-            nameOnCard,
-            city,
-            country,
-            streetAddress1,
-            streetAddress2,
-            state,
-            zipcode
-        } = this.billingInfo;
+        if(cartItems.length <= 0){
+            console.log(cartItems);
 
-        let cardInfo = {
-            card: {
-                number: creditCardNumber,
-                exp_month: expirationMonth,
-                exp_year: expirationYear,
-                cvc: cvc,
-                name: nameOnCard,
-                address_line1: streetAddress1,
-                address_line2: streetAddress2,
-                address_city: city,
-                address_zip: zipcode,
-                address_state: state,
-                address_country: country
-            }
-        };
+            Alert.alert(
+                "Your cart is empty.",
+                "Please try refreshing the app.",
+                [{text: 'OK'}],
+                { cancelable: false }
+            );
+        }
+        else{
+            const {
+                creditCardNumber,
+                expirationMonth,
+                expirationYear,
+                cvc,
+                nameOnCard,
+                city,
+                country,
+                streetAddress1,
+                streetAddress2,
+                state,
+                zipcode
+            } = this.billingInfo;
 
-        // Create Stripe token
-        stripe
-            .createToken(cardInfo)
-            .then(token => {
-                
-                // Use Stripe token to create a customer to charge later
-                let request = this.makePOSTRequest(
-                    "https://api.stripe.com/v1/customers", 
-                    this.getPostBody(token.id), 
-                    apiKey=StripeConfig.apiKey
-                );
+            let cardInfo = {
+                card: {
+                    number: creditCardNumber,
+                    exp_month: expirationMonth,
+                    exp_year: expirationYear,
+                    cvc: cvc,
+                    name: nameOnCard,
+                    address_line1: streetAddress1,
+                    address_line2: streetAddress2,
+                    address_city: city,
+                    address_zip: zipcode,
+                    address_state: state,
+                    address_country: country
+                }
+            };
 
-                request
-                    .then(response => {
-                        let jsonRequest = response.json();
+            // Create Stripe token
+            stripe
+                .createToken(cardInfo)
+                .then(token => {
+                    
+                    // Use Stripe token to create a customer to charge later
+                    let request = this.makePOSTRequest(
+                        "https://api.stripe.com/v1/customers", 
+                        this.getPostBody(token.id), 
+                        apiKey=StripeConfig.apiKey
+                    );
 
-                        // Add transaction metadata to Orders collection if Stripe processes successful
-                        jsonRequest
-                            .then(customer => {
-                                this.addToOrdersCollection(cartItems, customer.id);
-                            })
-                            .catch(error => {
-                                console.log("Error converting response to JSON object.");
-                                console.log(error);
-                            });
-                    })
-                    .catch(error => {
-                        console.log("Error trying to create Stripe customer object.");
-                        console.log(error);
-                    });
+                    request
+                        .then(response => {
+                            let jsonRequest = response.json();
 
-            })
-            .catch(error => {
-                console.log("Error retrieving Stripe token.")
-                console.log(error);
-            });
+                            // Add transaction metadata to Orders collection if Stripe processes successful
+                            jsonRequest
+                                .then(customer => {
+                                    this.addToOrdersCollection(cartItems, customer.id);
+                                })
+                                .catch(error => {
+                                    this.alertCouldNotConnect();
+                                    console.log("Error converting response to JSON object.");
+                                    console.log(error);
+                                });
+                        })
+                        .catch(error => {
+                            this.alertCouldNotConnect();
+                            console.log("Error trying to create Stripe customer object.");
+                            console.log(error);
+                        });
+
+                })
+                .catch(error => {
+                    this.alertCouldNotConnect();
+                    console.log("Error retrieving Stripe token.");
+                    console.log(error);
+                });
+        }
     }
 
     addToOrdersCollection(cartItems, stripeCustomerId){
@@ -691,6 +693,15 @@ export default class ReviewOrderScreen extends Component {
             .commit()
             .then( _ => {
                 this.clearShoppingCart();
+                this.props.navigation.popToTop();
+                this.props.navigation.navigate("SearchScreen");
+
+                Alert.alert(
+                    "Your order request has been placed!",
+                    "Once the vendor confirms the order, we will charge your card and notify you.",
+                    [{text: 'OK'}],
+                    { cancelable: false }
+                );
             })
             .catch(error => {
                 Alert.alert(
@@ -703,6 +714,15 @@ export default class ReviewOrderScreen extends Component {
                 console.log("Failed to commit order");
                 console.log(error);
             });
+    }
+
+    alertCouldNotConnect(){
+        Alert.alert(
+            "There was an issue connecting to the database.",
+            "",
+            [{text: 'OK'}],
+            { cancelable: false }
+        );
     }
 
     makePOSTRequest(url, postBody, apiKey=""){
