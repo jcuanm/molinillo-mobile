@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
+import { ShippoConfig } from '../../../assets/Config';
 import { Colors, DeliveryMethodDisplayText } from '../../helpers/Constants';
 import { DeliveryMethodScreenStyles } from './styles';
 import ItemPickupLocation from './components/ItemPickupLocation';
@@ -32,7 +33,7 @@ export default class DeliveryMethodScreen extends Component {
             streetAddress1: "",
             streetAddress2: "",
             city: "",
-            state: "",
+            state: "AL",
             zipcode: "",
             country: "United States",
         }
@@ -123,7 +124,7 @@ export default class DeliveryMethodScreen extends Component {
                 
 
                 <TouchableOpacity 
-                    onPress={() => this.proceed() } 
+                    onPress={() => this.checkIfShouldProceed() } 
                     style={DeliveryMethodScreenStyles.confirmDeliveryButton}
                 >
                     <Text style={DeliveryMethodScreenStyles.confirmDeliveryText}>
@@ -139,75 +140,132 @@ export default class DeliveryMethodScreen extends Component {
     }
 
     proceed(){
-        if(this.isVerifiedToProceed()){
-            const {
-                selectedDeliveryMethod,
-                userFullName,
-                phone,
-                streetAddress1,
-                streetAddress2,
-                city,
-                state,
-                zipcode,
-                country,
-            } = this.state;
-
-            const shippingAddress = {
-                userFullName: userFullName,
-                phone: phone,
-                streetAddress1: streetAddress1,
-                streetAddress2: streetAddress2,
-                city: city,
-                state: state,
-                zipcode: zipcode,
-                country: country,
-            }
-
-            var order = {
-                cartItems: this.cartItems,
-                selectedDeliveryMethod: selectedDeliveryMethod,
-                shippingAddress: shippingAddress
-            }
-
-            this.props.navigation.navigate("PaymentScreen", { order: order });
-        }
-        else{
-            Alert.alert(
-                "You must fill in the required fields",
-                "",
-                [
-                  {text: 'OK'}
-                ],
-                { cancelable: false }
-            );
-            return;
-        }
-    }
-
-    isVerifiedToProceed(){
         const {
             selectedDeliveryMethod,
             userFullName,
             phone,
             streetAddress1,
+            streetAddress2,
             city,
             state,
             zipcode,
+            country,
         } = this.state;
 
-        // Ensure required fields are filled in if shipping
+        const shippingAddress = {
+            userFullName: userFullName,
+            phone: phone,
+            streetAddress1: streetAddress1,
+            streetAddress2: streetAddress2,
+            city: city,
+            state: state,
+            zipcode: zipcode,
+            country: country,
+        }
+
+        var order = {
+            cartItems: this.cartItems,
+            selectedDeliveryMethod: selectedDeliveryMethod,
+            shippingAddress: shippingAddress
+        }
+
+        this.props.navigation.navigate("PaymentScreen", { order: order });
+    }
+
+    checkIfShouldProceed(){
+        if(this.state.selectedDeliveryMethod == "pickup"){
+            this.proceed();
+        }
+        else if(this.state.selectedDeliveryMethod == "shipping"){
+           this.checkIfValidAddress();
+        }
+    }
+
+    checkIfValidAddress(){
+        const {
+            streetAddress1,
+            streetAddress2,
+            city,
+            state,
+            zipcode,
+            country
+        } = this.state;
+
+        let request = fetch('https://api.goshippo.com/addresses/', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: "ShippoToken " + ShippoConfig.apiKey
+            },
+            body: JSON.stringify({
+                street1: streetAddress1,
+                street2: streetAddress2,
+                city: city,
+                state: state,
+                zip: zipcode,
+                country: country,
+                validate: true
+            })
+        });
+
+        request
+            .then(response => {
+                let jsonResponse = response.json();
+
+                jsonResponse
+                    .then(validationMetaData =>{
+                        
+                        if(!validationMetaData.validation_results.is_valid){
+                            Alert.alert(
+                                "An invalid invalid address was inputted.",
+                                "",
+                                [{text: 'OK'}],
+                                { cancelable: false }
+                            );
+                        }
+                        else if(!this.areAllRequiredFieldsFilled()){
+                            Alert.alert(
+                                "You must fill in all of the required fields.",
+                                "",
+                                [{text: 'OK'}],
+                                { cancelable: false }
+                            );
+                        }
+                        else{
+                            this.proceed();
+                        }
+                    })
+                    .catch(error => {
+                        console.log("Error converting request to JSON.")
+                        console.log(error);
+                    });
+            })
+            .catch(error => {
+                console.log("Error making request to Shippo.");
+                console.log(error);
+            });
+    }
+
+    areAllRequiredFieldsFilled(){
+        const {
+            userFullName,
+            phone,
+            streetAddress1,
+            city,
+            zipcode,
+        } = this.state;
+
         return (
-            selectedDeliveryMethod == "pickup" || 
-            (
-                userFullName.trim() !== "" &&
-                phone.trim() !== "" &&
-                streetAddress1.trim() !== "" &&
-                city.trim() !== "" &&
-                state.trim() !== "" &&
-                zipcode.trim() !== ""
-            )
+            userFullName.trim() !== "" &&
+            phone.trim() !== "" &&
+            streetAddress1.trim() !== "" &&
+            city.trim() !== "" &&
+            zipcode.trim() !== ""
         );
     }
+
+
 
     renderIosPicker(){
         const {selectedDeliveryMethod, isIosDialogVisible} = this.state;

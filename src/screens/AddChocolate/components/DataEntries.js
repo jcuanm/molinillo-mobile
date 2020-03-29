@@ -82,9 +82,7 @@ export default class DataEntries extends Component {
     Alert.alert(
       "Thanks for adding your chocolate!",
       "Our dedicated experts will now curate your post before publicly displaying it.",
-      [
-        {text: 'OK'}
-      ],
+      [{text: 'OK'}],
       { cancelable: false }
     );
   }

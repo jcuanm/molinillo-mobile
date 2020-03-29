@@ -18,7 +18,8 @@ export default class ShippingAddressInput extends Component {
         this.maxStringLength = 255;
 
 		this.state = {
-            isCountryDialogVisible: false
+            isCountryDialogVisible: false,
+            isStateDialogVisible: false,
 		};
     }
 
@@ -81,7 +82,7 @@ export default class ShippingAddressInput extends Component {
                     style={ShippingAddressInputStyles.inputBox} 
                     onChangeText={newText => this.onChangeText("city", newText)}
                 />
-                <TextInput 
+                {/* <TextInput 
                     maxLength={255}
                     value={state}
                     blurOnSubmit
@@ -89,7 +90,24 @@ export default class ShippingAddressInput extends Component {
                     clearButtonMode={"always"}
                     style={ShippingAddressInputStyles.inputBox} 
                     onChangeText={newText => this.onChangeText("state", newText)}
-                />
+                /> */}
+
+                <TouchableOpacity 
+                    onPress={() => this.setState({isStateDialogVisible: true})}
+                    style={ShippingAddressInputStyles.dialogButton}
+                >
+                    <Text style={ShippingAddressInputStyles.dialogButtonText}>
+                        {state}
+                    </Text>
+
+                    <View style={ShippingAddressInputStyles.chevron}>
+                        <Entypo size={20} name={"chevron-down"} />
+                    </View>
+                    
+                    {this.renderOptionsDialog("USStates", "state")}
+
+                </TouchableOpacity>   
+                
                 <TextInput 
                     maxLength={255}
                     value={zipcode}
@@ -101,9 +119,9 @@ export default class ShippingAddressInput extends Component {
                 />
                 <TouchableOpacity 
                     onPress={() => this.setState({isCountryDialogVisible: true})}
-                    style={ShippingAddressInputStyles.countryButton}
+                    style={ShippingAddressInputStyles.dialogButton}
                 >
-                    <Text style={ShippingAddressInputStyles.countryButtonText}>
+                    <Text style={ShippingAddressInputStyles.dialogButtonText}>
                         {country}
                     </Text>
 
@@ -111,7 +129,7 @@ export default class ShippingAddressInput extends Component {
                         <Entypo size={20} name={"chevron-down"} />
                     </View>
                     
-                    {this.renderOptionsDialog()}
+                    {this.renderOptionsDialog("countryOfOrigin", "country")}
 
                 </TouchableOpacity>   
             </View>
@@ -135,24 +153,37 @@ export default class ShippingAddressInput extends Component {
         }
     }
 
-    renderOptionsDialog(){
-        const { isCountryDialogVisible } = this.state;
+    renderOptionsDialog(datasetName, stateAttributeToUpdate){
+
+        if(datasetName == "USStates"){
+            var dialogBox = "isStateDialogVisible";
+            var isDialogVisible = this.state.isStateDialogVisible;
+        }
+        else if(datasetName == "countryOfOrigin"){
+            var dialogBox = "isCountryDialogVisible";
+            var isDialogVisible = this.state.isCountryDialogVisible;
+        }
+        else{
+            var dialogBox = "";
+            var isDialogVisible = false;
+        }
 
         return(
             <Modal 
-                onBackdropPress={() => this.setState({isCountryDialogVisible: false})}
+                onBackdropPress={() => this.setState({[dialogBox]: false})}
                 style={ShippingAddressInputStyles.popupModal} 
-                isVisible={isCountryDialogVisible}
+                isVisible={isDialogVisible}
             >
                 <View style={ShippingAddressInputStyles.popupFlatlistContainer}>
                     <FlatList
-                        data={dialogOptionsDatasets["countryOfOrigin"]}
+                        data={dialogOptionsDatasets[datasetName]}
                         renderItem={ ({ item }) =>
                             <TouchableOpacity 
                                 onPress={ () => {
-                                    this.props.updateAddress("country", item.key);
+                                    this.props.updateAddress([stateAttributeToUpdate], item.key);
+
                                     this.setState({
-                                        isCountryDialogVisible: false
+                                        [dialogBox]: false
                                     })
                                 }} 
                                 style={ShippingAddressInputStyles.popupEntriesBackground}
