@@ -34,7 +34,7 @@ export default class PaymentScreen extends React.Component {
             streetAddress2: "",
             phone: "",
             city: "",
-            state: "",
+            state: "AL",
             zipcode: "",
             country: "United States",
         }
@@ -105,38 +105,38 @@ export default class PaymentScreen extends React.Component {
         return(
             <ScrollView>
 
-                    <CreditCardInfo 
-                        updatePaymentInfo={this.updatePaymentInfo}
-                        nameOnCard={nameOnCard}
-                        creditCardNumber={creditCardNumber}
-                        cvc={cvc}
-                        expirationMonth={expirationMonth}
-                        expirationYear={expirationYear}
-                    />
+                <CreditCardInfo 
+                    updatePaymentInfo={this.updatePaymentInfo}
+                    nameOnCard={nameOnCard}
+                    creditCardNumber={creditCardNumber}
+                    cvc={cvc}
+                    expirationMonth={expirationMonth}
+                    expirationYear={expirationYear}
+                />
 
-                    <BillingAddressInput 
-                        updatePaymentInfo={this.updatePaymentInfo}
-                        useShippingAddress={useShippingAddress}
-                        updateToShippingAddress={this.updateToShippingAddress}
-                        shippingAddress={shippingAddress}
-                        selectedDeliveryMethod={selectedDeliveryMethod}
-                        streetAddress1={streetAddress1}
-                        streetAddress2={streetAddress2}
-                        phone={phone}
-                        city={city}
-                        state={state}
-                        zipcode={zipcode}
-                        country={country}
-                    />
+                <BillingAddressInput 
+                    updatePaymentInfo={this.updatePaymentInfo}
+                    useShippingAddress={useShippingAddress}
+                    updateToShippingAddress={this.updateToShippingAddress}
+                    shippingAddress={shippingAddress}
+                    selectedDeliveryMethod={selectedDeliveryMethod}
+                    streetAddress1={streetAddress1}
+                    streetAddress2={streetAddress2}
+                    phone={phone}
+                    city={city}
+                    state={state}
+                    zipcode={zipcode}
+                    country={country}
+                />
 
-                    <TouchableOpacity 
-                        onPress={() => this.proceed() } 
-                        style={PaymentScreenStyles.proceedToReviewButton}
-                    >
-                        <Text style={PaymentScreenStyles.proceedToReviewText}>
-                            Proceed to review
-                        </Text>
-                    </TouchableOpacity>
+                <TouchableOpacity 
+                    onPress={() => this.proceed() } 
+                    style={PaymentScreenStyles.proceedToReviewButton}
+                >
+                    <Text style={PaymentScreenStyles.proceedToReviewText}>
+                        Proceed to review
+                    </Text>
+                </TouchableOpacity>
                 
             </ScrollView>
         );

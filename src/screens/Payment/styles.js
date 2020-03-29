@@ -97,11 +97,11 @@ export const BillingAddressInputStyles = StyleSheet.create({
     chevron: {
         alignSelf:"flex-end"
     },
-    countryButton: {
+    dialogButton: {
         marginTop: marginTop,
         width: inputWidth,
         height: inputHeight,
-        backgroundColor: "rgba(0,0,0,.1)",
+        backgroundColor: "white",
         paddingLeft: inputPadding,
         paddingRight: inputPadding,
         borderColor: Colors.Primary,
@@ -110,7 +110,7 @@ export const BillingAddressInputStyles = StyleSheet.create({
         justifyContent: "center",
         flexDirection: "row"
     },
-    countryButtonText: {
+    dialogButtonText: {
         marginTop: 5,
         fontSize: 15,
         flex:2

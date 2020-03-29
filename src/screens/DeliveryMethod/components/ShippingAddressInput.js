@@ -82,15 +82,6 @@ export default class ShippingAddressInput extends Component {
                     style={ShippingAddressInputStyles.inputBox} 
                     onChangeText={newText => this.onChangeText("city", newText)}
                 />
-                {/* <TextInput 
-                    maxLength={255}
-                    value={state}
-                    blurOnSubmit
-                    placeholder={"State/Province/Region"}
-                    clearButtonMode={"always"}
-                    style={ShippingAddressInputStyles.inputBox} 
-                    onChangeText={newText => this.onChangeText("state", newText)}
-                /> */}
 
                 <TouchableOpacity 
                     onPress={() => this.setState({isStateDialogVisible: true})}
@@ -117,6 +108,7 @@ export default class ShippingAddressInput extends Component {
                     style={ShippingAddressInputStyles.inputBox} 
                     onChangeText={newText => this.onChangeText("zipcode", newText)}
                 />
+                
                 <TouchableOpacity 
                     onPress={() => this.setState({isCountryDialogVisible: true})}
                     style={ShippingAddressInputStyles.dialogButton}
