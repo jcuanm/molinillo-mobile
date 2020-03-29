@@ -20,7 +20,8 @@ export default class BillingAddressInput extends Component {
         this.maxStringLength = 255;
 
 		this.state = {
-            isCountryDialogVisible: false
+            isCountryDialogVisible: false,
+            isStateDialogVisible: false,
 		};
     }
 
@@ -112,15 +113,21 @@ export default class BillingAddressInput extends Component {
                         style={BillingAddressInputStyles.inputBox} 
                         onChangeText={newText => this.onChangeText("city", newText)}
                     />
-                    <TextInput 
-                        value={state}
-                        maxLength={255}
-                        blurOnSubmit
-                        placeholder={"State/Province/Region"}
-                        clearButtonMode={"always"}
-                        style={BillingAddressInputStyles.inputBox} 
-                        onChangeText={newText => this.onChangeText("state", newText)}
-                    />
+                    <TouchableOpacity 
+                        onPress={() => this.setState({isStateDialogVisible: true})}
+                        style={BillingAddressInputStyles.dialogButton}
+                    >
+                        <Text style={BillingAddressInputStyles.dialogButtonText}>
+                            {state}
+                        </Text>
+
+                        <View style={BillingAddressInputStyles.chevron}>
+                            <Entypo size={20} name={"chevron-down"} />
+                        </View>
+                        
+                        {this.renderOptionsDialog("USStates", "state")}
+
+                    </TouchableOpacity>
                     <TextInput 
                         value={zipcode}
                         maxLength={255}
@@ -132,9 +139,9 @@ export default class BillingAddressInput extends Component {
                     />
                     <TouchableOpacity 
                         onPress={() => this.setState({isCountryDialogVisible: true})}
-                        style={BillingAddressInputStyles.countryButton}
+                        style={BillingAddressInputStyles.dialogButton}
                     >
-                        <Text style={BillingAddressInputStyles.countryButtonText}>
+                        <Text style={BillingAddressInputStyles.dialogButtonText}>
                             {country}
                         </Text>
 
@@ -142,33 +149,46 @@ export default class BillingAddressInput extends Component {
                             <Entypo size={20} name={"chevron-down"} />
                         </View>
                         
-                        {this.renderOptionsDialog()}
+                        {this.renderOptionsDialog("countryOfOrigin", "country")}
 
-                    </TouchableOpacity> 
+                    </TouchableOpacity>   
                 </View> 
                  
             </View>
 		);
     }
 
-    renderOptionsDialog(){
-        const { isCountryDialogVisible } = this.state;
+    renderOptionsDialog(datasetName, stateAttributeToUpdate){
+
+        if(datasetName == "USStates"){
+            var dialogBox = "isStateDialogVisible";
+            var isDialogVisible = this.state.isStateDialogVisible;
+        }
+        else if(datasetName == "countryOfOrigin"){
+            var dialogBox = "isCountryDialogVisible";
+            var isDialogVisible = this.state.isCountryDialogVisible;
+        }
+        else{
+            var dialogBox = "";
+            var isDialogVisible = false;
+        }
 
         return(
             <Modal 
-                onBackdropPress={() => this.setState({isCountryDialogVisible: false})}
+                onBackdropPress={() => this.setState({[dialogBox]: false})}
                 style={BillingAddressInputStyles.popupModal} 
-                isVisible={isCountryDialogVisible}
+                isVisible={isDialogVisible}
             >
                 <View style={BillingAddressInputStyles.popupFlatlistContainer}>
                     <FlatList
-                        data={dialogOptionsDatasets["countryOfOrigin"]}
+                        data={dialogOptionsDatasets[datasetName]}
                         renderItem={ ({ item }) =>
                             <TouchableOpacity 
                                 onPress={ () => {
-                                    this.props.updatePaymentInfo("country", item.key);
+                                    this.props.updatePaymentInfo([stateAttributeToUpdate], item.key);
+
                                     this.setState({
-                                        isCountryDialogVisible: false
+                                        [dialogBox]: false
                                     })
                                 }} 
                                 style={BillingAddressInputStyles.popupEntriesBackground}
