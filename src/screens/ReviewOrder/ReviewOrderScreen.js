@@ -33,6 +33,7 @@ export default class ReviewOrderScreen extends Component {
         this.billingInfo = this.props.navigation.getParam('billingInfo', {});
         this.decimalPlaces = 2;
         this.numExpectedRequests = 3;
+        this.hasSwipedRight = false;
 
         this.state = {
             numRequestsFinished: 0,
@@ -585,7 +586,7 @@ export default class ReviewOrderScreen extends Component {
     }
 
     createStripeCustomer(cartItems){
-        if(cartItems.length <= 0){
+       if(cartItems.length <= 0){
             console.log(cartItems);
 
             Alert.alert(
@@ -595,7 +596,13 @@ export default class ReviewOrderScreen extends Component {
                 { cancelable: false }
             );
         }
+        else if(this.hasSwipedRight){
+            // Don't do anything if an order is currently being processed
+            return;
+        }
         else{
+            this.hasSwipedRight = true;
+
             const {
                 creditCardNumber,
                 expirationMonth,
@@ -649,12 +656,14 @@ export default class ReviewOrderScreen extends Component {
                                 })
                                 .catch(error => {
                                     this.alertCouldNotConnect();
+                                    this.hasSwipedRight = false;
                                     console.log("Error converting response to JSON object.");
                                     console.log(error);
                                 });
                         })
                         .catch(error => {
                             this.alertCouldNotConnect();
+                            this.hasSwipedRight = false;
                             console.log("Error trying to create Stripe customer object.");
                             console.log(error);
                         });
@@ -662,6 +671,7 @@ export default class ReviewOrderScreen extends Component {
                 })
                 .catch(error => {
                     this.alertCouldNotConnect();
+                    this.hasSwipedRight = false;
                     console.log("Error retrieving Stripe token.");
                     console.log(error);
                 });
@@ -720,6 +730,7 @@ export default class ReviewOrderScreen extends Component {
                 this.clearShoppingCart();
                 this.props.navigation.popToTop();
                 this.props.navigation.navigate("SearchScreen");
+                this.hasSwipedRight = false;
 
                 Alert.alert(
                     "Your order request has been placed!",
@@ -736,6 +747,7 @@ export default class ReviewOrderScreen extends Component {
                     { cancelable: false }
                 );
 
+                this.hasSwipedRight = false;
                 console.log("Failed to commit order");
                 console.log(error);
             });
