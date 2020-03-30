@@ -5,7 +5,8 @@ import {
     Linking,
     ScrollView, 
     Text,
-    TouchableOpacity
+    TouchableOpacity,
+    View
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ShippoConfig, StripeConfig } from '../../../assets/Config';
@@ -17,8 +18,10 @@ import ReviewItem from './components/ReviewItem';
 import DbHandler from '../../helpers/DbHandler';
 import PaymentMethod from './components/PaymentMethod';
 import { RNSlidingButton, SlideDirection } from 'rn-sliding-button';
+
 const uuidv4 = require('uuid/v4');
 var stripe = require('stripe-client')(StripeConfig.apiKey);
+
 
 export default class ReviewOrderScreen extends Component {
     constructor(props) {
@@ -29,8 +32,10 @@ export default class ReviewOrderScreen extends Component {
         this.order = this.props.navigation.getParam('order', {});
         this.billingInfo = this.props.navigation.getParam('billingInfo', {});
         this.decimalPlaces = 2;
+        this.numExpectedRequests = 3;
 
         this.state = {
+            numRequestsFinished: 0,
             shippingCostsPerVendor: {},
             chocolatesWithTaxRates: [],
             chocolatesWithShippingRates: [],
@@ -63,18 +68,21 @@ export default class ReviewOrderScreen extends Component {
     componentDidMount(){
         const { selectedDeliveryMethod, shippingAddress } = this.order;
 
-        this.getTaxRates();
-        this.getCommissionRates();
+        
+        let taxRatesRequest = this.getTaxRates();
+        let commisionRatesRequest = this.getCommissionRates();
+        let requests = [taxRatesRequest, commisionRatesRequest];
         
         if(selectedDeliveryMethod == "shipping" && shippingAddress !== undefined){
-            this.getShippingCosts();
+            let shippingCostsRequest = this.getShippingCosts();
+            requests.push(shippingCostsRequest);
         }
     }
 
     getCommissionRates(){
         let miscValuesCommerceRef = this.dbHandler.getRef("Commerce");
 
-        miscValuesCommerceRef
+        return miscValuesCommerceRef
             .get()
             .then(results => {
                 if(results.exists){
@@ -85,6 +93,7 @@ export default class ReviewOrderScreen extends Component {
                     } = results.data();
 
                     this.setState({
+                        numRequestsFinished: this.state.numRequestsFinished + 1,
                         serviceFeeDollars: serviceFeeDollars,
                         serviceFeePercent: serviceFeePercent,
                         vendorCommissionPercent: vendorCommissionPercent
@@ -102,7 +111,7 @@ export default class ReviewOrderScreen extends Component {
 
         let taxRatesRequests = this.getTaxRatesRequests(cartItems);
 
-        Promise
+        return Promise
             .all(taxRatesRequests)
             .then(taxRatesResults => {
                 let taxRatesInfoPerChocolate = {};
@@ -139,6 +148,7 @@ export default class ReviewOrderScreen extends Component {
                 }
 
                 this.setState({ 
+                    numRequestsFinished: this.state.numRequestsFinished + 1,
                     taxPerVendor: taxPerVendor,
                     chocolatesWithTaxRates: chocolatesWithTaxRates
                 });
@@ -186,7 +196,7 @@ export default class ReviewOrderScreen extends Component {
         }
 
         // Wait until all Firebase calls resolve until doing something with the shippingInfoResults array
-        Promise
+        return Promise
             .all(shippingInfoRequests)
             .then(shippingInfoResults => {
                 let shippoRequests = [];
@@ -278,6 +288,7 @@ export default class ReviewOrderScreen extends Component {
                                 }
 
                                 this.setState({
+                                    numRequestsFinished: this.state.numRequestsFinished + 1,
                                     shippingCostsPerVendor: shippingCostsPerVendor,
                                     chocolatesWithShippingRates: chocolatesWithShippingRates
                                 });
@@ -393,7 +404,8 @@ export default class ReviewOrderScreen extends Component {
             chocolatesWithShippingRates,
             taxPerVendor,
             serviceFeeDollars,
-            serviceFeePercent
+            serviceFeePercent,
+            numRequestsFinished
         } = this.state;
 
         if(selectedDeliveryMethod == "shipping"){
@@ -403,52 +415,65 @@ export default class ReviewOrderScreen extends Component {
         const { nameOnCard, creditCardNumber } = this.billingInfo;
         
         return(
-            <ScrollView style={ReviewOrderScreenStyles.container}> 
+            
+            <View >
+                { 
+                    numRequestsFinished < this.numExpectedRequests ?
+                    
+                        <Text style={ReviewOrderScreenStyles.loadingText}>Loading...</Text>
 
-                <DeliveryMethod 
-                    shippingAddress={shippingAddress}
-                    selectedDeliveryMethod={selectedDeliveryMethod} 
-                />
+                    :
 
-                <FlatList
-                    data={cartItems}
-                    renderItem={({_, index}) => this.renderItem(cartItems[index])}
-                    keyExtractor={(_, index) => index.toString()}
-                />
+                        <ScrollView style={ReviewOrderScreenStyles.container}> 
+                            <View>
+                                <DeliveryMethod 
+                                    shippingAddress={shippingAddress}
+                                    selectedDeliveryMethod={selectedDeliveryMethod} 
+                                />
 
-                <PaymentMethod
-                    nameOnCard={nameOnCard}
-                    creditCardNumber={creditCardNumber}
-                />
+                                <FlatList
+                                    data={cartItems}
+                                    renderItem={({_, index}) => this.renderItem(cartItems[index])}
+                                    keyExtractor={(_, index) => index.toString()}
+                                />
 
-                <PriceBreakdown 
-                    cartItems={cartItems}
-                    shippingCostsPerVendor={shippingCostsPerVendor}
-                    taxPerVendor={taxPerVendor}
-                    selectedDeliveryMethod={selectedDeliveryMethod}
-                    serviceFeeDollars={serviceFeeDollars}
-                    serviceFeePercent={serviceFeePercent}
-                />
+                                <PaymentMethod
+                                    nameOnCard={nameOnCard}
+                                    creditCardNumber={creditCardNumber}
+                                />
 
-                <Text style={ReviewOrderScreenStyles.policyText}>
-                    By placing your order, you agree to Molinillo's <Text 
-                        onPress={() => this.openWebpage(PrivacyPolicyUrl)} 
-                        style={ReviewOrderScreenStyles.policyLink}>
-                            privacy policy
-                    </Text> and terms of use. All sales are final after being placed.
-                </Text>
+                                <PriceBreakdown 
+                                    cartItems={cartItems}
+                                    shippingCostsPerVendor={shippingCostsPerVendor}
+                                    taxPerVendor={taxPerVendor}
+                                    selectedDeliveryMethod={selectedDeliveryMethod}
+                                    serviceFeeDollars={serviceFeeDollars}
+                                    serviceFeePercent={serviceFeePercent}
+                                />
 
-                <RNSlidingButton
-                    style={ReviewOrderScreenStyles.finalizeSlider}
-                    height={40}
-                    onSlidingSuccess={() => this.createStripeCustomer(cartItems)}
-                    slideDirection={SlideDirection.RIGHT}
-                >
-                    <Text style={ReviewOrderScreenStyles.finalizeText}>
-                        Slide right to place order >
-                    </Text>
-                </RNSlidingButton>
-            </ScrollView>
+                                <Text style={ReviewOrderScreenStyles.policyText}>
+                                    By placing your order, you agree to Molinillo's <Text 
+                                        onPress={() => this.openWebpage(PrivacyPolicyUrl)} 
+                                        style={ReviewOrderScreenStyles.policyLink}>
+                                            privacy policy
+                                    </Text> and terms of use. All sales are final after being placed.
+                                </Text>
+
+                                <RNSlidingButton
+                                    style={ReviewOrderScreenStyles.finalizeSlider}
+                                    height={40}
+                                    onSlidingSuccess={() => this.createStripeCustomer(cartItems)}
+                                    slideDirection={SlideDirection.RIGHT}
+                                >
+                                    <Text style={ReviewOrderScreenStyles.finalizeText}>
+                                        Slide right to place order >
+                                    </Text>
+                                </RNSlidingButton>
+                            </View>
+                    
+                        </ScrollView>
+                }
+            </View>
         );
     }
 
