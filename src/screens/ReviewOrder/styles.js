@@ -26,6 +26,12 @@ export const ReviewOrderScreenStyles = StyleSheet.create({
         fontWeight: 'bold',
         color:"white"
     },
+    loadingText: { 
+        fontSize: 30, 
+        paddingTop:20, 
+        textAlign:"center", 
+        fontWeight:"bold"
+    },
     policyLink: {
         color: "#004C99"
     },
