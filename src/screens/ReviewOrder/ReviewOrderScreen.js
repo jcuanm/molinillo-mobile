@@ -69,21 +69,18 @@ export default class ReviewOrderScreen extends Component {
     componentDidMount(){
         const { selectedDeliveryMethod, shippingAddress } = this.order;
 
-        
-        let taxRatesRequest = this.getTaxRates();
-        let commisionRatesRequest = this.getCommissionRates();
-        let requests = [taxRatesRequest, commisionRatesRequest];
+        this.getTaxRates();
+        this.getCommissionRates();
         
         if(selectedDeliveryMethod == "shipping" && shippingAddress !== undefined){
-            let shippingCostsRequest = this.getShippingCosts();
-            requests.push(shippingCostsRequest);
+            this.getShippingCosts();
         }
     }
 
     getCommissionRates(){
         let miscValuesCommerceRef = this.dbHandler.getRef("Commerce");
 
-        return miscValuesCommerceRef
+        miscValuesCommerceRef
             .get()
             .then(results => {
                 if(results.exists){
@@ -112,7 +109,7 @@ export default class ReviewOrderScreen extends Component {
 
         let taxRatesRequests = this.getTaxRatesRequests(cartItems);
 
-        return Promise
+        Promise
             .all(taxRatesRequests)
             .then(taxRatesResults => {
                 let taxRatesInfoPerChocolate = {};
@@ -197,7 +194,7 @@ export default class ReviewOrderScreen extends Component {
         }
 
         // Wait until all Firebase calls resolve until doing something with the shippingInfoResults array
-        return Promise
+        Promise
             .all(shippingInfoRequests)
             .then(shippingInfoResults => {
                 let shippoRequests = [];
