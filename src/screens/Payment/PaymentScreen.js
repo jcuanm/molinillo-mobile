@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../helpers/Constants';
+import { ShippoConfig } from '../../../assets/Config';
 import { PaymentScreenStyles } from './styles';
 import CreditCardInfo from './components/CreditCardInfo';
 import BillingAddressInput from './components/BillingAddressInput';
@@ -130,7 +131,7 @@ export default class PaymentScreen extends React.Component {
                 />
 
                 <TouchableOpacity 
-                    onPress={() => this.proceed() } 
+                    onPress={() => this.checkIfShouldProceed() } 
                     style={PaymentScreenStyles.proceedToReviewButton}
                 >
                     <Text style={PaymentScreenStyles.proceedToReviewText}>
@@ -143,43 +144,13 @@ export default class PaymentScreen extends React.Component {
     }
 
     proceed(){
-        if(this.isVerifiedToProceed()){
-            this.props.navigation.navigate(
-                "ReviewOrderScreen", 
-                { 
-                    order: this.order,
-                    billingInfo: this.state
-                }
-            );
-        }
-    }
-
-    isVerifiedToProceed(){
-        if(!this.isValidExpirationDate()){
-            Alert.alert(
-                "Invalid expiration date.",
-                "According to the date, this card is expired. Please use another card.",
-                [{text: 'OK'}],
-                { cancelable: false }
-            );
-
-            return false;
-        }
-
-        if(!this.areRequiredFieldsCompleted()){
-            Alert.alert(
-                "You must fill in the required fields",
-                "",
-                [
-                  {text: 'OK'}
-                ],
-                { cancelable: false }
-            );
-
-            return false;
-        }
-
-        return true;
+        this.props.navigation.navigate(
+            "ReviewOrderScreen", 
+            { 
+                order: this.order,
+                billingInfo: this.state
+            }
+        );
     }
 
     isValidExpirationDate(){
@@ -225,5 +196,85 @@ export default class PaymentScreen extends React.Component {
             zipcode.trim() !== "" &&
             country.trim() !== ""
         );
+    }
+
+    checkIfShouldProceed(){
+        const {
+            streetAddress1,
+            streetAddress2,
+            city,
+            state,
+            zipcode,
+            country
+        } = this.state;
+
+        if(!this.areRequiredFieldsCompleted()){
+            Alert.alert(
+                "You must fill in all of the required fields.",
+                "",
+                [{text: 'OK'}],
+                { cancelable: false }
+            );
+
+            return false;
+        }
+        else if(!this.isValidExpirationDate()){
+            Alert.alert(
+                "Invalid expiration date.",
+                "According to the date, this card is expired. Please use another card.",
+                [{text: 'OK'}],
+                { cancelable: false }
+            );
+
+            return false;
+        }
+
+        // Check if is valid address using Shippo
+        let request = fetch('https://api.goshippo.com/addresses/', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: "ShippoToken " + ShippoConfig.apiKey
+            },
+            body: JSON.stringify({
+                street1: streetAddress1,
+                street2: streetAddress2,
+                city: city,
+                state: state,
+                zip: zipcode,
+                country: country,
+                validate: true
+            })
+        });
+
+        request
+            .then(response => {
+                let jsonResponse = response.json();
+
+                jsonResponse
+                    .then(validationMetaData =>{
+                        
+                        if(!validationMetaData.validation_results.is_valid){
+                            Alert.alert(
+                                "An invalid invalid address was inputted.",
+                                "",
+                                [{text: 'OK'}],
+                                { cancelable: false }
+                            );
+                        }
+                        else{
+                            this.proceed();
+                        }
+                    })
+                    .catch(error => {
+                        console.log("Error converting request to JSON.")
+                        console.log(error);
+                    });
+            })
+            .catch(error => {
+                console.log("Error making request to Shippo.");
+                console.log(error);
+            });
     }
 }
