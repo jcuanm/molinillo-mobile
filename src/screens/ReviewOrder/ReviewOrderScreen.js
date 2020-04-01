@@ -32,7 +32,7 @@ export default class ReviewOrderScreen extends Component {
         this.order = this.props.navigation.getParam('order', {});
         this.billingInfo = this.props.navigation.getParam('billingInfo', {});
         this.decimalPlaces = 2;
-        this.numExpectedRequests = 3;
+        this.numExpectedRequests = this.order.selectedDeliveryMethod == "shipping" ? 3 : 2;
         this.hasSwipedRight = false;
 
         this.state = {
@@ -652,7 +652,6 @@ export default class ReviewOrderScreen extends Component {
                                     this.addToOrdersCollection(cartItems, customer.id);
                                 })
                                 .catch(error => {
-                                    this.alertCouldNotConnect();
                                     this.hasSwipedRight = false;
                                     console.log("Error converting response to JSON object.");
                                     console.log(error);
@@ -676,6 +675,17 @@ export default class ReviewOrderScreen extends Component {
     }
 
     addToOrdersCollection(cartItems, stripeCustomerId){
+        if(!stripeCustomerId){
+            Alert.alert(
+                "Invalid payment info supplied.",
+                "Please return to the payment screen and enter valid payment credentials.",
+                [{text: 'OK'}],
+                { cancelable: false }
+            );
+            this.hasSwipedRight = false;
+            return;
+        }
+
         let vendorInfo = this.getVendorInfo(cartItems);
         const { selectedDeliveryMethod, shippingAddress } = this.order;
         let ordersPerVendor = [];
