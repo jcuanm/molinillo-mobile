@@ -160,6 +160,7 @@ export default class DetailScreen extends Component {
 			vendorUrl,
 			uuid,
 			price,
+			vendorEmail
 		} = this.results;
 
 		const {
@@ -193,6 +194,7 @@ export default class DetailScreen extends Component {
 								imageDownloadUrl={imageDownloadUrl}
 								vendorAddress={vendorAddress}
 								vendorUid={vendorUid}
+								vendorEmail={vendorEmail}
 							/>
 						:
 							null

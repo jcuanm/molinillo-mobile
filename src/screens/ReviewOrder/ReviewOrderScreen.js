@@ -537,7 +537,8 @@ export default class ReviewOrderScreen extends Component {
                     producerName: item.producerName,
                     userId: item.userId,
                     vendorAddress: item.vendorAddress,
-                    cartItems: [item]
+                    cartItems: [item],
+                    vendorEmail: item.vendorEmail
                 };
             }
         }
@@ -650,6 +651,13 @@ export default class ReviewOrderScreen extends Component {
                             jsonRequest
                                 .then(customer => {
                                     this.addToOrdersCollection(cartItems, customer.id);
+
+                                    Alert.alert(
+                                        "Your order request has been placed!",
+                                        "Once the vendor confirms the order, we will charge your card and notify you.",
+                                        [{text: 'OK'}],
+                                        { cancelable: false }
+                                    );
                                 })
                                 .catch(error => {
                                     this.hasSwipedRight = false;
@@ -715,7 +723,9 @@ export default class ReviewOrderScreen extends Component {
                 subtotal: subtotal,
                 cartItems: JSON.stringify(vendorInfo[vendorUid].cartItems),
                 orderTotal: this.round(orderTotal, this.decimalPlaces),
-                vendorCommission: this.round((this.state.vendorCommissionPercent * orderTotal) - serviceFee, this.decimalPlaces)
+                vendorCommission: this.round((this.state.vendorCommissionPercent * orderTotal) - serviceFee, this.decimalPlaces),
+                customerEmail: this.dbHandler.currUser.email,
+                vendorEmail: vendorInfo[vendorUid].vendorEmail
             };
 
             ordersPerVendor.push(orderPerVendor);
@@ -738,13 +748,6 @@ export default class ReviewOrderScreen extends Component {
                 this.props.navigation.popToTop();
                 this.props.navigation.navigate("SearchScreen");
                 this.hasSwipedRight = false;
-
-                Alert.alert(
-                    "Your order request has been placed!",
-                    "Once the vendor confirms the order, we will charge your card and notify you.",
-                    [{text: 'OK'}],
-                    { cancelable: false }
-                );
             })
             .catch(error => {
                 Alert.alert(

@@ -158,7 +158,8 @@ export default class Commerce extends Component {
             confectionName,
             imageDownloadUrl,
             vendorAddress,
-            vendorUid
+            vendorUid,
+            vendorEmail
         } = this.props;
 
         let db = firebase.firestore();
@@ -190,7 +191,8 @@ export default class Commerce extends Component {
                         barcodeType: barcodeType,
                         imageDownloadUrl: imageDownloadUrl,
                         vendorAddress: vendorAddress,
-                        vendorUid: vendorUid
+                        vendorUid: vendorUid,
+                        vendorEmail: vendorEmail
                     };
     
                     cartRef
@@ -214,6 +216,8 @@ export default class Commerce extends Component {
                                 ],
                                 { cancelable: false }
                             );
+
+                            console.log(error);
                         });
                 }
                 else{
@@ -235,7 +239,7 @@ export default class Commerce extends Component {
                         });
                 }
             })
-            .catch( _ => {
+            .catch( error => {
                 Alert.alert(
                     "Error adding to shopping cart",
                     "",
@@ -244,6 +248,8 @@ export default class Commerce extends Component {
                     ],
                     { cancelable: false }
                 );
+
+                console.log(error);
             });
     }
 }
