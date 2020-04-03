@@ -110,7 +110,15 @@ export default class ShippingAddressInput extends Component {
                 />
                 
                 <TouchableOpacity 
-                    onPress={() => this.setState({isCountryDialogVisible: true})}
+                    onPress={() => {
+                            Alert.alert(
+                                "Unfortunately, we only ship within the US.",
+                                "",
+                                [{text: 'OK'}],
+                                { cancelable: false }
+                            );
+                        }
+                    }
                     style={ShippingAddressInputStyles.dialogButton}
                 >
                     <Text style={ShippingAddressInputStyles.dialogButtonText}>
