@@ -70,6 +70,8 @@ export default class VendorConfirmationScreen extends Component {
         } = this.order;
 
         cartItems = JSON.parse(cartItems);
+
+        let income = orderTotal - vendorCommission;
         
         return(
             <ScrollView style={VendorConfirmationScreenStyles.container}> 
@@ -106,7 +108,7 @@ export default class VendorConfirmationScreen extends Component {
 
                 <View style={VendorConfirmationScreenStyles.buttonsContainer}>
                     <TouchableOpacity 
-                        onPress={() => this.confirmOrder(orderUuid, stripeCustomerId, orderTotal, customerEmail, vendorEmail)}
+                        onPress={() => this.confirmOrder(orderUuid, stripeCustomerId, income, customerEmail, vendorEmail)}
                         style={[VendorConfirmationScreenStyles.acknowledgeButton, {backgroundColor:'green'}]}
                     >
                         <Text style={VendorConfirmationScreenStyles.acknowledgeButtonText}>
@@ -139,12 +141,12 @@ export default class VendorConfirmationScreen extends Component {
         );
     }
 
-    confirmOrder(orderUuid, stripeCustomerId, orderTotal, customerEmail, vendorEmail){
+    confirmOrder(orderUuid, stripeCustomerId, income, customerEmail, vendorEmail){
         
         // Charge the customer
         request = this.makePOSTRequest(
             "https://api.stripe.com/v1/charges", 
-            this.getPostBody(orderTotal, stripeCustomerId, vendorEmail), 
+            this.getPostBody(income, stripeCustomerId, vendorEmail), 
             apikey=StripeConfig.apiKey
         );
 
@@ -247,10 +249,10 @@ export default class VendorConfirmationScreen extends Component {
         );
     }
 
-    getPostBody(orderTotal, stripeCustomerId, vendorEmail){
+    getPostBody(income, stripeCustomerId, vendorEmail){
         return (
             "customer=" + stripeCustomerId + "&" +
-            "amount=" + (orderTotal * 100) + "&" + 
+            "amount=" + (income * 100) + "&" + 
             "currency=usd" + "&" +
             "receipt_email=" + vendorEmail
         );
