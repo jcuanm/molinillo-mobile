@@ -64,7 +64,9 @@ export default class VendorConfirmationScreen extends Component {
             vendorCommission,
             orderUuid,
             stripeCustomerId,
-            orderTotal
+            orderTotal,
+            customerEmail,
+            vendorEmail
         } = this.order;
 
         cartItems = JSON.parse(cartItems);
@@ -104,7 +106,7 @@ export default class VendorConfirmationScreen extends Component {
 
                 <View style={VendorConfirmationScreenStyles.buttonsContainer}>
                     <TouchableOpacity 
-                        onPress={() => this.confirmOrder(orderUuid, stripeCustomerId, orderTotal)}
+                        onPress={() => this.confirmOrder(orderUuid, stripeCustomerId, orderTotal, customerEmail, vendorEmail)}
                         style={[VendorConfirmationScreenStyles.acknowledgeButton, {backgroundColor:'green'}]}
                     >
                         <Text style={VendorConfirmationScreenStyles.acknowledgeButtonText}>
@@ -137,12 +139,12 @@ export default class VendorConfirmationScreen extends Component {
         );
     }
 
-    confirmOrder(orderUuid, stripeCustomerId, orderTotal){
+    confirmOrder(orderUuid, stripeCustomerId, orderTotal, customerEmail, vendorEmail){
         
         // Charge the customer
         request = this.makePOSTRequest(
             "https://api.stripe.com/v1/charges", 
-            this.getPostBody(orderTotal, stripeCustomerId), 
+            this.getPostBody(orderTotal, stripeCustomerId, vendorEmail), 
             apikey=StripeConfig.apiKey
         );
 
@@ -245,7 +247,12 @@ export default class VendorConfirmationScreen extends Component {
         );
     }
 
-    getPostBody(orderTotal, stripeCustomerId){
-        return "customer=" + stripeCustomerId + "&" + "amount=" + (orderTotal * 100) + "&currency=usd";
+    getPostBody(orderTotal, stripeCustomerId, vendorEmail){
+        return (
+            "customer=" + stripeCustomerId + "&" +
+            "amount=" + (orderTotal * 100) + "&" + 
+            "currency=usd" + "&" +
+            "receipt_email=" + vendorEmail
+        );
     }
 }
