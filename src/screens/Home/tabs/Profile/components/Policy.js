@@ -5,14 +5,13 @@ import {
     View, 
     Text
  } from 'react-native';
- import { PrivacyPolicyUrl } from '../../../../../helpers/Constants';
  import { ProfileNavTabStyles } from '../styles';
  
-export default class PrivacyPolicy extends Component {
+export default class PolicyPolicy extends Component {
 
     render(){
         return(
-            <TouchableOpacity onPress={() => this.openWebpage(PrivacyPolicyUrl)}>
+            <TouchableOpacity onPress={() => this.openWebpage(this.props.url)}>
                 <View style={ProfileNavTabStyles.container}>
                     <Text style={ProfileNavTabStyles.text}>{this.props.title}</Text> 
                 </View>

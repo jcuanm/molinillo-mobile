@@ -11,7 +11,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { StripeConfig } from '../../../assets/Config';
 import Dialog from "react-native-dialog";
-import { Colors, PrivacyPolicyUrl } from '../../helpers/Constants';
+import { Colors, PrivacyPolicyUrl, TermsAndServicesUrl } from '../../helpers/Constants';
 import { VendorConfirmationScreenStyles } from './styles';
 import PriceBreakdown from './components/PriceBreakdown';
 import DeliveryMethod from './components/DeliveryMethod';
@@ -103,7 +103,11 @@ export default class VendorConfirmationScreen extends Component {
                         onPress={() => this.openWebpage(PrivacyPolicyUrl)} 
                         style={VendorConfirmationScreenStyles.policyLink}>
                             privacy policy
-                    </Text> and terms of use. All sales are final after being placed.
+                    </Text> and <Text 
+                        onPress={() => this.openWebpage(TermsAndServicesUrl)} 
+                        style={VendorConfirmationScreenStyles.policyLink}>
+                            terms of use
+                    </Text> as outlined on our website. All sales are final after being placed.
                 </Text>
 
                 <View style={VendorConfirmationScreenStyles.buttonsContainer}>

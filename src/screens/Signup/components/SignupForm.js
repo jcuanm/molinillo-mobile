@@ -7,7 +7,7 @@ import {
   Button,
   Platform
 } from 'react-native';
-import { Colors, PrivacyPolicyUrl } from '../../../helpers/Constants';
+import { Colors, PrivacyPolicyUrl, TermsAndServicesUrl } from '../../../helpers/Constants';
 import DbHandler from '../../../helpers/DbHandler';
 import { SignupFormStyles } from '../styles';
 
@@ -82,8 +82,8 @@ export default class SignupForm extends Component {
           })} 
         />
 
-        <Text onPress={() => this.openWebpage(PrivacyPolicyUrl)} style={SignupFormStyles.privacyPolicyText}>  
-          By pressing Signup, you agree to our <Text style={SignupFormStyles.privacyPolicyLink}>privacy policy</Text>
+        <Text style={SignupFormStyles.policyText}>  
+          By pressing Signup, you agree to our <Text onPress={() => this.openWebpage(PrivacyPolicyUrl)} style={SignupFormStyles.policyLink}>privacy policy</Text> and our <Text onPress={() => this.openWebpage(TermsAndServicesUrl)} style={SignupFormStyles.policyLink}>terms of service</Text> as outlined on our website.
         </Text>
   		</View>
 		);
