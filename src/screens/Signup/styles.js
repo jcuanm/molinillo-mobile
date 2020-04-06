@@ -77,11 +77,11 @@ export const SignupFormStyles = StyleSheet.create({
         color: Colors.Secondary,
         textAlign:'center'
     },
-    privacyPolicyLink: {
+    policyLink: {
         fontWeight:"bold", 
         color: Colors.Secondary
     },
-    privacyPolicyText: {
+    policyText: {
         color:'rgba(255, 255, 255, .7)', 
         textAlign: "center", 
         padding:10

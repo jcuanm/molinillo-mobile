@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import Feedback from './Feedback';
 import About from './About';
-import PrivacyPolicy from './PrivacyPolicy';
+import Policy from './Policy';
 import Contact from './Contact';
+import { PrivacyPolicyUrl, TermsAndServicesUrl } from '../../../../../helpers/Constants';
 import { ProfileOptionsStyles } from '../styles';
 
 export default class ProfileOptions extends Component {
@@ -21,8 +22,13 @@ export default class ProfileOptions extends Component {
                     title={"Contact Us"} 
                     navigationFunc={this.props.navigationFunc} 
                 />
-                <PrivacyPolicy
+                <Policy
                     title={"Privacy Policy"} 
+                    url={PrivacyPolicyUrl}
+                />
+                <Policy
+                    title={"Terms of Service"} 
+                    url={TermsAndServicesUrl}
                 />
             </View>
         );

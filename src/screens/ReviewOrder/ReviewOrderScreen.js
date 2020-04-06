@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ShippoConfig, StripeConfig } from '../../../assets/Config';
-import { Colors, PrivacyPolicyUrl } from '../../helpers/Constants';
+import { Colors, PrivacyPolicyUrl, TermsAndServicesUrl } from '../../helpers/Constants';
 import { ReviewOrderScreenStyles } from './styles';
 import PriceBreakdown from './components/PriceBreakdown';
 import DeliveryMethod from './components/DeliveryMethod';
@@ -454,7 +454,11 @@ export default class ReviewOrderScreen extends Component {
                                         onPress={() => this.openWebpage(PrivacyPolicyUrl)} 
                                         style={ReviewOrderScreenStyles.policyLink}>
                                             privacy policy
-                                    </Text> and terms of use. All sales are final after being placed.
+                                    </Text> and <Text 
+                                        onPress={() => this.openWebpage(TermsAndServicesUrl)} 
+                                        style={ReviewOrderScreenStyles.policyLink}>
+                                            terms of use
+                                    </Text> as outlined on our website. All sales are final after being placed.
                                 </Text>
 
                                 <RNSlidingButton

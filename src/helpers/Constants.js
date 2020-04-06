@@ -8,6 +8,8 @@ export const Warnings = {
 
 export const PrivacyPolicyUrl = "https://app.termly.io/document/privacy-policy/21cb7adf-4c06-44f1-8af7-7e523f004ef7";
 
+export const TermsAndServicesUrl = "https://molinillomobile.wixsite.com/molinillo";
+
 export const StringConcatenations = {
     Prefix: "BarcodeType_",
 };
