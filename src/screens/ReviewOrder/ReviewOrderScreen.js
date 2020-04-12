@@ -539,7 +539,7 @@ export default class ReviewOrderScreen extends Component {
             else{
                 vendorInfo[item.vendorUid] = {
                     producerName: item.producerName,
-                    userId: item.userId,
+                    customerId: item.customerId,
                     vendorAddress: item.vendorAddress,
                     cartItems: [item],
                     vendorEmail: item.vendorEmail
@@ -712,7 +712,7 @@ export default class ReviewOrderScreen extends Component {
 
             let orderPerVendor = {
                 vendorUid: vendorUid,
-                userId: vendorInfo[vendorUid].userId,
+                customerId: vendorInfo[vendorUid].customerId,
                 producerName: vendorInfo[vendorUid].producerName,
                 vendorAddress: vendorInfo[vendorUid].vendorAddress,
                 timeOrderExecuted: new Date(),
@@ -798,7 +798,7 @@ export default class ReviewOrderScreen extends Component {
         let cartRef = this.dbHandler.dbRef.collection("Cart");
 
         cartRef
-            .where("userId", "==", this.dbHandler.currUser.uid)
+            .where("customerId", "==", this.dbHandler.currUser.uid)
             .get()
             .then(results => {
                 let batchRef = this.dbHandler.dbRef.batch();

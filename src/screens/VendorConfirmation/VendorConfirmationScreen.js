@@ -66,12 +66,11 @@ export default class VendorConfirmationScreen extends Component {
             stripeCustomerId,
             orderTotal,
             customerEmail,
-            vendorEmail
+            vendorEmail,
+            customerId
         } = this.order;
 
         cartItems = JSON.parse(cartItems);
-
-        let income = orderTotal - vendorCommission;
         
         return(
             <ScrollView style={VendorConfirmationScreenStyles.container}> 
@@ -112,7 +111,7 @@ export default class VendorConfirmationScreen extends Component {
 
                 <View style={VendorConfirmationScreenStyles.buttonsContainer}>
                     <TouchableOpacity 
-                        onPress={() => this.confirmOrder(orderUuid, stripeCustomerId, income, customerEmail, vendorEmail)}
+                        onPress={() => this.confirmOrder(orderUuid, stripeCustomerId, orderTotal, vendorEmail)}
                         style={[VendorConfirmationScreenStyles.acknowledgeButton, {backgroundColor:'green'}]}
                     >
                         <Text style={VendorConfirmationScreenStyles.acknowledgeButtonText}>
@@ -145,12 +144,12 @@ export default class VendorConfirmationScreen extends Component {
         );
     }
 
-    confirmOrder(orderUuid, stripeCustomerId, income, customerEmail, vendorEmail){
+    confirmOrder(orderUuid, stripeCustomerId, orderTotal, vendorEmail){
         
         // Charge the customer
         request = this.makePOSTRequest(
             "https://api.stripe.com/v1/charges", 
-            this.getPostBody(income, stripeCustomerId, vendorEmail), 
+            this.getPostBody(orderTotal, stripeCustomerId, vendorEmail), 
             apikey=StripeConfig.apiKey
         );
 
@@ -158,15 +157,16 @@ export default class VendorConfirmationScreen extends Component {
             .then(response => {
                 let jsonRequest = response.json();
 
-                // Delete order if successful
                 jsonRequest
                     .then(transaction => {
-                        this.deleteOrder(orderUuid);
+                        this.addToOrderHistory(transaction);
                     })
                     .catch(error => {
                         console.log("Error converting response to JSON object.");
                         console.log(error);
                     });
+                
+                this.deleteOrder(orderUuid);
             })
             .catch(error => {
                 console.log("Error trying to create Stripe customer object.");
@@ -175,9 +175,7 @@ export default class VendorConfirmationScreen extends Component {
     }
 
     declineOrder(orderUuid){
-        //TODO: Email user with the reason for cancellation
         this.deleteOrder(orderUuid);
-        
         this.setState({isDialogVisible: false});
     }
 
@@ -199,6 +197,19 @@ export default class VendorConfirmationScreen extends Component {
                     { cancelable: false }
                 );
             });
+    }
+
+    addToOrderHistory(transaction){
+        let orderHistoryRef = this.dbHandler.getRef("OrderHistory");
+        let payload = {
+            ...this.order,
+            stripeTransactionId: transaction.id,
+            receipt_number: transaction.receipt_number,
+            receiptUrl: transaction.receipt_url,
+            timeConfirmed: transaction.created
+        }
+
+        orderHistoryRef.set(payload);
     }
 
     renderItem(item){
