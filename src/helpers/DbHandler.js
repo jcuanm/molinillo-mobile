@@ -148,10 +148,15 @@ export default class DbHandler{
                     .doc(root);
                 break;
             case 'Orders':
-                    ref = this.dbRef
-                        .collection(root)
-                        .doc(orderUuid);
-                    break;
+                ref = this.dbRef
+                    .collection(root)
+                    .doc(orderUuid);
+                break;
+            case 'OrderHistory':
+                ref = this.dbRef
+                    .collection(root)
+                    .doc(uuidv4());
+                break;
             default:
                 ref = null; 
         }

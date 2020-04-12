@@ -42,7 +42,7 @@ export default class CartScreen extends Component {
     
     getUserCartItems(){
         let cartRef = firebase.firestore().collection("Cart");
-        let query = cartRef.where("userId", "==", this.dbHandler.currUser.uid);
+        let query = cartRef.where("customerId", "==", this.dbHandler.currUser.uid);
 
         query 
             .get()

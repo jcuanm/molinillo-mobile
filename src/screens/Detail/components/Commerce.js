@@ -163,12 +163,12 @@ export default class Commerce extends Component {
         } = this.props;
 
         let db = firebase.firestore();
-        let userId = this.dbHandler.currUser.uid;
+        let customerId = this.dbHandler.currUser.uid;
         let quantity = this.state.quantity;
 
         db
             .collection("Cart")
-            .where("userId", "==", userId)
+            .where("customerId", "==", customerId)
             .where("chocolateUuid", "==", uuid)
             .get()
             .then( doc => {
@@ -181,7 +181,7 @@ export default class Commerce extends Component {
     
                     const data = {
                         created_ts: new Date(),
-                        userId: userId,
+                        customerId: customerId,
                         quantity: this.state.quantity,
                         price: price,
                         producerName: producerName,
@@ -223,7 +223,7 @@ export default class Commerce extends Component {
                 else{
                     db
                         .collection("Cart")
-                        .doc(userId + "_" + uuid)
+                        .doc(customerId + "_" + uuid)
                         .update({
                             quantity: firebase.firestore.FieldValue.increment(quantity)
                         })
