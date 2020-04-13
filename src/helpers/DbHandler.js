@@ -157,6 +157,16 @@ export default class DbHandler{
                     .collection(root)
                     .doc(uuidv4());
                 break;
+            case 'AmountOwed':
+                ref = this.dbRef
+                    .collection('MiscValues')
+                    .doc(root);
+                break;
+            case 'AmountPaid':
+                ref = this.dbRef
+                    .collection('MiscValues')
+                    .doc(root);
+                break;
             default:
                 ref = null; 
         }
