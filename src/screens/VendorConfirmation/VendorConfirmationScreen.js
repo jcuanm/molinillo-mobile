@@ -8,6 +8,8 @@ import {
     TouchableOpacity,
     View
 } from 'react-native';
+import * as firebase from 'firebase';
+import 'firebase/firestore';
 import { Ionicons } from '@expo/vector-icons';
 import { StripeConfig } from '../../../assets/Config';
 import Dialog from "react-native-dialog";
@@ -65,9 +67,7 @@ export default class VendorConfirmationScreen extends Component {
             orderUuid,
             stripeCustomerId,
             orderTotal,
-            customerEmail,
             vendorEmail,
-            customerId
         } = this.order;
 
         cartItems = JSON.parse(cartItems);
@@ -160,6 +160,7 @@ export default class VendorConfirmationScreen extends Component {
                 jsonRequest
                     .then(transaction => {
                         this.addToOrderHistory(transaction);
+                        this.updateAmountOwed(this.dbHandler.currUser.uid);
                     })
                     .catch(error => {
                         console.log("Error converting response to JSON object.");
@@ -210,6 +211,13 @@ export default class VendorConfirmationScreen extends Component {
         }
 
         orderHistoryRef.set(payload);
+    }
+
+    updateAmountOwed(vendorUid){
+        let amountOwedRef = this.dbHandler.getRef("AmountOwed");
+        let increment = firebase.firestore.FieldValue.increment(parseFloat(this.income));
+
+        amountOwedRef.set({ [vendorUid]: increment }, { merge: true });
     }
 
     renderItem(item){
@@ -264,10 +272,10 @@ export default class VendorConfirmationScreen extends Component {
         );
     }
 
-    getPostBody(income, stripeCustomerId, vendorEmail){
+    getPostBody(orderTotal, stripeCustomerId, vendorEmail){
         return (
             "customer=" + stripeCustomerId + "&" +
-            "amount=" + (income * 100) + "&" + 
+            "amount=" + (orderTotal * 100) + "&" + 
             "currency=usd" + "&" +
             "receipt_email=" + vendorEmail
         );
