@@ -1,4 +1,5 @@
 import { Dimensions, StyleSheet } from 'react-native';
+import { Colors } from '../../helpers/Constants';
 
 export const CartScreenStyles = StyleSheet.create({
     container: {
@@ -90,3 +91,4 @@ export const CartItemStyles = StyleSheet.create({
         marginRight:15
     }
 });
+

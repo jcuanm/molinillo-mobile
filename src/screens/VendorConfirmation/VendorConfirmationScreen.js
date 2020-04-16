@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { 
-    Alert,
     FlatList, 
     Linking,
     ScrollView, 
@@ -159,15 +158,14 @@ export default class VendorConfirmationScreen extends Component {
 
                 jsonRequest
                     .then(transaction => {
-                        this.addToOrderHistory(transaction);
-                        this.updateAmountOwed(this.dbHandler.currUser.uid);
+                        this.updateOrderHistory(orderUuid, "confirmed", transaction=transaction);
+                        this.updateAmountOwed();
+                        this.props.navigation.navigate("OrdersScreen");
                     })
                     .catch(error => {
                         console.log("Error converting response to JSON object.");
                         console.log(error);
                     });
-                
-                this.deleteOrder(orderUuid);
             })
             .catch(error => {
                 console.log("Error trying to create Stripe customer object.");
@@ -176,48 +174,38 @@ export default class VendorConfirmationScreen extends Component {
     }
 
     declineOrder(orderUuid){
-        this.deleteOrder(orderUuid);
+        this.updateOrderHistory(orderUuid, "declined");
         this.setState({isDialogVisible: false});
+        this.props.navigation.navigate("OrdersScreen");
     }
 
-    deleteOrder(orderUuid){
+    updateOrderHistory(orderUuid, vendorDecision, transaction={}){
         let orderRef = this.dbHandler.getRef("Orders", barcode=null, chocolateUuid=null, commentUuid=null, orderUuid=orderUuid);
-
-        orderRef
-            .delete()
-            .then(_ => {
-                this.props.navigation.navigate("OrdersScreen");
-            })
-            .catch(error => {
-                console.log(error);
-
-                Alert.alert(
-                    "There was an error connecting to the database.",
-                    "Please try again later.",
-                    [{text: 'OK'}],
-                    { cancelable: false }
-                );
-            });
-    }
-
-    addToOrderHistory(transaction){
-        let orderHistoryRef = this.dbHandler.getRef("OrderHistory");
-        let payload = {
-            ...this.order,
-            stripeTransactionId: transaction.id,
-            receipt_number: transaction.receipt_number,
-            receiptUrl: transaction.receipt_url,
-            timeConfirmed: transaction.created
+        
+        if(transaction === {}){
+            var payload = {
+                stripeTransactionId: transaction.id,
+                receipt_number: transaction.receipt_number,
+                receiptUrl: transaction.receipt_url,
+                timeConfirmed: transaction.created,
+                orderState: vendorDecision
+            }
         }
-
-        orderHistoryRef.set(payload);
+        else{
+            payload = {
+                orderState: vendorDecision,
+                declinationReason: this.state.reason
+            }
+        }
+        
+        orderRef.update(payload);
     }
 
-    updateAmountOwed(vendorUid){
+    updateAmountOwed(){
         let amountOwedRef = this.dbHandler.getRef("AmountOwed");
         let increment = firebase.firestore.FieldValue.increment(parseFloat(this.income));
 
-        amountOwedRef.set({ [vendorUid]: increment }, { merge: true });
+        amountOwedRef.set({ [this.dbHandler.currUser.uid]: increment }, { merge: true });
     }
 
     renderItem(item){
