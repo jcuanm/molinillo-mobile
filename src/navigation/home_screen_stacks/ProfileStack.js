@@ -5,7 +5,7 @@ import DetailScreen from '../../screens/Detail/DetailScreen';
 import AddChocolateScreen from '../../screens/AddChocolate/AddChocolateScreen';
 import AboutScreen from '../../screens/About/AboutScreen';
 import ContactScreen from '../../screens/Contact/ContactScreen';
-import MyOrdersScreen from '../../screens/MyOrders/MyOrdersScreen';
+import OrderHistoryScreen from '../../screens/OrderHistory/OrderHistoryScreen';
 
 
 export default createStackNavigator({
@@ -15,5 +15,5 @@ export default createStackNavigator({
     AddChocolateScreen,
     AboutScreen,
     ContactScreen,
-    MyOrdersScreen
+    OrderHistoryScreen
 });

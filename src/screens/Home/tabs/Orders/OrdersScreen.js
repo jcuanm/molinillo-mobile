@@ -39,7 +39,9 @@ export default class OrdersScreen extends Component {
     
     getUserOrders(){
         let ordersRef = firebase.firestore().collection("Orders");
-        let query = ordersRef.where("vendorUid", "==", this.dbHandler.currUser.uid);
+        let query = ordersRef
+            .where("vendorUid", "==", this.dbHandler.currUser.uid)
+            .where("orderState", "==", "pending");
 
         query 
             .get()

@@ -4,7 +4,7 @@ import Feedback from './Feedback';
 import About from './About';
 import Policy from './Policy';
 import Contact from './Contact';
-import MyOrders from './MyOrders';
+import OrderHistory from './OrderHistory';
 import { PrivacyPolicyUrl, TermsAndServicesUrl } from '../../../../../helpers/Constants';
 import { ProfileOptionsStyles } from '../styles';
 
@@ -12,8 +12,8 @@ export default class ProfileOptions extends Component {
     render(){
         return(
             <View style={ProfileOptionsStyles.container}>
-                <MyOrders
-                    title={"My Orders"} 
+                <OrderHistory
+                    title={"Order History"} 
                     navigationFunc={this.props.navigationFunc} 
                 />
                 <Feedback 

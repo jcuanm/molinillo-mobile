@@ -6,10 +6,10 @@ import {
  } from 'react-native';
  import { ProfileNavTabStyles } from '../styles';
 
-export default class MyOrders extends Component {
+export default class OrderHistory extends Component {
     render(){
         return(
-            <TouchableOpacity onPress={() => this.props.navigationFunc("MyOrdersScreen")}>
+            <TouchableOpacity onPress={() => this.props.navigationFunc("OrderHistoryScreen")}>
                 <View style={ProfileNavTabStyles.container}>
                     <Text style={ProfileNavTabStyles.text}>{this.props.title}</Text> 
                 </View>

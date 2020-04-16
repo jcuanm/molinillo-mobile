@@ -729,7 +729,15 @@ export default class ReviewOrderScreen extends Component {
                 orderTotal: this.round(orderTotal, this.decimalPlaces),
                 vendorCommission: this.round((this.state.vendorCommissionPercent * orderTotal) - serviceFee, this.decimalPlaces),
                 customerEmail: this.dbHandler.currUser.email,
-                vendorEmail: vendorInfo[vendorUid].vendorEmail
+                vendorEmail: vendorInfo[vendorUid].vendorEmail,
+
+                // These values will be set after the vendor confirms/declines the order
+                stripeTransactionId: null,
+                receipt_number: null,
+                receiptUrl: null,
+                timeConfirmed: null,
+                declinationReason: "",
+                orderState: "pending"
             };
 
             ordersPerVendor.push(orderPerVendor);
