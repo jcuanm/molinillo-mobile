@@ -1,13 +1,34 @@
 import React, { Component } from 'react';
 import { 
-    Image,
+    FlatList,
     View, 
-    ScrollView,
-    Text
- } from 'react-native';
- import { Colors } from '../../helpers/Constants';
+    ScrollView
+} from 'react-native';
+import PastOrder from "./components/PastOrder";
+import ActionButton from 'react-native-action-button';
+import DbHandler from '../../helpers/DbHandler';
+import { Colors } from '../../helpers/Constants';
+import { OrderHistoryScreenStyles } from './styles';
+import * as firebase from 'firebase';
+import 'firebase/firestore';
+import { Ionicons } from '@expo/vector-icons';
+
  
 export default class OrderHistoryScreen extends Component {
+    constructor(props) {
+        super(props);
+        this.dbHandler = new DbHandler();
+        this.getPastOrders = this.getPastOrders.bind(this); 
+
+        props.navigation.setParams({
+            onTabFocus: this.handleTabFocus
+        });
+
+        this.state = {
+            pastOrders: []
+        }
+    }
+
     static navigationOptions = {
         headerTintColor: Colors.Secondary,
         headerStyle: {
@@ -19,8 +40,12 @@ export default class OrderHistoryScreen extends Component {
         title: "Order History",
     }
 
+    componentDidMount() {
+         this.getPastOrders();
+    }
+
     getPastOrders(){
-        let orderHistoryRef = firebase.firestore().collection("OrderHistory");
+        let orderHistoryRef = firebase.firestore().collection("Orders");
         let query = orderHistoryRef.where("customerId", "==", this.dbHandler.currUser.uid);
 
         query 
@@ -30,13 +55,7 @@ export default class OrderHistoryScreen extends Component {
 
                 if(results.size > 0){
                     results.forEach(doc => {
-
-                        const { 
-                            cartItems, 
-                            orderTotal,
-                            chocolateUuid 
-                        } = doc.data();
-                
+                        pastOrders.push(doc.data());
                     }); 
 
                     this.setState({pastOrders: pastOrders})
@@ -51,29 +70,16 @@ export default class OrderHistoryScreen extends Component {
     }
 
     render(){
+        const { pastOrders } = this.state;
         return(
-            <View style={CartScreenStyles.container}>
+            <View style={OrderHistoryScreenStyles.container}>
                 <ScrollView>
                     <FlatList
-                        data={cartItems}
+                        data={pastOrders}
                         scrollEnabled={true}
-                        renderItem={({_, index}) => this.renderItem(cartItems[index])}
+                        renderItem={({_, index}) => this.renderPastOrder(pastOrders[index])}
                         keyExtractor={(_, index) => index.toString()}
                     /> 
-
-                    {
-                        this.state.cartItems.length > 0 ?
-                            <TouchableOpacity 
-                                onPress={() => this.props.navigation.navigate("DeliveryMethodScreen", { cartItems: cartItems }) }
-                                style={CartScreenStyles.proceedToCheckoutButton}
-                            >
-                                <Text style={CartScreenStyles.proceedToCheckoutText}>
-                                    Proceed to checkout
-                                </Text>
-                            </TouchableOpacity>
-                        :
-                            null
-                    }
                 </ScrollView>
 
                 <ActionButton
@@ -82,6 +88,33 @@ export default class OrderHistoryScreen extends Component {
                     onPress={() => { this.props.navigation.navigate("ScannerScreen") }}
                 />
             </View>
+        );
+    }
+
+    renderPastOrder(pastOrder){
+        const { 
+            cartItems,
+            receiptNumber,
+            orderState,
+            orderTotal, 
+            selectedDeliveryMethod,
+            producerName,
+            shippingAddress,
+            vendorAddress,
+        } = pastOrder;
+
+        return(
+            <PastOrder 
+                getUserCartItems={this.getUserCartItems}
+                selectedDeliveryMethod={selectedDeliveryMethod}
+                cartItems={cartItems}
+                receiptNumber={receiptNumber}
+                orderState={orderState}
+                orderTotal={orderTotal} 
+                shippingAddress={shippingAddress}
+                producerName={producerName}
+                vendorAddress={vendorAddress}
+            />
         );
     }
 }
