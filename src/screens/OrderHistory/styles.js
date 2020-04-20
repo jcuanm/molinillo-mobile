@@ -19,11 +19,11 @@ export const OrderHistoryScreenStyles = StyleSheet.create({
 
 export const PastOrderStyles = StyleSheet.create({
     container: {
+        paddingTop: 10,
         paddingBottom: 10,
         flexDirection:"row",
         backgroundColor: "white",
         width: Dimensions.get('window').width, 
-        height: Dimensions.get('window').height/4,
         borderBottomColor: "grey",
         borderBottomWidth: 1,
         alignItems: "center",
@@ -35,13 +35,7 @@ export const PastOrderStyles = StyleSheet.create({
     orderInfoSubtitle: {
         fontWeight:"bold"
     },
-    incomeTitle: {
-        fontSize: 25, 
-        textAlign: 'center', 
-        fontWeight: 'bold', 
-        color: 'green'
-    },
-    incomeAmount: {
+    title: {
         fontSize: 25, 
         textAlign: 'center'
     }

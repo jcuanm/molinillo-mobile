@@ -100,6 +100,7 @@ export default class OrderHistoryScreen extends Component {
             selectedDeliveryMethod,
             producerName,
             shippingAddress,
+            timeOrderExecuted,
             vendorAddress,
         } = pastOrder;
 
@@ -114,6 +115,7 @@ export default class OrderHistoryScreen extends Component {
                 shippingAddress={shippingAddress}
                 producerName={producerName}
                 vendorAddress={vendorAddress}
+                timeOrderExecuted={timeOrderExecuted}
             />
         );
     }
