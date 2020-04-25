@@ -71,6 +71,10 @@ export default class OrderHistoryScreen extends Component {
 
     render(){
         const { pastOrders } = this.state;
+
+        // Sorting in descending order based on time order executed
+        pastOrders.sort((a, b) => (a.timeOrderExecuted.seconds < b.timeOrderExecuted.seconds) ? 1 : -1);
+
         return(
             <View style={OrderHistoryScreenStyles.container}>
                 <ScrollView>
