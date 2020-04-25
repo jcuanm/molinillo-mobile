@@ -20,7 +20,7 @@ export default class PastOrder extends Component {
         } = this.props;
 
         let stateColor = this.getStateColor(orderState);
-        let numCartItems = Object.keys(JSON.parse(cartItems)).length;
+        let parsedCartItems = JSON.parse(cartItems);
         let formattedDateOrderPlaced = this.getFormattedDateFromTimestamp(timeOrderExecuted);
 
         return(
@@ -46,8 +46,16 @@ export default class PastOrder extends Component {
                     <Text style={PastOrderStyles.orderInfoSubtitle}>Receipt #:</Text>
                     <Text>{receiptNumber}{"\n"}</Text>
 
-                    <Text style={PastOrderStyles.orderInfoSubtitle}>Number of items:</Text>
-                    <Text>{numCartItems}{"\n"}</Text>
+                    <Text style={PastOrderStyles.orderInfoSubtitle}>Ordered items:</Text>
+
+                    {
+                        parsedCartItems.map((value, index) => {
+                            return <Text key={index}>- {value.quantity} {value.confectionName}</Text>
+                        })
+                    }
+
+                    {/* Creating white-space */}
+                    <Text></Text>
 
                     {selectedDeliveryMethod == "shipping" ? 
 
