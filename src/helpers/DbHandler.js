@@ -162,6 +162,11 @@ export default class DbHandler{
                     .collection('MiscValues')
                     .doc(root);
                 break;
+            case 'WouldBuy':
+                ref = this.dbRef
+                    .collection(root)
+                    .doc(this.currUser.uid + "_" + chocolateUuid);
+                break;
             default:
                 ref = null; 
         }
