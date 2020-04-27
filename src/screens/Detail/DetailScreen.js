@@ -20,6 +20,7 @@ import CountryOrigin from './components/CountryOrigin';
 import VendorAddress from './components/VendorAddress';
 import ChocolateName from './components/ChocolateName';
 import Commerce from './components/Commerce';
+import WouldBuy from './components/WouldBuy';
 import Barcode from '../../helpers/Barcode';
 import CallbacksAndParams from '../../helpers/CallbacksAndParams';
 import { Colors, StringConcatenations } from '../../helpers/Constants';
@@ -197,7 +198,11 @@ export default class DetailScreen extends Component {
 								vendorEmail={vendorEmail}
 							/>
 						:
-							null
+						<WouldBuy 
+							barcodeData={barcodeData}
+							barcodeType={barcodeType}
+							uuid={uuid}
+						/>
 					}
 					
 					<Header 
