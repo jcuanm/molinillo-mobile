@@ -355,3 +355,43 @@ export const VendorAddressStyles = StyleSheet.create({
         textAlign:'center'
     }
 });
+
+export const WouldBuyStyles = StyleSheet.create({
+    border: {
+        borderBottomColor: "black", 
+        borderBottomWidth: .5
+    },
+    reasonButton: {
+        flex:1,
+        padding:5, 
+        margin: 20,
+        width: Dimensions.get('window').width / 2
+    },
+    buttonText: {
+        textAlign:"center", 
+        fontWeight:"bold",
+        color:"white"
+    },
+    container: {
+        flexDirection: 'row',
+        height: 25,
+        paddingLeft: 25,
+    },
+    column: {
+        fontWeight:'bold', 
+        paddingBottom: 3
+    },
+    row: {
+        flexDirection:"row"
+    },
+    purchaseText: {
+        color:Colors.Primary, 
+        fontWeight: 'bold',
+        fontSize:14, 
+        paddingBottom:3
+    },
+    subtitle: {
+        fontSize: 14, 
+        paddingBottom:3
+    },
+});
