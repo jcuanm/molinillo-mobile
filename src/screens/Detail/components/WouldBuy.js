@@ -18,6 +18,7 @@ export default class WouldBuy extends Component {
 
 		this.state = {
             reason: "",
+            response: "",
             isDialogVisible: false
 		};
     }
@@ -38,7 +39,7 @@ export default class WouldBuy extends Component {
 
                 <View style={WouldBuyStyles.row}>
                     <TouchableOpacity 
-                        onPress={() => this.setState({isDialogVisible: true})} 
+                        onPress={() => this.setState({response: "yes", isDialogVisible: true})} 
                         style={[WouldBuyStyles.reasonButton, {backgroundColor:"green"}]}
                     >
                         <Text style={WouldBuyStyles.buttonText}>
@@ -47,7 +48,7 @@ export default class WouldBuy extends Component {
                     </TouchableOpacity>
 
                     <TouchableOpacity 
-                        onPress={() => this.setState({isDialogVisible: true})} 
+                        onPress={() => this.setState({response: "no", isDialogVisible: true})} 
                         style={[WouldBuyStyles.reasonButton, {backgroundColor:"red"}]}
                     >
                         <Text style={WouldBuyStyles.buttonText}>
@@ -64,23 +65,53 @@ export default class WouldBuy extends Component {
                     </Dialog.Description>
                     <Dialog.Input onChangeText={text => this.setState({reason: text})}></Dialog.Input>
                     <Dialog.Button label="Confirm" onPress={() => this.submitFeedback()} />
-                    <Dialog.Button label="Cancel" onPress={() => this.setState({isDialogVisible: false})} />
                 </Dialog.Container>
             </View>
 		);
     }
 
     submitFeedback(){
-        Alert.alert(
-            "Thank you for your feedback!",
-            "",
-            [
-                {
-                    text: "Ok",
-                    onPress: () => this.setState({isDialogVisible: false})
-                }
-            ],
-            { cancelable: false }
-        );
+        let wouldBuyRef = this.dbHandler.getRef("WouldBuy", {}, this.props.uuid);
+
+        let data = {
+            last_updated: new Date(),
+            chocolateUuid: this.props.uuid,
+            barcodeType: this.props.barcodeType,
+            barcodeData: this.props.barcodeData,
+            userId: this.dbHandler.currUser.uid,
+            reason: this.state.reason,
+            response: this.state.response
+        }
+        
+        wouldBuyRef
+            .set(data)
+            .then(_ => {
+                Alert.alert(
+                    "Thank you for your feedback!",
+                    "",
+                    [
+                        {
+                            text: "Ok",
+                            onPress: () => this.setState({isDialogVisible: false})
+                        }
+                    ],
+                    { cancelable: false }
+                );
+            })
+            .catch(error => {
+                console.log(error);
+
+                Alert.alert(
+                    "There was an error connecting to the internet.",
+                    "Please try again later.",
+                    [
+                        {
+                            text: "Ok",
+                            onPress: () => this.setState({isDialogVisible: false})
+                        }
+                    ],
+                    { cancelable: false }
+                );
+            });
     }
 }
