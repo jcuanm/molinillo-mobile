@@ -24,6 +24,19 @@ export const SearchScreenStyles = StyleSheet.create({
     },
     instantSearchBar: {
         flex: 1
+    },
+    filterButton:{
+        width: 150,
+        height: 30,
+        backgroundColor: Colors.Primary,
+        alignSelf: "center",
+        justifyContent: "center",
+        marginBottom: 8
+    },
+    filterButtonTextInactive: {
+        color:"white", 
+        fontWeight:"bold",
+        textAlign: "center"
     }
 });
 

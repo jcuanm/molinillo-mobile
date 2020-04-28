@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { 
   Image, 
+  Text,
   TouchableOpacity, 
-  View } 
-from 'react-native';
+  View 
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import ActionButton from 'react-native-action-button';
 import { AlgoliaSearchConfig } from '../../../../../assets/Config';
@@ -64,7 +65,14 @@ export default class SearchScreen extends Component {
           root={this.root}
         >
           <SearchBox />
-          <InfiniteHits navigate={this.props.navigation.navigate}/>
+
+          <TouchableOpacity style={SearchScreenStyles.filterButtonInactive}>
+            <Text style={SearchScreenStyles.filterButtonText}>
+              For sale
+            </Text>
+          </TouchableOpacity>
+
+          <InfiniteHits filterForSale={false} navigate={this.props.navigation.navigate}/>
           <ActionButton
             buttonColor={Colors.Primary}
             icon={<Ionicons name="md-camera" size={25} color={Colors.Secondary} />}
