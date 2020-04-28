@@ -25,16 +25,33 @@ export const SearchScreenStyles = StyleSheet.create({
     instantSearchBar: {
         flex: 1
     },
-    filterButton:{
+    filterButtonInactive:{
         width: 150,
         height: 30,
         backgroundColor: Colors.Primary,
         alignSelf: "center",
         justifyContent: "center",
-        marginBottom: 8
+        marginBottom: 8,
+        borderWidth: 1,
+        borderColor: Colors.Primary,
+    },
+    filterButtonActive:{
+        width: 150,
+        height: 30,
+        backgroundColor: Colors.Secondary,
+        alignSelf: "center",
+        justifyContent: "center",
+        marginBottom: 8,
+        borderWidth: 1,
+        borderColor: Colors.Primary,
     },
     filterButtonTextInactive: {
-        color:"white", 
+        color:Colors.Secondary, 
+        fontWeight:"bold",
+        textAlign: "center"
+    },
+    filterButtonTextActive: {
+        color:Colors.Primary, 
         fontWeight:"bold",
         textAlign: "center"
     }

@@ -25,6 +25,10 @@ export default class SearchScreen extends Component {
         style: SearchScreenStyles.instantSearchBar,
       },
     };
+
+    this.state = {
+      filterForSale: false
+    };
   }
 
   componentDidMount(){
@@ -57,6 +61,15 @@ export default class SearchScreen extends Component {
   });
 
   render(){
+    if(this.state.filterForSale){
+      var buttonTextStyles = SearchScreenStyles.filterButtonTextActive;
+      var buttonStyles = SearchScreenStyles.filterButtonActive;
+    }
+    else{
+      var buttonTextStyles = SearchScreenStyles.filterButtonTextInactive;
+      var buttonStyles = SearchScreenStyles.filterButtonInactive;
+    }
+
     return(
       <View style={SearchScreenStyles.instantSearchBarContainer} >
         <InstantSearch
@@ -66,13 +79,21 @@ export default class SearchScreen extends Component {
         >
           <SearchBox />
 
-          <TouchableOpacity style={SearchScreenStyles.filterButtonInactive}>
-            <Text style={SearchScreenStyles.filterButtonText}>
+          {/* Button for filtering items based on if they're for sale or not */}
+          <TouchableOpacity 
+            onPress={() => this.setState({filterForSale: !this.state.filterForSale})}
+            style={buttonStyles}
+          >
+            <Text style={buttonTextStyles}>
               For sale
             </Text>
           </TouchableOpacity>
 
-          <InfiniteHits filterForSale={false} navigate={this.props.navigation.navigate}/>
+          <InfiniteHits 
+            filterForSale={this.state.filterForSale} 
+            navigate={this.props.navigation.navigate}
+          />
+
           <ActionButton
             buttonColor={Colors.Primary}
             icon={<Ionicons name="md-camera" size={25} color={Colors.Secondary} />}
