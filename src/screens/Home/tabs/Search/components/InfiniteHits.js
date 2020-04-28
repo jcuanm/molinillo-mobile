@@ -5,15 +5,21 @@ import CustomListItem from "../../../../../helpers/shared_components/CustomListI
 import { connectInfiniteHits } from 'react-instantsearch-native';
 import { InfiniteHitsStyles } from '../styles';
 
-const InfiniteHits = ({ hits, hasMore, refine, navigate }) => (
-  <FlatList
-    data={hits}
-    keyExtractor={item => item.objectID}
-    ItemSeparatorComponent={() => <View style={InfiniteHitsStyles.separator} />}
-    onEndReached={() => hasMore && refine()}
-    renderItem={({ item }) => renderItem(item, navigate) }
-  />
-);
+function InfiniteHits({ hits, hasMore, refine, navigate, filterForSale }){
+  if(filterForSale){
+    hits = hits.filter(function(el){ return el.price > 0 });
+  }
+
+  return(
+    <FlatList
+      data={hits}
+      keyExtractor={item => item.objectID}
+      ItemSeparatorComponent={() => <View style={InfiniteHitsStyles.separator} />}
+      onEndReached={() => hasMore && refine()}
+      renderItem={({ item }) => renderItem(item, navigate) }
+    />
+  );
+}
 
 InfiniteHits.propTypes = {
   hits: PropTypes.arrayOf(PropTypes.object).isRequired,
