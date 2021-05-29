@@ -36,7 +36,7 @@
     "rn-sliding-button": "^1.1.5",
     "stripe-client": "^1.1.5",
     "uuid": "^3.3.2",
-    "ws": "^7.0.0"
+    "ws": "^7.4.6"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.0.0",
